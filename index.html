@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Trakmile — Smart logistics management platform. Manage shipments, drivers, fleets, warehouses and delivery operations from one powerful dashboard.">
-    <meta name="keywords" content="logistics, shipment tracking, fleet management, warehouse, delivery, Trakmile, Saudi Arabia">
-    <meta property="og:title" content="Trakmile | Smart Logistics Management Platform">
-    <meta property="og:description" content="End-to-end logistics operating system for modern delivery and 3PL companies.">
+    <meta name="description" content="Trakmile — منصة إدارة لوجستية ذكية. أدر الشحنات والسائقين والأسطول والمستودعات من لوحة تحكم واحدة.">
+    <meta property="og:title" content="Trakmile | منصة إدارة لوجستية ذكية">
+    <meta property="og:description" content="نظام لوجستي متكامل لشركات التوصيل والخدمات اللوجستية.">
     <meta property="og:type" content="website">
-    <title>Trakmile | Smart Logistics Management Platform</title>
+    <title>Trakmile | منصة إدارة لوجستية ذكية</title>
     <link rel="icon" href="imgs/favicon.ico" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -42,13 +41,16 @@
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--dark);
             background: var(--white);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
         }
+
+        [dir="ltr"] body { font-family: 'Inter', 'Cairo', sans-serif; }
+        [dir="rtl"] .btn i[data-lucide="arrow-right"] { transform: scaleX(-1); }
 
         .container {
             width: min(92%, 1200px);
@@ -246,6 +248,172 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .lang-toggle {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--dark);
+            transition: all var(--transition);
+        }
+
+        .lang-toggle:hover {
+            background: var(--light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-quote {
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .btn-quote:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3);
+        }
+
+        /* ── Quote Modal ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.open .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 28px 28px 0;
+            gap: 16px;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .modal-header p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .modal-close {
+            background: var(--light);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            flex-shrink: 0;
+        }
+
+        .modal-close:hover { background: var(--border); color: var(--dark); }
+
+        .modal-body { padding: 24px 28px 28px; }
+
+        .form-group { margin-bottom: 18px; }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(27, 132, 255, 0.12);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .form-actions .btn { flex: 1; justify-content: center; }
+
+        .form-message {
+            display: none;
+            padding: 12px 16px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .form-message.success {
+            background: #ECFDF5;
+            color: #16A34A;
+            border: 1px solid #BBF7D0;
+        }
+
+        .form-message.error {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
         }
 
         .menu-toggle {
@@ -1293,16 +1461,18 @@
             </a>
 
             <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#how-it-works">How It Works</a></li>
-                <li><a href="#why">Why Trakmile</a></li>
-                <li><a href="#mobile">Mobile App</a></li>
-                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#features" data-i18n="nav.features">المميزات</a></li>
+                <li><a href="#how-it-works" data-i18n="nav.how">كيف يعمل</a></li>
+                <li><a href="#why" data-i18n="nav.why">لماذا تراك مايل</a></li>
+                <li><a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a></li>
+                <li><a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a></li>
             </ul>
 
             <div class="nav-actions">
-                <a href="https://app.trakmile.com" class="btn btn-outline">Login</a>
-                <a href="https://demo.trakmile.com" class="btn btn-primary">Try Demo</a>
+                <button class="lang-toggle" id="langToggle" type="button">EN</button>
+                <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب عرض</a>
+                <a href="https://app.trakmile.com" class="btn btn-outline" data-i18n="nav.login">دخول</a>
+                <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
             </div>
 
             <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
@@ -1312,14 +1482,15 @@
     </header>
 
     <nav class="mobile-nav" id="mobileNav">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#why">Why Trakmile</a>
-        <a href="#mobile">Mobile App</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
-        <a href="https://app.trakmile.com" class="btn btn-outline">Login</a>
-        <a href="https://demo.trakmile.com" class="btn btn-primary">Try Demo</a>
+        <a href="#features" data-i18n="nav.features">المميزات</a>
+        <a href="#how-it-works" data-i18n="nav.how">كيف يعمل</a>
+        <a href="#why" data-i18n="nav.why">لماذا تراك مايل</a>
+        <a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a>
+        <a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a>
+        <a href="#contact" data-i18n="nav.contact">تواصل معنا</a>
+        <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب عرض</a>
+        <a href="https://app.trakmile.com" class="btn btn-outline" data-i18n="nav.login">دخول</a>
+        <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
     </nav>
 
     <!-- Hero -->
@@ -1330,25 +1501,25 @@
                 <div class="hero-content reveal">
                     <div class="badge">
                         <span class="badge-dot"></span>
-                        Trusted by 500+ logistics companies
+                        <span data-i18n="hero.badge">موثوق من أكثر من 500 شركة لوجستية</span>
                     </div>
-                    <h1>The Complete <span class="gradient-text">Logistics OS</span> for Modern Delivery</h1>
-                    <p class="hero-desc">Manage shipments, drivers, fleets, warehouses and last-mile delivery — all from one intelligent platform built for 3PL and e-commerce logistics teams.</p>
+                    <h1 data-i18n-html="hero.title">نظام <span class="gradient-text">لوجستي</span> متكامل للتوصيل الحديث</h1>
+                    <p class="hero-desc" data-i18n="hero.desc">أدر الشحنات والسائقين والأسطول والمستودعات وعمليات التوصيل — من منصة واحدة ذكية.</p>
                     <div class="hero-actions">
                         <a href="https://demo.trakmile.com" class="btn btn-primary btn-lg">
-                            Launch Demo <i data-lucide="arrow-right"></i>
+                            <span data-i18n="hero.demo">جرب النسخة التجريبية</span> <i data-lucide="arrow-right"></i>
                         </a>
-                        <a href="#contact" class="btn btn-outline btn-lg">Talk to Sales</a>
+                        <a href="#" class="btn btn-outline btn-lg" data-open-quote data-i18n="hero.quote">طلب عرض</a>
                     </div>
                     <div class="hero-trust">
                         <div class="hero-trust-item">
-                            <i data-lucide="shield-check"></i> Enterprise-grade security
+                            <i data-lucide="shield-check"></i> <span data-i18n="hero.trust1">أمان على مستوى المؤسسات</span>
                         </div>
                         <div class="hero-trust-item">
-                            <i data-lucide="clock"></i> 99.9% uptime SLA
+                            <i data-lucide="clock"></i> <span data-i18n="hero.trust2">99.9% وقت تشغيل</span>
                         </div>
                         <div class="hero-trust-item">
-                            <i data-lucide="globe"></i> Built for MENA region
+                            <i data-lucide="globe"></i> <span data-i18n="hero.trust3">مصمم لمنطقة الشرق الأوسط</span>
                         </div>
                     </div>
                 </div>
@@ -1413,7 +1584,7 @@
     <!-- Integrations -->
     <section class="integrations">
         <div class="container integrations-inner">
-            <span class="integrations-label">Seamlessly integrates with</span>
+            <span class="integrations-label" data-i18n="integrations.label">يتكامل بسلاسة مع</span>
             <div class="integrations-list">
                 <div class="integration-item"><i data-lucide="shopping-bag"></i> Salla</div>
                 <div class="integration-item"><i data-lucide="store"></i> Zid</div>
@@ -1428,36 +1599,36 @@
     <section class="section" id="features">
         <div class="container">
             <div class="section-header reveal">
-                <span class="section-label">Platform Features</span>
-                <h2 class="section-title">Everything Your Logistics Team Needs</h2>
-                <p class="section-desc">Enterprise-grade tools designed to eliminate manual errors and scale operations effortlessly.</p>
+                <span class="section-label" data-i18n="features.label">مميزات المنصة</span>
+                <h2 class="section-title" data-i18n="features.title">كل ما يحتاجه فريقك اللوجستي</h2>
+                <p class="section-desc" data-i18n="features.desc">أدوات على مستوى المؤسسات للقضاء على الأخطاء اليدوية وتوسيع العمليات بسهولة.</p>
             </div>
 
             <div class="bento-grid">
                 <div class="bento-card featured reveal">
                     <div class="card-icon"><i data-lucide="package"></i></div>
-                    <h3>End-to-End Shipment Management</h3>
-                    <p>Create, assign, track and manage shipments across the entire delivery lifecycle — from pickup to proof of delivery.</p>
+                    <h3 data-i18n="features.shipment.title">إدارة شاملة للشحنات</h3>
+                    <p data-i18n="features.shipment.desc">أنشئ ووزّع وتتبّع الشحنات طوال دورة التوصيل — من الاستلام إلى إثبات التسليم.</p>
                 </div>
                 <div class="bento-card reveal">
                     <div class="card-icon"><i data-lucide="users"></i></div>
-                    <h3>Driver Management</h3>
-                    <p>Manage drivers, COD payouts, schedules, assignments and real-time performance metrics.</p>
+                    <h3 data-i18n="features.driver.title">إدارة السائقين</h3>
+                    <p data-i18n="features.driver.desc">أدر السائقين ومدفوعات COD والجداول والتكليفات ومؤشرات الأداء اللحظية.</p>
                 </div>
                 <div class="bento-card reveal">
                     <div class="card-icon"><i data-lucide="map-pin"></i></div>
-                    <h3>Live Fleet Tracking</h3>
-                    <p>Monitor vehicle locations in real time and optimize delivery routes dynamically.</p>
+                    <h3 data-i18n="features.fleet.title">تتبع الأسطول مباشرة</h3>
+                    <p data-i18n="features.fleet.desc">راقب مواقع المركبات لحظياً وحسّن مسارات التوصيل ديناميكياً.</p>
                 </div>
                 <div class="bento-card reveal">
                     <div class="card-icon"><i data-lucide="warehouse"></i></div>
-                    <h3>Warehouse Operations</h3>
-                    <p>Multi-hub inventory control, barcode scanning, and sorting hub management.</p>
+                    <h3 data-i18n="features.warehouse.title">عمليات المستودعات</h3>
+                    <p data-i18n="features.warehouse.desc">تحكم بالمخزون متعدد المراكز ومسح الباركود وإدارة مراكز الفرز.</p>
                 </div>
                 <div class="bento-card span-2 reveal">
                     <div class="card-icon"><i data-lucide="shield-check"></i></div>
-                    <h3>Proof of Delivery & Analytics</h3>
-                    <p>Capture digital signatures, live photos, and OTP confirmations. Gain actionable insights with interactive dashboards and automated reports for every stakeholder in your supply chain.</p>
+                    <h3 data-i18n="features.pod.title">إثبات التسليم والتحليلات</h3>
+                    <p data-i18n="features.pod.desc">التقط التوقيعات الرقمية والصور ورمز OTP. احصل على رؤى عملية عبر لوحات تحكم تفاعلية وتقارير آلية.</p>
                 </div>
             </div>
         </div>
@@ -1467,26 +1638,26 @@
     <section class="section how-it-works" id="how-it-works">
         <div class="container">
             <div class="section-header reveal">
-                <span class="section-label">Simple Setup</span>
-                <h2 class="section-title">Get Started in 3 Easy Steps</h2>
-                <p class="section-desc">From signup to first delivery — Trakmile gets you operational fast.</p>
+                <span class="section-label" data-i18n="how.label">إعداد بسيط</span>
+                <h2 class="section-title" data-i18n="how.title">ابدأ في 3 خطوات سهلة</h2>
+                <p class="section-desc" data-i18n="how.desc">من التسجيل إلى أول توصيل — تراك مايل يجعلك جاهزاً للعمل بسرعة.</p>
             </div>
 
             <div class="steps">
                 <div class="step reveal">
                     <div class="step-number">1</div>
-                    <h3>Connect Your Store</h3>
-                    <p>Integrate with Salla, Zid, Shopify or connect via our RESTful API in minutes.</p>
+                    <h3 data-i18n="how.step1.title">اربط متجرك</h3>
+                    <p data-i18n="how.step1.desc">تكامل مع Salla أو Zid أو Shopify أو عبر RESTful API في دقائق.</p>
                 </div>
                 <div class="step reveal">
                     <div class="step-number">2</div>
-                    <h3>Configure Operations</h3>
-                    <p>Set up warehouses, delivery zones, driver teams and automated assignment rules.</p>
+                    <h3 data-i18n="how.step2.title">اضبط العمليات</h3>
+                    <p data-i18n="how.step2.desc">أعد المستودعات ومناطق التوصيل وفرق السائقين وقواعد التكليف الآلي.</p>
                 </div>
                 <div class="step reveal">
                     <div class="step-number">3</div>
-                    <h3>Start Delivering</h3>
-                    <p>Track every shipment in real time, collect COD, and delight customers with live updates.</p>
+                    <h3 data-i18n="how.step3.title">ابدأ التوصيل</h3>
+                    <p data-i18n="how.step3.desc">تتبّع كل شحنة لحظياً، اجمع COD، وأرضِ عملاءك بتحديثات مباشرة.</p>
                 </div>
             </div>
         </div>
@@ -1498,19 +1669,19 @@
             <div class="stats-grid">
                 <div class="reveal">
                     <div class="stat-value" data-target="10" data-suffix="M+">0</div>
-                    <div class="stat-label">Shipments Managed</div>
+                    <div class="stat-label" data-i18n="stats.shipments">شحنة تمت إدارتها</div>
                 </div>
                 <div class="reveal">
                     <div class="stat-value" data-target="500" data-suffix="+">0</div>
-                    <div class="stat-label">Business Customers</div>
+                    <div class="stat-label" data-i18n="stats.customers">عميل تجاري</div>
                 </div>
                 <div class="reveal">
                     <div class="stat-value" data-target="50" data-suffix="K+">0</div>
-                    <div class="stat-label">Drivers Managed</div>
+                    <div class="stat-label" data-i18n="stats.drivers">سائق تمت إدارته</div>
                 </div>
                 <div class="reveal">
                     <div class="stat-value" data-target="99.9" data-decimal="true" data-suffix="%">0</div>
-                    <div class="stat-label">Platform Uptime</div>
+                    <div class="stat-label" data-i18n="stats.uptime">وقت تشغيل المنصة</div>
                 </div>
             </div>
         </div>
@@ -1521,30 +1692,30 @@
         <div class="container">
             <div class="why-grid">
                 <div class="reveal">
-                    <span class="section-label">Why Trakmile</span>
-                    <h2 class="section-title">Built for the Pace of Modern Logistics</h2>
-                    <p class="section-desc">Engineered for delivery companies and 3PL providers scaling across the Middle East.</p>
+                    <span class="section-label" data-i18n="why.label">لماذا تراك مايل</span>
+                    <h2 class="section-title" data-i18n="why.title">مصمم لسرعة اللوجستيات الحديثة</h2>
+                    <p class="section-desc" data-i18n="why.desc">مهندس لشركات التوصيل ومقدمي الخدمات اللوجستية في الشرق الأوسط.</p>
 
                     <div class="why-list">
                         <div class="why-item">
                             <div class="why-icon"><i data-lucide="eye"></i></div>
                             <div>
-                                <h4>Real-Time Visibility</h4>
-                                <p>Track every shipment node from a centralized operational dashboard.</p>
+                                <h4 data-i18n="why.vis.title">رؤية لحظية</h4>
+                                <p data-i18n="why.vis.desc">تتبّع كل نقطة شحنة من لوحة تحكم مركزية.</p>
                             </div>
                         </div>
                         <div class="why-item">
                             <div class="why-icon"><i data-lucide="zap"></i></div>
                             <div>
-                                <h4>Operational Automation</h4>
-                                <p>Automate webhooks, invoicing, and driver assignment workflows.</p>
+                                <h4 data-i18n="why.auto.title">أتمتة العمليات</h4>
+                                <p data-i18n="why.auto.desc">أتمت webhooks والفوترة وتكليف السائقين.</p>
                             </div>
                         </div>
                         <div class="why-item">
                             <div class="why-icon"><i data-lucide="trending-up"></i></div>
                             <div>
-                                <h4>Peak-Season Ready</h4>
-                                <p>Cloud architecture built to handle high order volumes during e-commerce peaks.</p>
+                                <h4 data-i18n="why.scale.title">جاهز لموسم الذروة</h4>
+                                <p data-i18n="why.scale.desc">بنية سحابية تتحمل أحجام الطلبات العالية في مواسم التجارة.</p>
                             </div>
                         </div>
                     </div>
@@ -1567,19 +1738,19 @@
         <div class="container">
             <div class="mobile-grid">
                 <div class="reveal">
-                    <span class="section-label">Mobile App</span>
-                    <h2 class="section-title">Empower Your Drivers On the Go</h2>
-                    <p class="section-desc">Native mobile app for drivers and field teams — real-time order management, navigation, and proof of delivery.</p>
+                    <span class="section-label" data-i18n="mobile.label">تطبيق الجوال</span>
+                    <h2 class="section-title" data-i18n="mobile.title">مكّن سائقيك أثناء التنقل</h2>
+                    <p class="section-desc" data-i18n="mobile.desc">تطبيق جوال للسائقين وفرق الميدان — إدارة الطلبات والملاحة وإثبات التسليم.</p>
 
                     <div class="mobile-features">
-                        <div class="mobile-feature"><i data-lucide="check-circle"></i> Real-time order assignments & updates</div>
-                        <div class="mobile-feature"><i data-lucide="check-circle"></i> GPS navigation & route optimization</div>
-                        <div class="mobile-feature"><i data-lucide="check-circle"></i> Digital POD with photo & signature capture</div>
-                        <div class="mobile-feature"><i data-lucide="check-circle"></i> COD collection & instant sync</div>
+                        <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f1">تكليف وتحديث الطلبات لحظياً</span></div>
+                        <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f2">ملاحة GPS وتحسين المسارات</span></div>
+                        <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f3">إثبات تسليم رقمي بالصورة والتوقيع</span></div>
+                        <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f4">تحصيل COD ومزامنة فورية</span></div>
                     </div>
 
                     <a href="https://demo.trakmile.com" class="btn btn-secondary btn-lg">
-                        Explore Driver App <i data-lucide="smartphone"></i>
+                        <span data-i18n="mobile.btn">استكشف تطبيق السائق</span> <i data-lucide="smartphone"></i>
                     </a>
                 </div>
 
@@ -1635,42 +1806,42 @@
     <section class="section testimonials">
         <div class="container">
             <div class="section-header reveal">
-                <span class="section-label">Testimonials</span>
-                <h2 class="section-title">Trusted by Logistics Leaders</h2>
-                <p class="section-desc">See what our customers say about transforming their delivery operations.</p>
+                <span class="section-label" data-i18n="testimonials.label">آراء العملاء</span>
+                <h2 class="section-title" data-i18n="testimonials.title">موثوق من قادة اللوجستيات</h2>
+                <p class="section-desc" data-i18n="testimonials.desc">اطلع على تجارب عملائنا في تحويل عمليات التوصيل.</p>
             </div>
 
             <div class="testimonial-grid">
                 <div class="testimonial-card reveal">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"Trakmile transformed our last-mile operations. We reduced failed deliveries by 35% and our drivers love the mobile app."</p>
+                    <p class="testimonial-text" data-i18n="testimonials.t1">"حوّل تراك مايل عملياتنا. خفّضنا التسليمات الفاشلة 35% وسائقونا يحبون التطبيق."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">A</div>
                         <div class="author-info">
-                            <strong>Ahmed Al-Rashid</strong>
-                            <span>Operations Director, FastShip KSA</span>
+                            <strong data-i18n="testimonials.t1.name">أحمد الرشيد</strong>
+                            <span data-i18n="testimonials.t1.role">مدير العمليات، FastShip KSA</span>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"The Salla integration was seamless. Orders flow automatically and our team saves hours every day on manual data entry."</p>
+                    <p class="testimonial-text" data-i18n="testimonials.t2">"تكامل Salla كان سلساً. الطلبات تتدفق تلقائياً ونوفر ساعات يومياً."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">S</div>
                         <div class="author-info">
-                            <strong>Sara Al-Mutairi</strong>
-                            <span>CEO, Express Logistics</span>
+                            <strong data-i18n="testimonials.t2.name">سارة المطيري</strong>
+                            <span data-i18n="testimonials.t2.role">المديرة التنفيذية، Express Logistics</span>
                         </div>
                     </div>
                 </div>
                 <div class="testimonial-card reveal">
                     <div class="testimonial-stars">★★★★★</div>
-                    <p class="testimonial-text">"During peak season we handled 3x our normal volume without any downtime. The platform scales beautifully with our growth."</p>
+                    <p class="testimonial-text" data-i18n="testimonials.t3">"في موسم الذروة تعاملنا مع 3 أضعاف الحجم دون أي توقف."</p>
                     <div class="testimonial-author">
                         <div class="author-avatar">M</div>
                         <div class="author-info">
-                            <strong>Mohammed Al-Qahtani</strong>
-                            <span>CTO, Gulf Delivery Co.</span>
+                            <strong data-i18n="testimonials.t3.name">محمد القحطاني</strong>
+                            <span data-i18n="testimonials.t3.role">CTO، Gulf Delivery Co.</span>
                         </div>
                     </div>
                 </div>
@@ -1682,45 +1853,45 @@
     <section class="section" id="faq">
         <div class="container">
             <div class="section-header reveal">
-                <span class="section-label">FAQ</span>
-                <h2 class="section-title">Frequently Asked Questions</h2>
+                <span class="section-label" data-i18n="faq.label">الأسئلة الشائعة</span>
+                <h2 class="section-title" data-i18n="faq.title">أسئلة متكررة</h2>
             </div>
 
             <div class="faq-list">
                 <div class="faq-item">
                     <button class="faq-question">
-                        What e-commerce platforms does Trakmile integrate with?
+                        <span data-i18n="faq.q1">ما منصات التجارة التي يتكامل معها تراك مايل؟</span>
                         <i data-lucide="chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <div class="faq-answer-inner">Trakmile integrates natively with Salla, Zid, Shopify, and WooCommerce. We also provide a comprehensive RESTful API for custom integrations with any platform.</div>
+                        <div class="faq-answer-inner" data-i18n="faq.a1">يتكامل تراك مايل مع Salla وZid وShopify وWooCommerce. كما نوفر RESTful API للتكاملات المخصصة.</div>
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question">
-                        Is there a mobile app for drivers?
+                        <span data-i18n="faq.q2">هل يوجد تطبيق جوال للسائقين؟</span>
                         <i data-lucide="chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <div class="faq-answer-inner">Yes. Trakmile includes a dedicated mobile app for drivers with real-time order management, GPS navigation, proof of delivery capture, and COD collection features.</div>
+                        <div class="faq-answer-inner" data-i18n="faq.a2">نعم. يتضمن تراك مايل تطبيقاً للسائقين مع إدارة الطلبات والملاحة وإثبات التسليم وتحصيل COD.</div>
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question">
-                        How long does it take to get started?
+                        <span data-i18n="faq.q3">كم يستغرق البدء؟</span>
                         <i data-lucide="chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <div class="faq-answer-inner">Most customers are fully operational within 1-2 weeks. Our team provides onboarding support including store integration, warehouse setup, and driver training.</div>
+                        <div class="faq-answer-inner" data-i18n="faq.a3">معظم العملاء يصبحون جاهزين خلال 1-2 أسبوع مع دعم الربط وإعداد المستودعات وتدريب السائقين.</div>
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question">
-                        Can I try Trakmile before committing?
+                        <span data-i18n="faq.q4">هل يمكنني تجربة تراك مايل قبل الالتزام؟</span>
                         <i data-lucide="chevron-down"></i>
                     </button>
                     <div class="faq-answer">
-                        <div class="faq-answer-inner">Absolutely. We offer a live demo environment where you can explore all platform features. Contact our sales team for a personalized walkthrough.</div>
+                        <div class="faq-answer-inner" data-i18n="faq.a4">بالتأكيد. نوفر بيئة تجريبية حية. تواصل مع فريق المبيعات لجولة مخصصة.</div>
                     </div>
                 </div>
             </div>
@@ -1731,14 +1902,14 @@
     <section class="cta" id="demo">
         <div class="container">
             <div class="cta-box reveal">
-                <h2>Ready to Transform Your Logistics?</h2>
-                <p>Join 500+ companies already using Trakmile to streamline delivery operations and scale with confidence.</p>
+                <h2 data-i18n="cta.title">مستعد لتحويل عملياتك اللوجستية؟</h2>
+                <p data-i18n="cta.desc">انضم إلى أكثر من 500 شركة تستخدم تراك مايل لتبسيط التوصيل والتوسع بثقة.</p>
                 <div class="cta-actions">
                     <a href="https://demo.trakmile.com" class="btn btn-secondary btn-lg">
-                        Launch Live Demo <i data-lucide="external-link"></i>
+                        <span data-i18n="cta.demo">جرب المنصة التجريبية</span> <i data-lucide="external-link"></i>
                     </a>
-                    <a href="mailto:info@trakmile.com" class="btn btn-outline btn-lg" style="color:#fff;border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05)">
-                        Contact Sales
+                    <a href="#" class="btn btn-outline btn-lg" data-open-quote style="color:#fff;border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05)">
+                        <span data-i18n="cta.quote">طلب عرض</span>
                     </a>
                 </div>
             </div>
@@ -1752,7 +1923,7 @@
                 <a href="#" class="logo">
                     <img src="imgs/logo.png" alt="Trakmile" style="height:40px" onerror="this.style.display='none'">
                 </a>
-                <p>Next-generation logistics operating system powering smart fulfillment for delivery companies across the Middle East.</p>
+                <p data-i18n="footer.desc">نظام لوجستي متكامل يدعم التنفيذ الذكي لشركات التوصيل في الشرق الأوسط.</p>
                 <div class="footer-social">
                     <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
                     <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
@@ -1760,111 +1931,79 @@
                 </div>
             </div>
             <div class="footer-col">
-                <h4>Product</h4>
+                <h4 data-i18n="footer.product">المنتج</h4>
                 <ul>
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#mobile">Mobile App</a></li>
-                    <li><a href="https://demo.trakmile.com">Live Demo</a></li>
+                    <li><a href="#features" data-i18n="nav.features">المميزات</a></li>
+                    <li><a href="#how-it-works" data-i18n="nav.how">كيف يعمل</a></li>
+                    <li><a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a></li>
+                    <li><a href="https://demo.trakmile.com" data-i18n="footer.liveDemo">عرض تجريبي</a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Company</h4>
+                <h4 data-i18n="footer.company">الشركة</h4>
                 <ul>
-                    <li><a href="#why">About</a></li>
-                    <li><a href="#faq">FAQ</a></li>
-                    <li><a href="mailto:info@trakmile.com">Contact</a></li>
+                    <li><a href="#why" data-i18n="footer.about">من نحن</a></li>
+                    <li><a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a></li>
+                    <li><a href="mailto:info@trakmile.com" data-i18n="nav.contact">تواصل</a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Contact</h4>
+                <h4 data-i18n="footer.contact">تواصل</h4>
                 <ul>
                     <li><a href="mailto:info@trakmile.com">info@trakmile.com</a></li>
-                    <li><a href="#">Riyadh, Saudi Arabia</a></li>
+                    <li><a href="#" data-i18n="footer.location">الرياض، المملكة العربية السعودية</a></li>
                     <li><a href="https://app.trakmile.com">app.trakmile.com</a></li>
                 </ul>
             </div>
         </div>
         <div class="container footer-bottom">
-            <p>&copy; 2026 Trakmile. All rights reserved.</p>
-            <p>Built for smarter fulfillment ecosystems.</p>
+            <p data-i18n="footer.rights">© 2026 Trakmile. جميع الحقوق محفوظة.</p>
+            <p data-i18n="footer.tagline">مصمم لنظم تنفيذ أذكى.</p>
         </div>
     </footer>
 
-    <script>
-        lucide.createIcons();
+    <!-- Quote Request Modal -->
+    <div class="modal-overlay" id="quoteModal">
+        <div class="modal" role="dialog" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalTitle" data-i18n="modal.title">طلب عرض</h2>
+                    <p data-i18n="modal.subtitle">املأ النموذج وسيتواصل معك فريقنا في أقرب وقت</p>
+                </div>
+                <button class="modal-close" id="closeModal" type="button" aria-label="Close">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-message" id="formMessage"></div>
+                <form id="quoteForm">
+                    <div class="form-group">
+                        <label for="quoteName" data-i18n="modal.name">الاسم</label>
+                        <input type="text" id="quoteName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quotePhone" data-i18n="modal.phone">رقم الجوال</label>
+                        <input type="tel" id="quotePhone" name="phone" required dir="ltr">
+                    </div>
+                    <div class="form-group">
+                        <label for="quoteEmail" data-i18n="modal.email">البريد الإلكتروني</label>
+                        <input type="email" id="quoteEmail" name="email" required dir="ltr">
+                    </div>
+                    <div class="form-group">
+                        <label for="quoteDescription" data-i18n="modal.description">الوصف</label>
+                        <textarea id="quoteDescription" name="description" data-i18n-placeholder="modal.descriptionPlaceholder" placeholder="صف احتياجاتك أو حجم عملياتك..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline" id="cancelModal" data-i18n="modal.cancel">إلغاء</button>
+                        <button type="submit" class="btn btn-primary" data-i18n="modal.submit">إرسال</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-        // Header scroll effect
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('scrolled', window.scrollY > 20);
-        });
-
-        // Mobile menu
-        const menuToggle = document.getElementById('menuToggle');
-        const mobileNav = document.getElementById('mobileNav');
-        menuToggle.addEventListener('click', () => {
-            const isOpen = mobileNav.classList.toggle('open');
-            menuToggle.innerHTML = isOpen
-                ? '<i data-lucide="x"></i>'
-                : '<i data-lucide="menu"></i>';
-            lucide.createIcons();
-        });
-        mobileNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileNav.classList.remove('open');
-                menuToggle.innerHTML = '<i data-lucide="menu"></i>';
-                lucide.createIcons();
-            });
-        });
-
-        // Scroll reveal
-        const revealEls = document.querySelectorAll('.reveal');
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
-                    revealObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-        revealEls.forEach(el => revealObserver.observe(el));
-
-        // Animated counters
-        const statEls = document.querySelectorAll('.stat-value[data-target]');
-        const counterObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                const el = entry.target;
-                const target = parseFloat(el.dataset.target);
-                const suffix = el.dataset.suffix || '';
-                const isDecimal = el.dataset.decimal === 'true';
-                const duration = 1800;
-                const start = performance.now();
-
-                function animate(now) {
-                    const progress = Math.min((now - start) / duration, 1);
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    const current = target * eased;
-                    el.textContent = isDecimal
-                        ? current.toFixed(1) + suffix
-                        : Math.floor(current) + suffix;
-                    if (progress < 1) requestAnimationFrame(animate);
-                }
-                requestAnimationFrame(animate);
-                counterObserver.unobserve(el);
-            });
-        }, { threshold: 0.5 });
-        statEls.forEach(el => counterObserver.observe(el));
-
-        // FAQ accordion
-        document.querySelectorAll('.faq-item').forEach(item => {
-            item.querySelector('.faq-question').addEventListener('click', () => {
-                const wasOpen = item.classList.contains('open');
-                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-                if (!wasOpen) item.classList.add('open');
-            });
-        });
-    </script>
+    <script>lucide.createIcons();</script>
+    <script src="js/i18n.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

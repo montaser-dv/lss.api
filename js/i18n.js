@@ -66,7 +66,7 @@ const translations = {
         'testimonials.title': 'موثوق من قادة اللوجستيات',
         'testimonials.desc': 'اطلع على تجارب عملائنا في تحويل عمليات التوصيل.',
         'testimonials.t1': '"حوّل تراك مايل عملياتنا. خفّضنا التسليمات الفاشلة 35% وسائقونا يحبون التطبيق."',
-        'testimonials.t1.name': 'أحمد الرashid',
+        'testimonials.t1.name': 'أحمد الرشيد',
         'testimonials.t1.role': 'مدير العمليات، FastShip KSA',
         'testimonials.t2': '"تكامل Salla كان سلساً. الطلبات تتدفق تلقائياً ونوفر ساعات يومياً."',
         'testimonials.t2.name': 'سارة المطيري',
