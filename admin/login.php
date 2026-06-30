@@ -1,0 +1,103 @@
+<?php
+
+require_once __DIR__ . '/auth.php';
+
+if (!empty($_SESSION['admin_id'])) {
+    header('Location: index.php');
+    exit;
+}
+
+$error = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+
+    if ($username && $password && attemptLogin($username, $password)) {
+        header('Location: index.php');
+        exit;
+    }
+    $error = 'بيانات الدخول غير صحيحة';
+}
+?>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | Trakmile Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0F172A, #1E293B);
+            padding: 20px;
+        }
+        .login-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+        }
+        .login-box h1 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            color: #0F172A;
+        }
+        .login-box p { color: #64748B; font-size: 14px; margin-bottom: 28px; }
+        label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #334155; }
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #E2E8F0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            margin-bottom: 18px;
+        }
+        input:focus { outline: none; border-color: #1B84FF; box-shadow: 0 0 0 3px rgba(27,132,255,0.15); }
+        button {
+            width: 100%;
+            padding: 13px;
+            background: #1B84FF;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        button:hover { background: #156BCB; }
+        .error {
+            background: #FEF2F2;
+            color: #DC2626;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>لوحة إدارة Trakmile</h1>
+        <p>سجّل الدخول لاستعراض طلبات العروض</p>
+        <?php if ($error): ?><div class="error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
+        <form method="post">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" id="username" name="username" required autocomplete="username">
+            <label for="password">كلمة المرور</label>
+            <input type="password" id="password" name="password" required autocomplete="current-password">
+            <button type="submit">دخول</button>
+        </form>
+    </div>
+</body>
+</html>

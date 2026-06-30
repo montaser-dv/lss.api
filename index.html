@@ -9,6 +9,7 @@
     <meta property="og:description" content="End-to-end logistics operating system for modern delivery and 3PL companies.">
     <meta property="og:type" content="website">
     <title>Trakmile | Smart Logistics Management Platform</title>
+    <link rel="icon" href="imgs/favicon.ico" type="image/x-icon">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -509,7 +510,7 @@
         .mockup-bar-col:nth-child(1) { height: 45%; animation-delay: 0.1s; }
         .mockup-bar-col:nth-child(2) { height: 70%; animation-delay: 0.2s; }
         .mockup-bar-col:nth-child(3) { height: 55%; animation-delay: 0.3s; }
-        .mockup-bar-col:nth-child(4) { height: 85%; animation-delay: 0.4s; background: linear-gradient(to top, var(--secondary), rgba(255, 106, 0, 0.3); }
+        .mockup-bar-col:nth-child(4) { height: 85%; animation-delay: 0.4s; background: linear-gradient(to top, var(--secondary), rgba(255, 106, 0, 0.3)); }
         .mockup-bar-col:nth-child(5) { height: 60%; animation-delay: 0.5s; }
         .mockup-bar-col:nth-child(6) { height: 90%; animation-delay: 0.6s; }
         .mockup-bar-col:nth-child(7) { height: 75%; animation-delay: 0.7s; }
@@ -1074,19 +1075,26 @@
         .faq-item.open .faq-question i { transform: rotate(180deg); }
 
         .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s ease;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            grid-template-rows: 1fr;
         }
 
         .faq-answer-inner {
-            padding: 0 24px 20px;
+            overflow: hidden;
+            padding: 0 24px;
             font-size: 15px;
             color: var(--gray);
             line-height: 1.7;
         }
 
-        .faq-item.open .faq-answer { max-height: 200px; }
+        .faq-item.open .faq-answer-inner {
+            padding-bottom: 20px;
+        }
 
         /* ── CTA ── */
         .cta {
@@ -1164,6 +1172,11 @@
             gap: 48px;
             padding-bottom: 60px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .footer-brand img {
+            height: 44px;
+            object-fit: contain;
         }
 
         .footer-brand p {
@@ -1275,7 +1288,7 @@
     <header id="header">
         <div class="container navbar">
             <a href="#" class="logo">
-                <img src="imgs/logo-big.png" alt="Trakmile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                <img src="imgs/logo.png" alt="Trakmile" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
                 <span class="logo-text" style="display:none">Trak<span>mile</span></span>
             </a>
 
@@ -1737,7 +1750,7 @@
         <div class="container footer-grid">
             <div class="footer-brand">
                 <a href="#" class="logo">
-                    <img src="imgs/logo-big.png" alt="Trakmile" style="height:36px;filter:brightness(0) invert(1)" onerror="this.style.display='none'">
+                    <img src="imgs/logo.png" alt="Trakmile" style="height:40px" onerror="this.style.display='none'">
                 </a>
                 <p>Next-generation logistics operating system powering smart fulfillment for delivery companies across the Middle East.</p>
                 <div class="footer-social">
