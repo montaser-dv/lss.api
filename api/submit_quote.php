@@ -1,8 +1,26 @@
 <?php
 
-require_once dirname(__DIR__) . '/config.php';
+function jsonResponse(array $data, int $code = 200): void
+{
+    if (!headers_sent()) {
+        http_response_code($code);
+        header('Content-Type: application/json; charset=utf-8');
+        header('Access-Control-Allow-Origin: *');
+    }
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
-header('Access-Control-Allow-Origin: *');
+try {
+    require_once dirname(__DIR__) . '/config.php';
+} catch (Throwable $e) {
+    jsonResponse([
+        'success' => false,
+        'message' => 'server_error',
+        'error'   => $e->getMessage(),
+    ], 500);
+}
+
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
@@ -11,20 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-function jsonResponse(array $data, int $code = 200): void
-{
-    http_response_code($code);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    exit;
-}
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     jsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
 }
 
 if ($db->connect_error) {
-    jsonResponse(['success' => false, 'message' => 'server_error'], 500);
+    jsonResponse([
+        'success' => false,
+        'message' => 'server_error',
+        'error'   => 'DB connect: ' . $db->connect_error,
+    ], 500);
 }
 
 function readInput(): array
@@ -54,9 +68,9 @@ function strLen(string $value): int
 
 function normalizePhone(string $phone): string
 {
-    $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-    $western = ['0','1','2','3','4','5','6','7','8','9'];
-    $phone = str_replace($arabic, $western, trim($phone));
+    $arabic  = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    $western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    $phone   = str_replace($arabic, $western, trim($phone));
     return preg_replace('/[^\d+]/', '', $phone) ?? '';
 }
 
@@ -87,11 +101,31 @@ try {
     $stmt = $db->prepare(
         'INSERT INTO quote_requests (name, phone, email, description) VALUES (?, ?, ?, ?)'
     );
-    $stmt->bind_param('ssss', $name, $phone, $email, $description);
-    $stmt->execute();
-    $stmt->close();
 
+    if (!$stmt) {
+        jsonResponse([
+            'success' => false,
+            'message' => 'server_error',
+            'error'   => 'Prepare failed: ' . $db->error,
+        ], 500);
+    }
+
+    $stmt->bind_param('ssss', $name, $phone, $email, $description);
+
+    if (!$stmt->execute()) {
+        jsonResponse([
+            'success' => false,
+            'message' => 'server_error',
+            'error'   => 'Execute failed: ' . $stmt->error,
+        ], 500);
+    }
+
+    $stmt->close();
     jsonResponse(['success' => true, 'message' => 'submitted']);
 } catch (Throwable $e) {
-    jsonResponse(['success' => false, 'message' => 'server_error'], 500);
+    jsonResponse([
+        'success' => false,
+        'message' => 'server_error',
+        'error'   => $e->getMessage(),
+    ], 500);
 }

@@ -96,7 +96,14 @@
                 method: 'POST',
                 body: formData,
             });
-            const result = await res.json();
+            const text = await res.text();
+            let result;
+            try {
+                result = JSON.parse(text);
+            } catch {
+                console.error('Invalid JSON response:', text);
+                throw new Error('invalid_response');
+            }
 
             if (!formMessage) return;
 
@@ -108,9 +115,11 @@
                 setTimeout(closeModal, 2500);
             } else {
                 formMessage.className = 'form-message error';
-                formMessage.textContent = result.message === 'server_error'
+                const detail = result.error ? `\n(${result.error})` : '';
+                formMessage.textContent = (result.message === 'server_error'
                     ? t('modal.serverError')
-                    : t('modal.validation');
+                    : t('modal.validation')) + detail;
+                if (result.error) console.error('Quote submit error:', result.error);
             }
         } catch {
             if (formMessage) {
