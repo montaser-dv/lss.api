@@ -1378,6 +1378,18 @@
             color: var(--white);
         }
 
+        .footer-vision {
+            margin-top: 28px;
+        }
+
+        .footer-vision img {
+            height: 80px;
+            width: auto;
+            max-width: 160px;
+            object-fit: contain;
+            opacity: 0.9;
+        }
+
         .footer-col h4 {
             color: var(--white);
             font-size: 15px;
@@ -1443,6 +1455,7 @@
             .footer-grid { grid-template-columns: 1fr; text-align: center; }
             .footer-brand p { margin-inline: auto; }
             .footer-social { justify-content: center; }
+            .footer-vision { display: flex; justify-content: center; }
             .footer-bottom { flex-direction: column; text-align: center; }
 
             .integrations-inner { flex-direction: column; gap: 20px; }
@@ -1470,7 +1483,7 @@
 
             <div class="nav-actions">
                 <button class="lang-toggle" id="langToggle" type="button">EN</button>
-                <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب عرض</a>
+                <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب استشارة</a>
                 <a href="/admin/" class="btn btn-outline" data-i18n="nav.login">دخول</a>
                 <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
             </div>
@@ -1488,7 +1501,7 @@
         <a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a>
         <a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a>
         <a href="#contact" data-i18n="nav.contact">تواصل معنا</a>
-        <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب عرض</a>
+        <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب استشارة</a>
         <a href="/admin/" class="btn btn-outline" data-i18n="nav.login">دخول</a>
         <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
     </nav>
@@ -1509,7 +1522,7 @@
                         <a href="https://demo.trakmile.com" class="btn btn-primary btn-lg">
                             <span data-i18n="hero.demo">جرب النسخة التجريبية</span> <i data-lucide="arrow-right"></i>
                         </a>
-                        <a href="#" class="btn btn-outline btn-lg" data-open-quote data-i18n="hero.quote">طلب عرض</a>
+                        <a href="#" class="btn btn-outline btn-lg" data-open-quote data-i18n="hero.quote">طلب استشارة</a>
                     </div>
                     <div class="hero-trust">
                         <div class="hero-trust-item">
@@ -1909,7 +1922,7 @@
                         <span data-i18n="cta.demo">جرب المنصة التجريبية</span> <i data-lucide="external-link"></i>
                     </a>
                     <a href="#" class="btn btn-outline btn-lg" data-open-quote style="color:#fff;border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05)">
-                        <span data-i18n="cta.quote">طلب عرض</span>
+                        <span data-i18n="cta.quote">طلب استشارة</span>
                     </a>
                 </div>
             </div>
@@ -1928,6 +1941,9 @@
                     <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
                     <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
                     <a href="mailto:info@trakmile.com" aria-label="Email"><i data-lucide="mail"></i></a>
+                </div>
+                <div class="footer-vision">
+                    <img src="imgs/visionn3.png" alt="رؤية المملكة العربية السعودية 2030">
                 </div>
             </div>
             <div class="footer-col">
@@ -1967,7 +1983,7 @@
         <div class="modal" role="dialog" aria-labelledby="modalTitle">
             <div class="modal-header">
                 <div>
-                    <h2 id="modalTitle" data-i18n="modal.title">طلب عرض</h2>
+                    <h2 id="modalTitle" data-i18n="modal.title">طلب استشارة</h2>
                     <p data-i18n="modal.subtitle">املأ النموذج وسيتواصل معك فريقنا في أقرب وقت</p>
                 </div>
                 <button class="modal-close" id="closeModal" type="button" aria-label="Close">
