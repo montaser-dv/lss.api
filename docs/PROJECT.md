@@ -47,9 +47,12 @@ lss.api/
 ├── js/
 │   ├── i18n.js             # ملف الترجمة
 │   └── app.js              # تبديل اللغة + نموذج طلب العرض
-├── config.php              # اتصال قاعدة البيانات ($db)
+├── config.php              # يحمّل api/db.php
 ├── api/
-│   └── submit_quote.php    # استقبال طلبات العروض
+│   ├── db.php              # اتصال قاعدة البيانات ($db)
+│   ├── submit_quote.php    # استقبال طلبات العروض
+│   ├── test_db.php         # اختبار الاتصال
+│   └── ping.php            # اختبار PHP
 ├── admin/
 │   ├── login.php           # تسجيل دخول الأدمن
 │   ├── index.php           # استعراض طلبات العروض

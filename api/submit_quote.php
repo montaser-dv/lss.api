@@ -1,28 +1,50 @@
 <?php
 
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
+
+register_shutdown_function(function () {
+    $err = error_get_last();
+    if (!$err || !in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        return;
+    }
+    if (!headers_sent()) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+    }
+    echo json_encode([
+        'success' => false,
+        'message' => 'fatal_error',
+        'error'   => $err['message'],
+        'file'    => basename($err['file']),
+        'line'    => $err['line'],
+    ], JSON_UNESCAPED_UNICODE);
+});
+
 function jsonResponse(array $data, int $code = 200): void
 {
     if (!headers_sent()) {
         http_response_code($code);
         header('Content-Type: application/json; charset=utf-8');
         header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-try {
-    require_once dirname(__DIR__) . '/config.php';
-} catch (Throwable $e) {
-    jsonResponse([
-        'success' => false,
-        'message' => 'server_error',
-        'error'   => $e->getMessage(),
-    ], 500);
+$dbFile = __DIR__ . '/db.php';
+if (!is_file($dbFile)) {
+    jsonResponse(['success' => false, 'message' => 'server_error', 'error' => 'db.php not found'], 500);
 }
 
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+require_once $dbFile;
+
+if (!isset($db) || !($db instanceof mysqli)) {
+    jsonResponse(['success' => false, 'message' => 'server_error', 'error' => '$db not available'], 500);
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
@@ -41,49 +63,22 @@ if ($db->connect_error) {
     ], 500);
 }
 
-function readInput(): array
-{
-    if (!empty($_POST)) {
-        return $_POST;
-    }
-
+$input = $_POST;
+if (empty($input)) {
     $raw = file_get_contents('php://input');
-    if ($raw === false || $raw === '') {
-        return [];
+    if ($raw) {
+        $json = json_decode($raw, true);
+        $input = is_array($json) ? $json : [];
     }
-
-    $json = json_decode($raw, true);
-    if (is_array($json)) {
-        return $json;
-    }
-
-    parse_str($raw, $parsed);
-    return is_array($parsed) ? $parsed : [];
 }
-
-function strLen(string $value): int
-{
-    return function_exists('mb_strlen') ? mb_strlen($value, 'UTF-8') : strlen($value);
-}
-
-function normalizePhone(string $phone): string
-{
-    $arabic  = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-    $western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    $phone   = str_replace($arabic, $western, trim($phone));
-    return preg_replace('/[^\d+]/', '', $phone) ?? '';
-}
-
-$input = readInput();
 
 $name        = trim($input['name'] ?? '');
-$phone       = normalizePhone($input['phone'] ?? '');
+$phone       = preg_replace('/[^\d+]/', '', trim($input['phone'] ?? ''));
 $email       = trim($input['email'] ?? '');
 $description = trim($input['description'] ?? '');
 
 $errors = [];
-
-if ($name === '' || strLen($name) < 2) {
+if ($name === '' || strlen($name) < 2) {
     $errors[] = 'name';
 }
 if ($phone === '' || !preg_match('/^(\+966|966|0)?5\d{8}$/', $phone)) {
@@ -97,35 +92,27 @@ if ($errors) {
     jsonResponse(['success' => false, 'message' => 'validation_error', 'fields' => $errors], 422);
 }
 
-try {
-    $stmt = $db->prepare(
-        'INSERT INTO quote_requests (name, phone, email, description) VALUES (?, ?, ?, ?)'
-    );
+$stmt = $db->prepare(
+    'INSERT INTO quote_requests (name, phone, email, description) VALUES (?, ?, ?, ?)'
+);
 
-    if (!$stmt) {
-        jsonResponse([
-            'success' => false,
-            'message' => 'server_error',
-            'error'   => 'Prepare failed: ' . $db->error,
-        ], 500);
-    }
-
-    $stmt->bind_param('ssss', $name, $phone, $email, $description);
-
-    if (!$stmt->execute()) {
-        jsonResponse([
-            'success' => false,
-            'message' => 'server_error',
-            'error'   => 'Execute failed: ' . $stmt->error,
-        ], 500);
-    }
-
-    $stmt->close();
-    jsonResponse(['success' => true, 'message' => 'submitted']);
-} catch (Throwable $e) {
+if (!$stmt) {
     jsonResponse([
         'success' => false,
         'message' => 'server_error',
-        'error'   => $e->getMessage(),
+        'error'   => 'Prepare: ' . $db->error,
     ], 500);
 }
+
+$stmt->bind_param('ssss', $name, $phone, $email, $description);
+
+if (!$stmt->execute()) {
+    jsonResponse([
+        'success' => false,
+        'message' => 'server_error',
+        'error'   => 'Execute: ' . $stmt->error,
+    ], 500);
+}
+
+$stmt->close();
+jsonResponse(['success' => true, 'message' => 'submitted']);

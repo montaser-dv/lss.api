@@ -102,7 +102,15 @@
                 result = JSON.parse(text);
             } catch {
                 console.error('Invalid JSON response:', text);
-                throw new Error('invalid_response');
+                if (formMessage) {
+                    formMessage.style.display = 'block';
+                    formMessage.className = 'form-message error';
+                    formMessage.textContent = text
+                        ? t('modal.fatal') + ' ' + text.substring(0, 200)
+                        : t('modal.error');
+                }
+                submitBtn.disabled = false;
+                return;
             }
 
             if (!formMessage) return;
