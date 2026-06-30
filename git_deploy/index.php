@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../debug.php';
+
    //.........xx....yyy
 
    $secret = "105504801_170001144_147715555"; // <-- نفس السر في GitHub

@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__DIR__) . '/config.php';
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
@@ -20,8 +22,6 @@ function jsonResponse(array $data, int $code = 200): void
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     jsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
 }
-
-require_once dirname(__DIR__) . '/config.php';
 
 if ($db->connect_error) {
     jsonResponse(['success' => false, 'message' => 'server_error'], 500);
