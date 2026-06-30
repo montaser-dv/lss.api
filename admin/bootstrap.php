@@ -16,9 +16,8 @@ if (session_status() === PHP_SESSION_NONE) {
 function adminResolveDbFile(): string
 {
     $paths = [
-        dirname(__DIR__) . '/api/db.php',                 // docroot: public_html/admin
-        dirname(__DIR__) . '/public_html/api/db.php',     // docroot: admin.trakmile.com (CyberPanel)
-        __DIR__ . '/db.php',                              // نسخة محلية داخل admin
+        dirname(__DIR__) . '/api/db.php',
+        __DIR__ . '/db.php',
     ];
 
     foreach ($paths as $path) {
@@ -40,13 +39,6 @@ require_once $dbFile;
 
 if (!isset($db) || !($db instanceof mysqli)) {
     die('Database connection ($db) is not available.');
-}
-
-function adminBaseUrl(): string
-{
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-    $host   = $_SERVER['HTTP_HOST'] ?? 'admin.trakmile.com';
-    return $scheme . '://' . $host;
 }
 
 function adminDbError(): string
