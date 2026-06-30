@@ -1,0 +1,15 @@
+DirectoryIndex login.php index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # إعادة توجيه الوصول عبر trakmile.com/admin إلى النطاق الفرعي
+    RewriteCond %{HTTP_HOST} ^(www\.)?trakmile\.com$ [NC]
+    RewriteRule ^ https://admin.trakmile.com/ [R=301,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-Content-Type-Options "nosniff"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

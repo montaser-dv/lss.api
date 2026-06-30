@@ -27,4 +27,7 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
 
 -- Default admin: username=admin  password=Trakmile@2026
 INSERT IGNORE INTO `admin_users` (`username`, `password_hash`) VALUES
-('admin', '$2y$10$zR0n7CoyAOd6qDs53gC/uuyOORmGuD1VIXIiX7yVa13IZCdDugCky');
+('admin', '$2y$10$t4ew9GmdVO.j6CAcynTHzuq7FgNE8UNDT5LO0n5pB5ZYeYounUKbe');
+
+-- إذا كان المستخدم موجوداً مسبقاً، حدّث كلمة المرور:
+-- UPDATE admin_users SET password_hash='$2y$10$t4ew9GmdVO.j6CAcynTHzuq7FgNE8UNDT5LO0n5pB5ZYeYounUKbe' WHERE username='admin';

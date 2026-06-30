@@ -87,10 +87,20 @@ lss.api/
 
 ## لوحة الإدارة
 
+**الرابط:** [https://admin.trakmile.com](https://admin.trakmile.com)
+
 | الرابط | الوصف |
 |--------|-------|
-| `/admin/login.php` | تسجيل الدخول |
-| `/admin/index.php` | استعراض وإدارة الطلبات |
+| `admin.trakmile.com` | تسجيل الدخول واستعراض طلبات العروض |
+
+### إعداد النطاق الفرعي (CyberPanel)
+
+1. أنشئ subdomain: `admin.trakmile.com`
+2. اضبط **Document Root** على أحد الخيارين:
+   - **مُفضّل:** `/home/trakmile.com/public_html/admin`
+   - **أو:** مجلد منفصل مع نسخ محتويات `admin/` (يعمل عبر `admin/db.php`)
+3. فعّل SSL للنطاق الفرعي
+4. أي زيارة لـ `trakmile.com/admin` تُوجَّه تلقائياً إلى `admin.trakmile.com`
 
 ### بيانات الدخول الافتراضية
 

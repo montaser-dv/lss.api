@@ -5,6 +5,14 @@ requireAdmin();
 
 global $db;
 
+if ($db->connect_error) {
+    die('Database connection failed: ' . htmlspecialchars($db->connect_error));
+}
+
+if (!adminTableExists('quote_requests')) {
+    die('Table quote_requests not found. Run docs/DB/quote_tables.sql on trak_db');
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $id = (int)($_POST['id'] ?? 0);
     $action = $_POST['action'];
