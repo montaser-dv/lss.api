@@ -16,22 +16,52 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 require_once __DIR__ . '/config.php';
 
-$input = json_decode(file_get_contents('php://input'), true);
-if (!is_array($input)) {
-    $input = $_POST;
+function readInput(): array
+{
+    if (!empty($_POST)) {
+        return $_POST;
+    }
+
+    $raw = file_get_contents('php://input');
+    if ($raw === false || $raw === '') {
+        return [];
+    }
+
+    $json = json_decode($raw, true);
+    if (is_array($json)) {
+        return $json;
+    }
+
+    parse_str($raw, $parsed);
+    return is_array($parsed) ? $parsed : [];
 }
 
+function strLen(string $value): int
+{
+    return function_exists('mb_strlen') ? mb_strlen($value, 'UTF-8') : strlen($value);
+}
+
+function normalizePhone(string $phone): string
+{
+    $arabic = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    $western = ['0','1','2','3','4','5','6','7','8','9'];
+    $phone = str_replace($arabic, $western, trim($phone));
+    return preg_replace('/[^\d+]/', '', $phone) ?? '';
+}
+
+$input = readInput();
+
 $name        = trim($input['name'] ?? '');
-$phone       = trim($input['phone'] ?? '');
+$phone       = normalizePhone($input['phone'] ?? '');
 $email       = trim($input['email'] ?? '');
 $description = trim($input['description'] ?? '');
 
 $errors = [];
 
-if ($name === '' || mb_strlen($name) < 2) {
+if ($name === '' || strLen($name) < 2) {
     $errors[] = 'name';
 }
-if ($phone === '' || !preg_match('/^[0-9+\-\s()]{8,20}$/', $phone)) {
+if ($phone === '' || !preg_match('/^(\+966|966|0)?5\d{8}$/', $phone)) {
     $errors[] = 'phone';
 }
 if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {

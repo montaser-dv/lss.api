@@ -85,18 +85,16 @@
         const submitBtn = quoteForm.querySelector('[type="submit"]');
         submitBtn.disabled = true;
 
-        const data = {
-            name: quoteForm.name.value.trim(),
-            phone: quoteForm.phone.value.trim(),
-            email: quoteForm.email.value.trim(),
-            description: quoteForm.description.value.trim(),
-        };
+        const formData = new FormData();
+        formData.append('name', document.getElementById('quoteName').value.trim());
+        formData.append('phone', document.getElementById('quotePhone').value.trim());
+        formData.append('email', document.getElementById('quoteEmail').value.trim());
+        formData.append('description', document.getElementById('quoteDescription').value.trim());
 
         try {
             const res = await fetch('api/submit_quote.php', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
+                body: formData,
             });
             const result = await res.json();
 
@@ -110,7 +108,9 @@
                 setTimeout(closeModal, 2500);
             } else {
                 formMessage.className = 'form-message error';
-                formMessage.textContent = t('modal.validation');
+                formMessage.textContent = result.message === 'server_error'
+                    ? t('modal.serverError')
+                    : t('modal.validation');
             }
         } catch {
             if (formMessage) {

@@ -109,6 +109,7 @@ const translations = {
         'modal.success': 'تم إرسال طلبك بنجاح! سنتواصل معك قريباً.',
         'modal.error': 'حدث خطأ. يرجى المحاولة مرة أخرى.',
         'modal.validation': 'يرجى التحقق من البيانات المدخلة.',
+        'modal.serverError': 'تعذر إرسال الطلب. يرجى المحاولة لاحقاً.',
     },
     en: {
         'meta.title': 'Trakmile | Smart Logistics Management Platform',
@@ -220,5 +221,6 @@ const translations = {
         'modal.success': 'Your request was submitted successfully! We will contact you soon.',
         'modal.error': 'An error occurred. Please try again.',
         'modal.validation': 'Please check the entered data.',
+        'modal.serverError': 'Could not submit your request. Please try again later.',
     }
 };
