@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Trakmile — الملف التعريفي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1B84FF;
+            --secondary: #FF6A00;
+            --dark: #0F172A;
+            --gray: #64748B;
+            --light: #F8FAFC;
+            --border: #E2E8F0;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            color: var(--dark);
+            background: #fff;
+            line-height: 1.7;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 18mm 20mm;
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page:last-child { page-break-after: auto; }
+
+        /* Cover */
+        .cover {
+            background: linear-gradient(145deg, #0F172A 0%, #1a2744 55%, #0F172A 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+        .cover-logo { height: 52px; }
+        .cover-vision { height: 70px; opacity: 0.95; }
+
+        .cover-main { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 30mm 0; }
+        .cover-badge {
+            display: inline-block;
+            background: rgba(27,132,255,0.2);
+            color: #60A5FA;
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border: 1px solid rgba(27,132,255,0.3);
+        }
+        .cover h1 { font-size: 42px; font-weight: 800; line-height: 1.25; margin-bottom: 16px; }
+        .cover h1 span { color: var(--primary); }
+        .cover-sub { font-size: 18px; color: #94A3B8; max-width: 480px; line-height: 1.8; }
+        .cover-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 40px;
+        }
+        .cover-stat {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .cover-stat strong { display: block; font-size: 26px; color: var(--primary); font-weight: 800; }
+        .cover-stat span { font-size: 11px; color: #94A3B8; }
+
+        .cover-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 16px;
+            font-size: 13px;
+            color: #94A3B8;
+        }
+
+        /* Inner pages */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid var(--primary);
+        }
+        .page-header img { height: 32px; }
+        .page-header span { font-size: 12px; color: var(--gray); font-weight: 600; }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        h2 { font-size: 26px; font-weight: 800; margin-bottom: 14px; color: var(--dark); }
+        h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--dark); }
+        p { font-size: 13px; color: var(--gray); margin-bottom: 12px; }
+
+        .intro-box {
+            background: var(--light);
+            border-right: 4px solid var(--primary);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 24px;
+        }
+        .intro-box p { color: var(--dark); font-size: 14px; margin: 0; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+
+        .card {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            background: #fff;
+        }
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(27,132,255,0.1);
+            color: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .card h3 { font-size: 14px; margin-bottom: 6px; }
+        .card p { font-size: 12px; margin: 0; line-height: 1.6; }
+
+        .steps { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+        .step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .step-num {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+        }
+        .step-content h3 { margin-bottom: 4px; }
+        .step-content p { margin: 0; font-size: 12px; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+        th {
+            background: var(--dark);
+            color: #fff;
+            padding: 10px 12px;
+            text-align: right;
+            font-weight: 600;
+        }
+        td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border);
+            color: var(--gray);
+        }
+        tr:nth-child(even) td { background: var(--light); }
+
+        .arch-diagram {
+            background: var(--light);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .arch-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .arch-box {
+            background: #fff;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            min-width: 120px;
+        }
+        .arch-box.orange { border-color: var(--secondary); }
+        .arch-box.dark { background: var(--dark); color: #fff; border-color: var(--dark); }
+        .arch-arrow { color: var(--primary); font-size: 20px; font-weight: 700; }
+
+        .integrations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .integration-tag {
+            background: var(--light);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .contact-bar {
+            background: linear-gradient(135deg, var(--dark), #1a2744);
+            color: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .contact-bar h3 { color: #fff; font-size: 18px; margin-bottom: 12px; }
+        .contact-item { font-size: 13px; color: #94A3B8; margin-bottom: 6px; }
+        .contact-item strong { color: #fff; }
+
+        .page-num {
+            position: absolute;
+            bottom: 12mm;
+            left: 20mm;
+            font-size: 11px;
+            color: var(--gray);
+        }
+
+        ul.feature-list {
+            list-style: none;
+            margin-bottom: 16px;
+        }
+        ul.feature-list li {
+            font-size: 12px;
+            color: var(--gray);
+            padding: 4px 0;
+            padding-right: 18px;
+            position: relative;
+        }
+        ul.feature-list li::before {
+            content: '✓';
+            position: absolute;
+            right: 0;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<!-- صفحة الغلاف -->
+<div class="page cover">
+    <div class="cover-top">
+        <img src="../imgs/logo.png" alt="Trakmile" class="cover-logo">
+        <img src="../imgs/visionn3.png" alt="Vision 2030" class="cover-vision">
+    </div>
+    <div class="cover-main">
+        <span class="cover-badge">Smart Logistics Management Platform</span>
+        <h1>نظام <span>Trakmile</span><br>اللوجستي المتكامل</h1>
+        <p class="cover-sub">منصة سحابية متكاملة لإدارة الشحنات والسائقين والأسطول والمستودعات وعمليات التوصيل — مصممة لشركات اللوجستيات بمختلف الأحجام والمستويات في المملكة والمنطقة.</p>
+        <div class="cover-stats">
+            <div class="cover-stat"><strong>10M+</strong><span>شحنة مُدارة</span></div>
+            <div class="cover-stat"><strong>500+</strong><span>عميل تجاري</span></div>
+            <div class="cover-stat"><strong>50K+</strong><span>سائق</span></div>
+            <div class="cover-stat"><strong>99.9%</strong><span>وقت التشغيل</span></div>
+        </div>
+    </div>
+    <div class="cover-footer">
+        <div>
+            <strong style="color:#fff">trakmile.com</strong><br>
+            info@trakmile.com · الرياض، المملكة العربية السعودية
+        </div>
+        <div>الملف التعريفي · 2026</div>
+    </div>
+</div>
+
+<!-- نظرة عامة -->
+<div class="page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · نظرة عامة</span>
+    </div>
+
+    <span class="section-label">About Trakmile</span>
+    <h2>ما هو Trakmile؟</h2>
+
+    <div class="intro-box">
+        <p><strong>Trakmile (تراك مايل)</strong> هو نظام تشغيل لوجستي يُمكّن شركات التوصيل ومقدمي الخدمات اللوجستية (3PL) من إدارة عملياتهم بالكامل من منصة واحدة — من استلام الطلب حتى إثبات التسليم.</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3>الرؤية</h3>
+            <p>تمكين قطاع اللوجستيات في الشرق الأوسط من التحول الرقمي الكامل وفق رؤية المملكة 2030.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">💡</div>
+            <h3>الرسالة</h3>
+            <p>تقديم حلول لوجستية ذكية تُقلّل التكلفة، تزيد الكفاءة، وتحسّن تجربة العميل النهائي.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">👥</div>
+            <h3>الفئة المستهدفة</h3>
+            <p>شركات التوصيل، مقدمو الخدمات اللوجستية (3PL)، ومراكز التوزيع — بمختلف الأحجام والمستويات.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">🌍</div>
+            <h3>التغطية</h3>
+            <p>مصمم خصيصاً لمنطقة الشرق الأوسط مع دعم كامل للغة العربية والعمليات المحلية (COD، SMS، إلخ).</p>
+        </div>
+    </div>
+
+    <span class="section-label">Service Components</span>
+    <h2>مكوّنات الخدمة</h2>
+    <table>
+        <tr><th>الخدمة</th><th>الوصف</th><th>الفائدة للعميل</th></tr>
+        <tr><td><strong>منصة التشغيل</strong></td><td>لوحة تحكم مركزية لإدارة الشحنات والسائقين والمستودعات والتقارير</td><td>رؤية شاملة وتحكم كامل بعمليات التوصيل</td></tr>
+        <tr><td><strong>تطبيق السائقين</strong></td><td>تطبيق جوال يمكّن السائقين من استلام الطلبات والتنقل وإثبات التسليم</td><td>تنفيذ أسرع وأدق على أرض الواقع</td></tr>
+        <tr><td><strong>تكامل المتاجر</strong></td><td>ربط متاجر عملائك (Salla، Zid، Shopify وغيرها) لاستقبال الطلبات تلقائياً</td><td>تقليل العمل اليدوي وتسريع بدء التوصيل</td></tr>
+        <tr><td><strong>إدارة COD</strong></td><td>متابعة تحصيل الدفع عند الاستلام وتسوية المبالغ مع السائقين</td><td>شفافية مالية وتحكم بالتحصيلات</td></tr>
+        <tr><td><strong>الاستشارات والدعم</strong></td><td>استشارة تشغيلية، تدريب الفريق، ومتابعة بعد التشغيل</td><td>انطلاق سلس ونجاح مستدام للعمليات</td></tr>
+    </table>
+    <div class="page-num">2</div>
+</div>
+
+<!-- المميزات -->
+<div class="page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · المميزات</span>
+    </div>
+
+    <span class="section-label">Core Features</span>
+    <h2>مميزات المنصة</h2>
+
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-icon">📦</div>
+            <h3>إدارة الشحنات</h3>
+            <p>إنشاء وتعيين وتتبع الشحنات طوال دورة التوصيل — من الاستلام إلى إثبات التسليم (POD).</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">🚗</div>
+            <h3>إدارة السائقين</h3>
+            <p>إدارة السائقين، جداول العمل، التكليفات، مدفوعات COD، ومؤشرات الأداء اللحظية.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">📍</div>
+            <h3>تتبع الأسطول</h3>
+            <p>مراقبة مواقع المركبات مباشرة وتحسين مسارات التوصيل ديناميكياً.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">🏭</div>
+            <h3>إدارة المستودعات</h3>
+            <p>تحكم بالمخزون متعدد المراكز، مسح الباركود، وإدارة مراكز الفرز.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">✅</div>
+            <h3>إثبات التسليم (POD)</h3>
+            <p>التوقيعات الرقمية، الصور الفورية، ورمز OTP عند التسليم.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>التقارير والتحليلات</h3>
+            <p>لوحات تحكم تفاعلية، تقارير آلية، ومؤشرات أداء لكل أصحاب المصلحة.</p>
+        </div>
+    </div>
+
+    <span class="section-label">Why Trakmile</span>
+    <h2>لماذا Trakmile؟</h2>
+    <div class="grid-3">
+        <div class="card">
+            <h3>رؤية لحظية</h3>
+            <p>تتبّع كل شحنة من لوحة تحكم مركزية واحدة.</p>
+        </div>
+        <div class="card">
+            <h3>أتمتة العمليات</h3>
+            <p>تكليف تلقائي للسائقين، إشعارات للعملاء، وفوترة منظمة.</p>
+        </div>
+        <div class="card">
+            <h3>جاهز للذروة</h3>
+            <p>منصة سحابية تتحمل 3× الحجم في مواسم التجارة والعروض.</p>
+        </div>
+    </div>
+    <div class="page-num">3</div>
+</div>
+
+<!-- كيف يعمل + التكامل -->
+<div class="page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · آلية العمل</span>
+    </div>
+
+    <span class="section-label">How It Works</span>
+    <h2>كيف تبدأ مع Trakmile؟</h2>
+
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h3>اربط متاجر عملائك</h3>
+                <p>تكامل فوري مع Salla، Zid، Shopify، WooCommerce — لاستقبال طلبات عملائك تلقائياً دون إدخال يدوي.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h3>اضبط عملياتك</h3>
+                <p>إعداد المستودعات، مناطق التوصيل، فرق السائقين، وقواعد التكليف الآلي.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h3>ابدأ التوصيل</h3>
+                <p>تتبّع كل شحنة لحظياً، اجمع COD، وأرسل تحديثات مباشرة لعملائك.</p>
+            </div>
+        </div>
+    </div>
+
+    <span class="section-label">Integrations</span>
+    <h2>التكاملات المدعومة</h2>
+    <div class="integrations">
+        <span class="integration-tag">Salla</span>
+        <span class="integration-tag">Zid</span>
+        <span class="integration-tag">Shopify</span>
+        <span class="integration-tag">WooCommerce</span>
+        <span class="integration-tag">رسائل SMS</span>
+        <span class="integration-tag">واتساب</span>
+        <span class="integration-tag">إشعارات الجوال</span>
+        <span class="integration-tag">خرائط وملاحة</span>
+    </div>
+
+    <span class="section-label">Service Flow</span>
+    <h2>مسار الخدمة</h2>
+    <div class="arch-diagram">
+        <div class="arch-row">
+            <div class="arch-box">متجر العميل</div>
+            <span class="arch-arrow">←</span>
+            <div class="arch-box dark">Trakmile</div>
+            <span class="arch-arrow">→</span>
+            <div class="arch-box orange">السائق</div>
+            <span class="arch-arrow">→</span>
+            <div class="arch-box">المستلم</div>
+        </div>
+        <p style="text-align:center;font-size:11px;color:var(--gray);margin:8px 0 0">من استلام الطلب حتى إثبات التسليم — دورة واحدة متكاملة وقابلة للمتابعة</p>
+    </div>
+    <div class="page-num">4</div>
+</div>
+
+<!-- تطبيق الجوال + خدمات التشغيل -->
+<div class="page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · خدمات التشغيل</span>
+    </div>
+
+    <span class="section-label">Mobile App</span>
+    <h2>تطبيق السائقين</h2>
+    <p>تطبيق جوال مخصص لفرق التوصيل والميدان، يُمكّن السائقين من:</p>
+    <ul class="feature-list">
+        <li>استلام وتأكيد الطلبات لحظياً</li>
+        <li>الملاحة وتحسين مسارات التوصيل</li>
+        <li>إثبات التسليم بالصورة والتوقيع الرقمي</li>
+        <li>تحصيل COD ومزامنة فورية مع منصة التشغيل</li>
+        <li>إشعارات فورية بالطلبات الجديدة والتحديثات</li>
+        <li>عرض سجل الطلبات والأداء اليومي</li>
+    </ul>
+
+    <span class="section-label">Operations</span>
+    <h2>خدمات التشغيل اليومي</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-icon">📋</div>
+            <h3>إدارة الطلبات</h3>
+            <p>استلام الطلبات، فرزها، تعيينها للسائقين، ومتابعة حالتها حتى التسليم.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">🗺️</div>
+            <h3>تخطيط المناطق</h3>
+            <p>تقسيم مناطق التوصيل، تحديد الأولويات، وتوزيع الأحمال على الفرق.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">💬</div>
+            <h3>تواصل العملاء</h3>
+            <p>إرسال تحديثات الحالة عبر SMS وواتساب لرفع رضا العملاء.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">💰</div>
+            <h3>إدارة التحصيلات</h3>
+            <p>متابعة مبالغ COD، تسوية السائقين، وتقارير التحصيل اليومية.</p>
+        </div>
+    </div>
+
+    <span class="section-label">For Each Client</span>
+    <h2>بيئة مستقلة لكل عميل</h2>
+    <div class="intro-box">
+        <p>كل شركة لوجستية تحصل على <strong>بيئة تشغيل خاصة</strong> ببياناتها وعملياتها — مع إمكانية تجربة المنصة عبر نسخة تجريبية قبل التشغيل الكامل.</p>
+    </div>
+    <div class="page-num">5</div>
+</div>
+
+<!-- القطاعات + الدعم -->
+<div class="page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · القطاعات والدعم</span>
+    </div>
+
+    <span class="section-label">Industries</span>
+    <h2>القطاعات التي نخدمها</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-icon">🚚</div>
+            <h3>شركات التوصيل</h3>
+            <p>إدارة الأسطول والسائقين والشحنات اليومية بكفاءة عالية.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">📦</div>
+            <h3>مقدمو الخدمات اللوجستية (3PL)</h3>
+            <p>تشغيل عمليات متعددة العملاء من منصة واحدة منظمة.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">📈</div>
+            <h3>شركات بمختلف الأحجام</h3>
+            <p>من الشركات الناشئة إلى المؤسسات الكبرى — حلول مرنة تنمو مع توسع عملياتك.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">🏢</div>
+            <h3>مراكز التوزيع</h3>
+            <p>إدارة المستودعات والفرز والتوزيع للمرحلة الأخيرة.</p>
+        </div>
+    </div>
+
+    <span class="section-label">Support & Onboarding</span>
+    <h2>الدعم والانطلاق</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h3>استشارة مجانية</h3>
+                <p>نفهم احتياجاتك التشغيلية ونقترح الحل المناسب لحجم عملك.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h3>تجربة المنصة</h3>
+                <p>جولة في النسخة التجريبية لاستكشاف المميزات قبل الالتزام.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h3>تشغيل ودعم مستمر</h3>
+                <p>إعداد الحساب، تدريب الفريق، ومتابعة بعد الإطلاق لضمان النجاح.</p>
+            </div>
+        </div>
+    </div>
+
+    <span class="section-label">Reports</span>
+    <h2>التقارير واتخاذ القرار</h2>
+    <ul class="feature-list">
+        <li>تقارير أداء السائقين ومعدلات التسليم في الوقت</li>
+        <li>تحليل مناطق التوصيل والأحمال التشغيلية</li>
+        <li>متابعة COD والتحصيلات المالية</li>
+        <li>لوحات مؤشرات لحظية لصناع القرار</li>
+    </ul>
+    <div class="page-num">6</div>
+</div>
+
+<!-- صفحة التواصل -->
+<div class="page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · تواصل معنا</span>
+    </div>
+
+    <div style="text-align:center;padding:40px 0 30px">
+        <span class="section-label">Get Started</span>
+        <h2 style="font-size:32px;margin-bottom:12px">ابدأ رحلتك مع Trakmile</h2>
+        <p style="font-size:15px;max-width:460px;margin:0 auto 30px">انضم إلى أكثر من 500 شركة لوجستية تثق بـ Trakmile لإدارة عمليات التوصيل.</p>
+    </div>
+
+    <div class="contact-bar">
+        <div>
+            <h3>تواصل معنا</h3>
+            <div class="contact-item"><strong>الموقع الإلكتروني:</strong> trakmile.com</div>
+            <div class="contact-item"><strong>البريد الإلكتروني:</strong> info@trakmile.com</div>
+            <div class="contact-item"><strong>النسخة التجريبية:</strong> demo.trakmile.com</div>
+            <div class="contact-item"><strong>العنوان:</strong> الرياض، المملكة العربية السعودية</div>
+            <div class="contact-item"><strong>طلب استشارة:</strong> عبر الموقع — نموذج «طلب استشارة»</div>
+        </div>
+        <div>
+            <h3>الخطوات التالية</h3>
+            <div class="contact-item">① جرب المنصة التجريبية مجاناً</div>
+            <div class="contact-item">② اطلب استشارة عبر الموقع</div>
+            <div class="contact-item">③ تواصل مع فريق المبيعات</div>
+            <div class="contact-item">④ ابدأ التشغيل خلال 1-2 أسبوع</div>
+        </div>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)">
+        <img src="../imgs/logo.png" alt="Trakmile" style="height:40px">
+        <img src="../imgs/visionn3.png" alt="Vision 2030" style="height:60px">
+    </div>
+
+    <p style="text-align:center;font-size:11px;color:var(--gray);margin-top:30px">
+        © 2026 Trakmile. جميع الحقوق محفوظة.<br>
+        Smart Logistics Management Platform — Built for Smarter Fulfillment Ecosystems
+    </p>
+    <div class="page-num">7</div>
+</div>
+
+</body>
+</html>
