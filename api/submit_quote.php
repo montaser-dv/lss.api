@@ -9,12 +9,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
+function jsonResponse(array $data, int $code = 200): void
+{
+    http_response_code($code);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    require_once __DIR__ . '/config.php';
     jsonResponse(['success' => false, 'message' => 'Method not allowed'], 405);
 }
 
-require_once __DIR__ . '/config.php';
+require_once dirname(__DIR__) . '/config.php';
+
+if ($db->connect_error) {
+    jsonResponse(['success' => false, 'message' => 'server_error'], 500);
+}
 
 function readInput(): array
 {
@@ -73,14 +84,12 @@ if ($errors) {
 }
 
 try {
-    $db = getDB();
     $stmt = $db->prepare(
         'INSERT INTO quote_requests (name, phone, email, description) VALUES (?, ?, ?, ?)'
     );
     $stmt->bind_param('ssss', $name, $phone, $email, $description);
     $stmt->execute();
     $stmt->close();
-    $db->close();
 
     jsonResponse(['success' => true, 'message' => 'submitted']);
 } catch (Throwable $e) {

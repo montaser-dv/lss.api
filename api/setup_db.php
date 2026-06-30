@@ -1,11 +1,14 @@
 <?php
 
-require_once __DIR__ . '/config.php';
+require_once dirname(__DIR__) . '/config.php';
 
 $sqlFile = dirname(__DIR__) . '/docs/DB/quote_tables.sql';
 $sql = file_get_contents($sqlFile);
 
-$db = getDB();
+if ($db->connect_error) {
+    die('Database connection failed: ' . $db->connect_error);
+}
+
 $db->multi_query($sql);
 
 do {
@@ -13,7 +16,5 @@ do {
         $result->free();
     }
 } while ($db->next_result());
-
-$db->close();
 
 echo "OK: Tables created successfully.\n";

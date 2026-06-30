@@ -3,7 +3,7 @@
 require_once __DIR__ . '/auth.php';
 requireAdmin();
 
-$db = getDB();
+global $db;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $id = (int)($_POST['id'] ?? 0);

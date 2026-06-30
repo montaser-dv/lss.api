@@ -35,7 +35,7 @@
 3. GitHub webhook ينشر التحديثات على الخادم تلقائياً
 4. استعراض النتيجة مباشرة على الموقع الحي
 
-> **ملاحظة:** إعداد قاعدة البيانات (مثل `quote_tables.sql`) يُنفَّذ على **خادم الإنتاج** حيث تعمل قاعدة `lss_main`، وليس بالضرورة على الجهاز المحلي.
+> **ملاحظة:** إعداد قاعدة البيانات (مثل `quote_tables.sql`) يُنفَّذ على **خادم الإنتاج** في قاعدة `trak_db` عبر CyberPanel/phpMyAdmin.
 
 ---
 
@@ -47,8 +47,8 @@ lss.api/
 ├── js/
 │   ├── i18n.js             # ملف الترجمة
 │   └── app.js              # تبديل اللغة + نموذج طلب العرض
+├── config.php              # اتصال قاعدة البيانات ($db)
 ├── api/
-│   ├── config.php          # اتصال قاعدة البيانات
 │   └── submit_quote.php    # استقبال طلبات العروض
 ├── admin/
 │   ├── login.php           # تسجيل دخول الأدمن
@@ -100,11 +100,13 @@ lss.api/
 
 ### إعداد قاعدة البيانات
 
-نفّذ ملف SQL على قاعدة `lss_main`:
+نفّذ ملف SQL على قاعدة `trak_db`:
 
 ```bash
-mysql -u lss_main_user -p lss_main < docs/DB/quote_tables.sql
+mysql -u trak_user -p trak_db < docs/DB/quote_tables.sql
 ```
+
+> **ملاحظة:** جميع ملفات PHP تستخدم `config.php` في جذر المشروع ومتغير `$db`.
 
 ---
 

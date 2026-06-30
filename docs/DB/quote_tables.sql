@@ -1,5 +1,5 @@
 -- Trakmile: Quote requests & Admin tables
--- Run on database: lss_main
+-- Run on database: trak_db
 
 SET NAMES utf8mb4;
 
