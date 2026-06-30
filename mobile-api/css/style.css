@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Marhey:wght@400..700&family=Nanum+Gothic&family=Noto+Kufi+Arabic:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Marhey:wght@300..700&family=Nobile:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Noto+Kufi+Arabic:wght@100..900&family=Noto+Sans+Telugu:wght@100..900&family=Raleway:wght@504&family=Roboto:ital,wght@1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:ital,wght@0,100..1000;1,100..1000&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Marhey:wght@300..700&family=Nobile:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Noto+Kufi+Arabic:wght@100..900&family=Noto+Sans+Telugu:wght@100..900&family=Raleway:wght@504&family=Roboto:ital,wght@1,100..900&display=swap');
+
+    body{
+       padding: 0;
+    margin: 0;
+    font-family: "Ancizar", sans-serif;
+}
+
+
+.min-tbl-item{
+    border: 1px solid #ccc;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    background-color: #e0e0e0;
+}
+
+.confirmOr{
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px;
+    width: 90px;
+    background-color: #ff533b;
+    color: #fff;
+    border-radius: 10px;
+    border: 2px solid #ff533b;
+}
+
+.tbl-item{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    font-family: "Ancizar", sans-serif;
+    background-color: #fdf6e6;
+}
+
+.tbl-item td{
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px;
+}
+
+.tbl-item-confirm{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    font-family: "Ancizar", sans-serif;
+    background-color: #f9f9f9;
+}
+
+
+.tbl-item-confirm td{
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+#awb{
+    font-size: 20px;
+    font-family: "Nobile", sans-serif;
+    font-weight: 500;
+}
+
+.orderDetail{
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    font-family: "Ancizar", sans-serif;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.btn-lk{
+    width: 200px;
+}
+
+.orderDetail td{
+    border: 0px solid #ccc;
+    padding: 10px;
+    margin: 0;
+    font-size: 16px;
+    font-family: "Ancizar", sans-serif;
+}
+
+.lo_style{
+    width: 60px;
+    height: 60px;
+    padding:15px;
+
+}
+
+
+.cap_oo{
+    font-size: 16px;
+    font-weight: bold;
+    color:#333;
+}
+
+.hr-btm{
+    border-bottom: 2px solid #b3b3b3;
+}
