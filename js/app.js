@@ -4,8 +4,14 @@
 
     let currentLang = localStorage.getItem(STORAGE_KEY) || DEFAULT_LANG;
 
+    function getTranslations() {
+        return window.translations || (typeof translations !== 'undefined' ? translations : null);
+    }
+
     function t(key) {
-        return translations[currentLang]?.[key] ?? translations[DEFAULT_LANG][key] ?? key;
+        const dict = getTranslations();
+        if (!dict) return key;
+        return dict[currentLang]?.[key] ?? dict[DEFAULT_LANG]?.[key] ?? key;
     }
 
     function applyLanguage(lang) {
@@ -17,15 +23,18 @@
         document.title = t('meta.title');
 
         document.querySelectorAll('[data-i18n]').forEach(el => {
-            el.textContent = t(el.dataset.i18n);
+            const key = el.getAttribute('data-i18n');
+            if (key) el.textContent = t(key);
         });
 
         document.querySelectorAll('[data-i18n-html]').forEach(el => {
-            el.innerHTML = t(el.dataset.i18nHtml);
+            const key = el.getAttribute('data-i18n-html');
+            if (key) el.innerHTML = t(key);
         });
 
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-            el.placeholder = t(el.dataset.i18nPlaceholder);
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (key) el.placeholder = t(key);
         });
 
         const langBtn = document.getElementById('langToggle');
@@ -142,7 +151,11 @@
 
     // Init
     document.getElementById('langToggle')?.addEventListener('click', toggleLanguage);
-    applyLanguage(currentLang);
+    if (getTranslations()) {
+        applyLanguage(currentLang);
+    } else {
+        console.error('Trakmile i18n: translations not loaded');
+    }
 
     // Header scroll
     const header = document.getElementById('header');

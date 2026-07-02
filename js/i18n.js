@@ -358,3 +358,5 @@ const translations = {
         'modal.serverError': 'Could not submit your request. Please try again later.',
     }
 };
+
+window.translations = translations;
