@@ -1,4 +1,5 @@
-var translations = {
+(function (window) {
+window.translations = {
     ar: {
         'meta.title': 'Trakmile | منصة إدارة لوجستية ذكية',
         'nav.features': 'المميزات',
@@ -358,5 +359,4 @@ var translations = {
         'modal.serverError': 'Could not submit your request. Please try again later.',
     }
 };
-
-window.translations = translations;
+})(window);
