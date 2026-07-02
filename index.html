@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -230,16 +230,19 @@
 
         .nav-links {
             display: flex;
-            gap: 36px;
+            gap: 22px;
             list-style: none;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .nav-links a {
             text-decoration: none;
             color: var(--gray);
             font-weight: 500;
-            font-size: 15px;
+            font-size: 14px;
             transition: color var(--transition);
+            white-space: nowrap;
         }
 
         .nav-links a:hover { color: var(--primary); }
@@ -1126,6 +1129,617 @@
             color: var(--secondary);
         }
 
+        /* ── Spotlight Showcases ── */
+        .showcase-section { padding: 100px 0; position: relative; overflow: hidden; }
+
+        .showcase-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .showcase-grid.reverse { direction: ltr; }
+        .showcase-grid.reverse > * { direction: rtl; }
+        [dir="ltr"] .showcase-grid.reverse { direction: rtl; }
+        [dir="ltr"] .showcase-grid.reverse > * { direction: ltr; }
+
+        .showcase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .showcase-title {
+            font-size: clamp(28px, 4vw, 38px);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
+            line-height: 1.25;
+        }
+
+        .showcase-desc {
+            font-size: 16px;
+            line-height: 1.75;
+            margin-bottom: 28px;
+            max-width: 520px;
+        }
+
+        .showcase-benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .showcase-benefit {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            transition: transform var(--transition), box-shadow var(--transition);
+        }
+
+        .showcase-benefit:hover {
+            transform: translateX(-4px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        [dir="ltr"] .showcase-benefit:hover { transform: translateX(4px); }
+
+        .feat-icon {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .feat-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .feat-icon.ai-purple {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(27, 132, 255, 0.15));
+            color: #A78BFA;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+        }
+
+        .feat-icon.ai-blue {
+            background: linear-gradient(135deg, rgba(27, 132, 255, 0.2), rgba(96, 165, 250, 0.1));
+            color: #60A5FA;
+        }
+
+        .feat-icon.ai-orange {
+            background: linear-gradient(135deg, rgba(255, 106, 0, 0.15), rgba(251, 191, 36, 0.1));
+            color: var(--secondary);
+        }
+
+        .feat-icon.acc-green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.1));
+            color: #10B981;
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+        }
+
+        .feat-icon.acc-blue {
+            background: linear-gradient(135deg, rgba(27, 132, 255, 0.15), rgba(96, 165, 250, 0.08));
+            color: var(--primary);
+        }
+
+        .feat-icon.wh-blue {
+            background: linear-gradient(135deg, rgba(27, 132, 255, 0.18), rgba(14, 165, 233, 0.1));
+            color: #38BDF8;
+            box-shadow: 0 8px 24px rgba(27, 132, 255, 0.15);
+        }
+
+        .feat-icon.scan-orange {
+            background: linear-gradient(135deg, rgba(255, 106, 0, 0.2), rgba(251, 146, 60, 0.12));
+            color: var(--secondary);
+            box-shadow: 0 8px 24px rgba(255, 106, 0, 0.2);
+        }
+
+        .showcase-benefit h4 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .showcase-benefit p {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* AI Showcase */
+        .ai-showcase {
+            background: linear-gradient(135deg, #0F172A 0%, #1a1040 50%, #0F172A 100%);
+            color: var(--white);
+        }
+
+        .ai-showcase::before {
+            background:
+                radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(27, 132, 255, 0.12) 0%, transparent 45%);
+        }
+
+        .ai-showcase .section-label { color: #A78BFA; }
+        .ai-showcase .showcase-desc { color: rgba(255,255,255,0.72); }
+        .ai-showcase .showcase-benefit {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .ai-showcase .showcase-benefit p { color: rgba(255,255,255,0.6); }
+        .ai-showcase .showcase-badge {
+            background: rgba(139, 92, 246, 0.15);
+            color: #C4B5FD;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .ai-chat-mockup {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+            position: relative;
+        }
+
+        .ai-chat-mockup::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #8B5CF6, #1B84FF, transparent);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .ai-chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .ai-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #8B5CF6, #1B84FF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .ai-avatar svg { width: 22px; height: 22px; fill: white; }
+
+        .ai-chat-header strong { display: block; font-size: 15px; }
+        .ai-chat-header span { font-size: 12px; color: #34D399; }
+
+        .ai-bubble {
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 13px;
+            line-height: 1.65;
+            margin-bottom: 12px;
+            max-width: 92%;
+        }
+
+        .ai-bubble.user {
+            background: rgba(27, 132, 255, 0.15);
+            border: 1px solid rgba(27, 132, 255, 0.25);
+            margin-inline-start: auto;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .ai-bubble.bot {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.85);
+        }
+
+        .ai-bubble.bot strong { color: #A78BFA; }
+
+        .ai-typing {
+            display: flex;
+            gap: 4px;
+            padding: 8px 0;
+        }
+
+        .ai-typing span {
+            width: 6px;
+            height: 6px;
+            background: #8B5CF6;
+            border-radius: 50%;
+            animation: aiDot 1.4s infinite;
+        }
+
+        .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes aiDot {
+            0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+            30% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Accounting Showcase */
+        .accounting-showcase {
+            background: linear-gradient(180deg, #F0FDF4 0%, var(--white) 40%, var(--light) 100%);
+        }
+
+        .accounting-showcase::before {
+            background: radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+        }
+
+        .accounting-showcase .section-label { color: #059669; }
+        .accounting-showcase .showcase-badge {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .accounting-showcase .showcase-benefit {
+            background: var(--white);
+            border: 1px solid var(--border);
+        }
+
+        .accounting-showcase .showcase-benefit p { color: var(--gray); }
+
+        .accounting-dashboard {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .acc-dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .acc-dash-header h4 { font-size: 14px; font-weight: 700; }
+
+        .acc-dash-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 100px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .acc-stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .acc-stat-box {
+            background: var(--light);
+            border-radius: var(--radius);
+            padding: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .acc-stat-box .label { font-size: 10px; color: var(--gray); margin-bottom: 4px; }
+        .acc-stat-box .value { font-size: 18px; font-weight: 800; }
+        .acc-stat-box .value.green { color: #059669; }
+        .acc-stat-box .value.blue { color: var(--primary); }
+        .acc-stat-box .value.orange { color: var(--secondary); }
+
+        .acc-modules {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .acc-module {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 8px;
+            background: var(--light);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--dark-soft);
+            transition: all var(--transition);
+        }
+
+        .acc-module:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .acc-module-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .acc-module-icon svg { width: 16px; height: 16px; fill: currentColor; }
+
+        /* Warehouse Showcase */
+        .warehouse-showcase {
+            background: var(--light);
+        }
+
+        .warehouse-showcase::before {
+            background: radial-gradient(circle at 10% 80%, rgba(27, 132, 255, 0.06) 0%, transparent 45%);
+        }
+
+        .warehouse-showcase .section-label { color: var(--primary); }
+        .warehouse-showcase .showcase-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid rgba(27, 132, 255, 0.2);
+        }
+
+        .warehouse-showcase .showcase-benefit {
+            background: var(--white);
+            border: 1px solid var(--border);
+        }
+
+        .warehouse-showcase .showcase-benefit p { color: var(--gray); }
+
+        .warehouse-visual {
+            background: linear-gradient(135deg, var(--dark) 0%, #1e3a5f 100%);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .warehouse-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .wh-hub-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wh-hub {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            color: var(--white);
+            transition: all var(--transition);
+        }
+
+        .wh-hub:hover {
+            background: rgba(27, 132, 255, 0.15);
+            border-color: rgba(27, 132, 255, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .wh-hub-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            background: rgba(27, 132, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #60A5FA;
+        }
+
+        .wh-hub-icon svg { width: 20px; height: 20px; fill: currentColor; }
+        .wh-hub strong { display: block; font-size: 12px; margin-bottom: 4px; }
+        .wh-hub span { font-size: 10px; color: rgba(255,255,255,0.55); }
+
+        .wh-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wh-flow-step {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 100px;
+            background: rgba(255, 106, 0, 0.15);
+            color: #FB923C;
+            border: 1px solid rgba(255, 106, 0, 0.25);
+        }
+
+        .wh-flow-arrow { color: rgba(255,255,255,0.3); font-size: 14px; }
+
+        /* Mobile Barcode Highlight */
+        .barcode-spotlight {
+            background: linear-gradient(135deg, rgba(255, 106, 0, 0.12), rgba(255, 106, 0, 0.04));
+            border: 1px solid rgba(255, 106, 0, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .barcode-spotlight-icon {
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
+            background: linear-gradient(135deg, var(--secondary), #FB923C);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(255, 106, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .barcode-spotlight-icon svg { width: 28px; height: 28px; fill: white; position: relative; z-index: 1; }
+
+        .barcode-spotlight-icon::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 8px rgba(255,255,255,0.6);
+            animation: scanLine 2s ease-in-out infinite;
+        }
+
+        @keyframes scanLine {
+            0%, 100% { top: 15%; opacity: 0.5; }
+            50% { top: 75%; opacity: 1; }
+        }
+
+        .barcode-spotlight h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+
+        .barcode-spotlight p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.72);
+            line-height: 1.65;
+        }
+
+        .mobile-feature.highlight {
+            background: rgba(255, 106, 0, 0.1);
+            border: 1px solid rgba(255, 106, 0, 0.2);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+        }
+
+        .mobile-feature.highlight i { color: #FB923C; }
+
+        .phone-scanner-view {
+            background: #0F172A;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-scanner-header {
+            padding: 40px 20px 16px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .phone-scanner-header h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .phone-scanner-header p { font-size: 11px; color: rgba(255,255,255,0.6); }
+
+        .phone-scanner-frame {
+            flex: 1;
+            margin: 0 24px 24px;
+            border: 2px dashed rgba(255, 106, 0, 0.5);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .phone-scanner-frame::before {
+            content: '';
+            position: absolute;
+            left: 8%;
+            right: 8%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            animation: scanLine 2.5s ease-in-out infinite;
+            box-shadow: 0 0 12px var(--secondary);
+        }
+
+        .scanner-bars {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 48px;
+        }
+
+        .scanner-bars span {
+            width: 4px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 1px;
+        }
+
+        .scanner-bars span:nth-child(1) { height: 70%; }
+        .scanner-bars span:nth-child(2) { height: 100%; }
+        .scanner-bars span:nth-child(3) { height: 45%; }
+        .scanner-bars span:nth-child(4) { height: 90%; }
+        .scanner-bars span:nth-child(5) { height: 55%; }
+        .scanner-bars span:nth-child(6) { height: 100%; }
+        .scanner-bars span:nth-child(7) { height: 40%; }
+        .scanner-bars span:nth-child(8) { height: 80%; }
+        .scanner-bars span:nth-child(9) { height: 60%; }
+        .scanner-bars span:nth-child(10) { height: 95%; }
+
+        .scanner-success {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34D399;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 100px;
+        }
+
+        .scanner-success svg { width: 14px; height: 14px; fill: currentColor; }
+
         /* ── Testimonials ── */
         .testimonials { background: var(--light); }
 
@@ -1429,6 +2043,8 @@
             .bento-card.span-2 { grid-column: span 1; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .footer-grid { grid-template-columns: 1fr 1fr; }
+            .showcase-grid { grid-template-columns: 1fr; gap: 40px; }
+            .acc-modules { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
@@ -1437,7 +2053,13 @@
 
             .hero-grid,
             .why-grid,
-            .mobile-grid { grid-template-columns: 1fr; }
+            .mobile-grid,
+            .showcase-grid { grid-template-columns: 1fr; }
+
+            .acc-stats-row { grid-template-columns: 1fr; }
+            .wh-hub-grid { grid-template-columns: 1fr; }
+            .wh-flow { flex-wrap: wrap; }
+            .barcode-spotlight { flex-direction: column; }
 
             .hero { padding: 120px 0 80px; text-align: center; }
             .hero-desc { margin-inline: auto; }
@@ -1475,8 +2097,10 @@
 
             <ul class="nav-links">
                 <li><a href="#features" data-i18n="nav.features">المميزات</a></li>
+                <li><a href="#ai" data-i18n="nav.ai">الذكاء الاصطناعي</a></li>
+                <li><a href="#accounting" data-i18n="nav.accounting">المحاسبة</a></li>
+                <li><a href="#warehouses" data-i18n="nav.warehouses">المستودعات</a></li>
                 <li><a href="#how-it-works" data-i18n="nav.how">كيف يعمل</a></li>
-                <li><a href="#why" data-i18n="nav.why">لماذا تراك مايل</a></li>
                 <li><a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a></li>
                 <li><a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a></li>
             </ul>
@@ -1496,8 +2120,10 @@
 
     <nav class="mobile-nav" id="mobileNav">
         <a href="#features" data-i18n="nav.features">المميزات</a>
+        <a href="#ai" data-i18n="nav.ai">الذكاء الاصطناعي</a>
+        <a href="#accounting" data-i18n="nav.accounting">المحاسبة</a>
+        <a href="#warehouses" data-i18n="nav.warehouses">المستودعات</a>
         <a href="#how-it-works" data-i18n="nav.how">كيف يعمل</a>
-        <a href="#why" data-i18n="nav.why">لماذا تراك مايل</a>
         <a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a>
         <a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a>
         <a href="#contact" data-i18n="nav.contact">تواصل معنا</a>
@@ -1635,13 +2261,177 @@
                 </div>
                 <div class="bento-card reveal">
                     <div class="card-icon"><i data-lucide="warehouse"></i></div>
-                    <h3 data-i18n="features.warehouse.title">عمليات المستودعات</h3>
-                    <p data-i18n="features.warehouse.desc">تحكم بالمخزون متعدد المراكز ومسح الباركود وإدارة مراكز الفرز.</p>
+                    <h3 data-i18n="features.warehouse.title">مستودعات متطورة</h3>
+                    <p data-i18n="features.warehouse.desc">إدارة متعددة المراكز، فرز ذكي، مخزون لحظي، ومسح باركود — من استلام الشحنة حتى التوزيع.</p>
                 </div>
                 <div class="bento-card span-2 reveal">
                     <div class="card-icon"><i data-lucide="shield-check"></i></div>
                     <h3 data-i18n="features.pod.title">إثبات التسليم والتحليلات</h3>
                     <p data-i18n="features.pod.desc">التقط التوقيعات الرقمية والصور ورمز OTP. احصل على رؤى عملية عبر لوحات تحكم تفاعلية وتقارير آلية.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Assistant Showcase -->
+    <section class="showcase-section ai-showcase" id="ai">
+        <div class="container">
+            <div class="showcase-grid">
+                <div class="reveal">
+                    <span class="section-label" data-i18n="ai.label">مساعد ذكي</span>
+                    <div class="showcase-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#A78BFA"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zM11.5 9.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5z"/></svg>
+                        <span data-i18n="ai.badge">مدمج داخل المنصة</span>
+                    </div>
+                    <h2 class="showcase-title" data-i18n="ai.title">مساعد الذكاء الاصطناعي</h2>
+                    <p class="showcase-desc" data-i18n="ai.desc">مساعد ذكي يعمل داخل Trakmile — يجيب على استفسارات التشغيل، يحلّل البيانات، ويساعد فرقك على اتخاذ قرارات أسرع دون مغادرة النظام.</p>
+
+                    <div class="showcase-benefits">
+                        <div class="showcase-benefit">
+                            <div class="feat-icon ai-purple">
+                                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="ai.f1.title">إجابات فورية</h4>
+                                <p data-i18n="ai.f1.desc">اسأل عن حالة الشحنات، أداء المندوبين، أو ملخص العمليات — ويُجيب المساعد فوراً.</p>
+                            </div>
+                        </div>
+                        <div class="showcase-benefit">
+                            <div class="feat-icon ai-blue">
+                                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="ai.f2.title">دعم القرار</h4>
+                                <p data-i18n="ai.f2.desc">تحليلات وتوصيات مبنية على بياناتك التشغيلية لتحسين الكفاءة وتوزيع الأحمال.</p>
+                            </div>
+                        </div>
+                        <div class="showcase-benefit">
+                            <div class="feat-icon ai-orange">
+                                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="ai.f3.title">متاح على مدار الساعة</h4>
+                                <p data-i18n="ai.f3.desc">مساعد يعمل 24/7 ضمن بيئة عملك — دون انتظار أو تحويل بين الأنظمة.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-chat-mockup reveal">
+                    <div class="ai-chat-header">
+                        <div class="ai-avatar">
+                            <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zM11.5 9.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5z"/></svg>
+                        </div>
+                        <div>
+                            <strong data-i18n="ai.chat.name">Trakmile AI</strong>
+                            <span data-i18n="ai.chat.status">● متصل الآن</span>
+                        </div>
+                    </div>
+                    <div class="ai-bubble user" data-i18n="ai.chat.q">كم عدد الشحنات المتأخرة اليوم في فرع الرياض؟</div>
+                    <div class="ai-bubble bot" data-i18n-html="ai.chat.a">لديك <strong>7 شحنات</strong> متأخرة — 4 في منطقة الشمال و3 في الغرب. أعلى سبب: انتظار COD. هل تريد توزيعها على مندوبين متاحين؟</div>
+                    <div class="ai-typing"><span></span><span></span><span></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Accounting Showcase -->
+    <section class="showcase-section accounting-showcase" id="accounting">
+        <div class="container">
+            <div class="showcase-grid reverse">
+                <div class="accounting-dashboard reveal">
+                    <div class="acc-dash-header">
+                        <h4 data-i18n="accounting.dash.title">لوحة المعلومات المالية</h4>
+                        <span class="acc-dash-badge" data-i18n="accounting.dash.live">● مباشر</span>
+                    </div>
+                    <div class="acc-stats-row">
+                        <div class="acc-stat-box">
+                            <div class="label" data-i18n="accounting.dash.revenue">الإيرادات</div>
+                            <div class="value green">SAR 284K</div>
+                        </div>
+                        <div class="acc-stat-box">
+                            <div class="label" data-i18n="accounting.dash.cod">COD محصّل</div>
+                            <div class="value orange">SAR 48K</div>
+                        </div>
+                        <div class="acc-stat-box">
+                            <div class="label" data-i18n="accounting.dash.pending">مستحقات</div>
+                            <div class="value blue">SAR 12K</div>
+                        </div>
+                    </div>
+                    <div class="acc-modules">
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-green"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+                            <span data-i18n="accounting.m1">الفواتير</span>
+                        </div>
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-blue"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+                            <span data-i18n="accounting.m2">المقبوضات</span>
+                        </div>
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-green"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+                            <span data-i18n="accounting.m3">المصروفات</span>
+                        </div>
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-blue"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+                            <span data-i18n="accounting.m4">التسويات</span>
+                        </div>
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-green"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg></div>
+                            <span data-i18n="accounting.m5">دليل الحسابات</span>
+                        </div>
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-blue"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg></div>
+                            <span data-i18n="accounting.m6">التقارير</span>
+                        </div>
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-green"><svg viewBox="0 0 24 24"><path d="M3 3h8v10H3V3zm10 0h8v6h-8V3zM3 15h8v6H3v-6zm10 4h8v2h-8v-2z"/></svg></div>
+                            <span data-i18n="accounting.m7">لوحة مالية</span>
+                        </div>
+                        <div class="acc-module">
+                            <div class="acc-module-icon acc-blue"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
+                            <span data-i18n="accounting.m8">الإعدادات</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal">
+                    <span class="section-label" data-i18n="accounting.label">محاسبة متكاملة</span>
+                    <div class="showcase-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#059669"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
+                        <span data-i18n="accounting.badge">بدون برامج منفصلة</span>
+                    </div>
+                    <h2 class="showcase-title" data-i18n="accounting.title">النظام المحاسبي المدمج</h2>
+                    <p class="showcase-desc" data-i18n="accounting.desc">نظام محاسبي كامل داخل المنصة — كل عملية توصيل أو تحصيل COD تنعكس تلقائياً في السجلات المالية والتقارير.</p>
+
+                    <div class="showcase-benefits">
+                        <div class="showcase-benefit">
+                            <div class="feat-icon acc-green">
+                                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="accounting.f1.title">فواتير مرتبطة بالشحنات</h4>
+                                <p data-i18n="accounting.f1.desc">إصدار فواتير تلقائية لخدمات التوصيل مع متابعة حالة السداد.</p>
+                            </div>
+                        </div>
+                        <div class="showcase-benefit">
+                            <div class="feat-icon acc-blue">
+                                <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="accounting.f2.title">تسوية السائقين وCOD</h4>
+                                <p data-i18n="accounting.f2.desc">احتساب العمولات والتحصيلات وإغلاق حساب كل مندوب بشكل دوري.</p>
+                            </div>
+                        </div>
+                        <div class="showcase-benefit">
+                            <div class="feat-icon acc-green">
+                                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="accounting.f3.title">تقارير مالية قابلة للتصدير</h4>
+                                <p data-i18n="accounting.f3.desc">إيرادات، مصروفات، أرباح، COD، والذمم — جاهزة للمحاسب والإدارة.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1746,6 +2536,91 @@
         </div>
     </section>
 
+    <!-- Advanced Warehouses -->
+    <section class="showcase-section warehouse-showcase" id="warehouses">
+        <div class="container">
+            <div class="showcase-grid">
+                <div class="reveal">
+                    <span class="section-label" data-i18n="warehouse.label">المستودعات</span>
+                    <div class="showcase-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#1B84FF"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7L12 2z"/></svg>
+                        <span data-i18n="warehouse.badge">إدارة متعددة المراكز</span>
+                    </div>
+                    <h2 class="showcase-title" data-i18n="warehouse.title">مستودعات متطورة</h2>
+                    <p class="showcase-desc" data-i18n="warehouse.desc">تحكم كامل بعمليات الاستلام والفرز والتوزيع — من مراكز متعددة مع رؤية لحظية للمخزون ومسح باركود في كل خطوة.</p>
+
+                    <div class="showcase-benefits">
+                        <div class="showcase-benefit">
+                            <div class="feat-icon wh-blue">
+                                <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="warehouse.f1.title">مراكز متعددة</h4>
+                                <p data-i18n="warehouse.f1.desc">إدارة مستودعات ومراكز فرز في مواقع مختلفة من لوحة تحكم واحدة.</p>
+                            </div>
+                        </div>
+                        <div class="showcase-benefit">
+                            <div class="feat-icon wh-blue">
+                                <svg viewBox="0 0 24 24"><path d="M4 6h2v12H4V6zm3 0h1v12H7V6zm2 0h3v12H9V6zm4 0h1v12h-1V6zm2 0h2v12h-2V6zm3 0h1v12h-1V6z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="warehouse.f2.title">مسح باركود في المستودع</h4>
+                                <p data-i18n="warehouse.f2.desc">تأكيد استلام وفرز الشحنات بالباركود — ربط تلقائي مع الطلب في المنصة.</p>
+                            </div>
+                        </div>
+                        <div class="showcase-benefit">
+                            <div class="feat-icon wh-blue">
+                                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="warehouse.f3.title">فرز وتوزيع ذكي</h4>
+                                <p data-i18n="warehouse.f3.desc">تخطيط مسارات الفرز، تتبع الشحنات بين المراكز، ومؤشرات أداء لحظية.</p>
+                            </div>
+                        </div>
+                        <div class="showcase-benefit">
+                            <div class="feat-icon wh-blue">
+                                <svg viewBox="0 0 24 24"><path d="M3 3h8v10H3V3zm10 0h8v6h-8V3zM3 15h8v6H3v-6zm10 4h8v2h-8v-2z"/></svg>
+                            </div>
+                            <div>
+                                <h4 data-i18n="warehouse.f4.title">مخزون لحظي</h4>
+                                <p data-i18n="warehouse.f4.desc">رؤية فورية لحالة الشحنات في كل مركز — قيد الفرز، جاهزة، أو في الطريق.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="warehouse-visual reveal">
+                    <div class="wh-hub-grid">
+                        <div class="wh-hub">
+                            <div class="wh-hub-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7L12 2z"/></svg></div>
+                            <strong data-i18n="warehouse.hub1">الرياض — الرئيسي</strong>
+                            <span>842 <span data-i18n="warehouse.shipments">شحنة</span></span>
+                        </div>
+                        <div class="wh-hub">
+                            <div class="wh-hub-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7L12 2z"/></svg></div>
+                            <strong data-i18n="warehouse.hub2">جدة — فرع</strong>
+                            <span>516 <span data-i18n="warehouse.shipments">شحنة</span></span>
+                        </div>
+                        <div class="wh-hub">
+                            <div class="wh-hub-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7L12 2z"/></svg></div>
+                            <strong data-i18n="warehouse.hub3">الدمام — فرع</strong>
+                            <span>328 <span data-i18n="warehouse.shipments">شحنة</span></span>
+                        </div>
+                    </div>
+                    <div class="wh-flow">
+                        <span class="wh-flow-step" data-i18n="warehouse.flow1">استلام</span>
+                        <span class="wh-flow-arrow">→</span>
+                        <span class="wh-flow-step" data-i18n="warehouse.flow2">مسح باركود</span>
+                        <span class="wh-flow-arrow">→</span>
+                        <span class="wh-flow-step" data-i18n="warehouse.flow3">فرز</span>
+                        <span class="wh-flow-arrow">→</span>
+                        <span class="wh-flow-step" data-i18n="warehouse.flow4">توزيع</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Mobile App -->
     <section class="section mobile-section" id="mobile">
         <div class="container">
@@ -1753,9 +2628,20 @@
                 <div class="reveal">
                     <span class="section-label" data-i18n="mobile.label">تطبيق الجوال</span>
                     <h2 class="section-title" data-i18n="mobile.title">مكّن سائقيك أثناء التنقل</h2>
-                    <p class="section-desc" data-i18n="mobile.desc">تطبيق جوال للسائقين وفرق الميدان — إدارة الطلبات والملاحة وإثبات التسليم.</p>
+                    <p class="section-desc" data-i18n="mobile.desc">تطبيق جوال للمندوبين وفرق الميدان — إدارة الطلبات، مسح باركود، ملاحة، وإثبات التسليم.</p>
+
+                    <div class="barcode-spotlight">
+                        <div class="barcode-spotlight-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4 6h2v12H4V6zm3 0h1v12H7V6zm2 0h3v12H9V6zm4 0h1v12h-1V6zm2 0h2v12h-2V6zm3 0h1v12h-1V6z"/></svg>
+                        </div>
+                        <div>
+                            <h4 data-i18n="mobile.barcode.title">ماسح الباركود لتأكيد الاستلام</h4>
+                            <p data-i18n="mobile.barcode.desc">يمسح المندوب باركود الشحنة لتأكيد استلامها فوراً من المستودع أو نقطة التجميع — مع ربط تلقائي بالطلب وتقليل الأخطاء اليدوية.</p>
+                        </div>
+                    </div>
 
                     <div class="mobile-features">
+                        <div class="mobile-feature highlight"><i data-lucide="scan-barcode"></i> <span data-i18n="mobile.f5">مسح باركود الشحنة وتأكيد الاستلام</span></div>
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f1">تكليف وتحديث الطلبات لحظياً</span></div>
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f2">ملاحة GPS وتحسين المسارات</span></div>
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f3">إثبات تسليم رقمي بالصورة والتوقيع</span></div>
@@ -1769,43 +2655,19 @@
 
                 <div class="phone-mockup reveal">
                     <div class="phone-frame">
-                        <div class="phone-screen">
-                            <div class="phone-header">
-                                <h4>Today's Orders</h4>
-                                <p>12 active · 8 completed</p>
+                        <div class="phone-screen phone-scanner-view">
+                            <div class="phone-scanner-header">
+                                <h4 data-i18n="mobile.scanner.title">مسح باركود الشحنة</h4>
+                                <p data-i18n="mobile.scanner.sub">امسح باركود الشحنة للتأكيد</p>
                             </div>
-                            <div class="phone-orders">
-                                <div class="phone-order">
-                                    <div class="phone-order-icon"><i data-lucide="package"></i></div>
-                                    <div class="phone-order-info">
-                                        <strong>#TM-4821</strong>
-                                        <span>Al Olaya, Riyadh</span>
-                                    </div>
-                                    <span class="phone-order-status">Delivered</span>
+                            <div class="phone-scanner-frame">
+                                <div class="scanner-bars">
+                                    <span></span><span></span><span></span><span></span><span></span>
+                                    <span></span><span></span><span></span><span></span><span></span>
                                 </div>
-                                <div class="phone-order">
-                                    <div class="phone-order-icon"><i data-lucide="package"></i></div>
-                                    <div class="phone-order-info">
-                                        <strong>#TM-4822</strong>
-                                        <span>Al Malaz, Riyadh</span>
-                                    </div>
-                                    <span class="phone-order-status pending">In Transit</span>
-                                </div>
-                                <div class="phone-order">
-                                    <div class="phone-order-icon"><i data-lucide="package"></i></div>
-                                    <div class="phone-order-info">
-                                        <strong>#TM-4823</strong>
-                                        <span>Al Nakheel, Riyadh</span>
-                                    </div>
-                                    <span class="phone-order-status pending">Pending</span>
-                                </div>
-                                <div class="phone-order">
-                                    <div class="phone-order-icon"><i data-lucide="package"></i></div>
-                                    <div class="phone-order-info">
-                                        <strong>#TM-4824</strong>
-                                        <span>King Fahd, Riyadh</span>
-                                    </div>
-                                    <span class="phone-order-status pending">Pending</span>
+                                <div class="scanner-success">
+                                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                    <span data-i18n="mobile.scanner.success">#TM-4821 — تم تأكيد الاستلام</span>
                                 </div>
                             </div>
                         </div>
@@ -1950,7 +2812,9 @@
                 <h4 data-i18n="footer.product">المنتج</h4>
                 <ul>
                     <li><a href="#features" data-i18n="nav.features">المميزات</a></li>
-                    <li><a href="#how-it-works" data-i18n="nav.how">كيف يعمل</a></li>
+                    <li><a href="#ai" data-i18n="nav.ai">الذكاء الاصطناعي</a></li>
+                    <li><a href="#accounting" data-i18n="nav.accounting">المحاسبة</a></li>
+                    <li><a href="#warehouses" data-i18n="nav.warehouses">المستودعات</a></li>
                     <li><a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a></li>
                     <li><a href="https://demo.trakmile.com" data-i18n="footer.liveDemo">عرض تجريبي</a></li>
                 </ul>

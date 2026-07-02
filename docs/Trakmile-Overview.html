@@ -62,12 +62,29 @@
 
         .page {
             width: 210mm;
-            min-height: 297mm;
-            padding: 18mm 20mm;
+            padding: 14mm 18mm 16mm;
             page-break-after: always;
+            break-after: page;
+            page-break-inside: avoid;
+            break-inside: avoid-page;
             position: relative;
-            overflow: hidden;
+            box-sizing: border-box;
         }
+
+        .page.fill {
+            min-height: 297mm;
+        }
+
+        .page.compact .section-label { margin-bottom: 4px; }
+        .page.compact h2 { font-size: 22px; margin-bottom: 10px; }
+        .page.compact .grid-2 { gap: 12px; margin-bottom: 14px; }
+        .page.compact .grid-3 { gap: 10px; margin-bottom: 14px; }
+        .page.compact .intro-box { margin-bottom: 14px; padding: 12px 16px; }
+        .page.compact .steps { gap: 24px; margin-bottom: 14px; }
+        .page.compact .integrations { margin-bottom: 14px; }
+        .page.compact .arch-diagram { padding: 14px; margin-bottom: 14px; }
+        .page.compact ul.feature-list { margin-bottom: 12px; }
+        .page.compact p { margin-bottom: 8px; }
 
         .page:last-child { page-break-after: auto; }
 
@@ -78,6 +95,35 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow: hidden;
+        }
+        .cover::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 15% 85%, rgba(27, 132, 255, 0.18) 0%, transparent 48%),
+                radial-gradient(circle at 88% 12%, rgba(255, 106, 0, 0.14) 0%, transparent 42%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.6' opacity='0.07'%3E%3Cpath d='M0 50h200M0 100h200M0 150h200'/%3E%3Cpath d='M50 0v200M100 0v200M150 0v200'/%3E%3Cpath d='M50 50 Q100 20 150 50 T250 50' transform='translate(-25 40)'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: auto, auto, 200px 200px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .cover::after {
+            content: '';
+            position: absolute;
+            bottom: -40mm;
+            left: -30mm;
+            width: 130mm;
+            height: 130mm;
+            border-radius: 50%;
+            border: 1px solid rgba(27, 132, 255, 0.15);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .cover > * {
+            position: relative;
+            z-index: 1;
         }
 
         .cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
@@ -130,8 +176,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
             border-bottom: 3px solid var(--primary);
         }
         .page-header img { height: 32px; }
@@ -145,7 +191,7 @@
             letter-spacing: 1px;
             margin-bottom: 8px;
         }
-        h2 { font-size: 26px; font-weight: 800; margin-bottom: 14px; color: var(--dark); }
+        h2 { font-size: 24px; font-weight: 800; margin-bottom: 12px; color: var(--dark); }
         h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: var(--dark); }
         p { font-size: 13px; color: var(--gray); margin-bottom: 12px; }
 
@@ -170,19 +216,194 @@
         .card-icon {
             width: 36px;
             height: 36px;
-            background: rgba(27,132,255,0.1);
+            background: rgba(27,132,255,0.12);
             color: var(--primary);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
             margin-bottom: 10px;
         }
+        .card-icon.orange { background: rgba(255,106,0,0.12); color: var(--secondary); }
+        .card-icon.dark { background: rgba(15,23,42,0.08); color: var(--dark); }
+        .card-icon svg,
+        .svc-icon svg { width: 18px; height: 18px; display: block; fill: currentColor; }
         .card h3 { font-size: 14px; margin-bottom: 6px; }
         .card p { font-size: 12px; margin: 0; line-height: 1.6; }
 
-        .steps { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+        .industries-page {
+            display: flex;
+            flex-direction: column;
+        }
+        .fill-page {
+            display: flex;
+            flex-direction: column;
+        }
+        .industry-list {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 0;
+        }
+        .industry-list .card {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 22px 20px;
+        }
+        .industry-list .card-icon {
+            margin-bottom: 0;
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+        }
+        .industry-list .card-icon svg { width: 22px; height: 22px; }
+        .industry-list .card-body { flex: 1; }
+        .industry-list .card-body h3 { font-size: 16px; margin-bottom: 6px; }
+        .industry-list .card-body p { font-size: 13px; line-height: 1.7; }
+        .industry-list.compact-items { gap: 8px; }
+        .industry-list.compact-items .card { flex: 0 0 auto; padding: 12px 16px; }
+        .industry-list.compact-items .card-icon { width: 36px; height: 36px; }
+        .industry-list.compact-items .card-icon svg { width: 18px; height: 18px; }
+        .industry-list.compact-items .card-body h3 { font-size: 13px; margin-bottom: 3px; }
+        .industry-list.compact-items .card-body p { font-size: 11px; line-height: 1.5; }
+        .industry-list.fill-items .card { flex: 1; padding: 20px 18px; }
+        .industry-list.fill-items .card-body h3 { font-size: 15px; }
+        .industry-list.fill-items .card-body p { font-size: 12px; }
+        .fill-page .intro-box { margin-bottom: 10px; padding: 10px 14px; }
+        .fill-page .intro-box p { font-size: 13px; }
+        .fill-page h2 { margin-bottom: 8px; font-size: 22px; }
+
+        .accounting-page {
+            padding: 10mm 14mm 12mm;
+            display: flex;
+            flex-direction: column;
+            min-height: 297mm;
+        }
+        .accounting-page .page-header { margin-bottom: 8px; padding-bottom: 6px; }
+        .accounting-page .page-header img { height: 28px; }
+        .accounting-page .section-label { margin-bottom: 3px; font-size: 11px; }
+        .accounting-page h2 { font-size: 20px; margin-bottom: 6px; }
+        .accounting-page .intro-box { margin-bottom: 8px; padding: 8px 12px; }
+        .accounting-page .intro-box p { font-size: 12px; line-height: 1.55; }
+        .accounting-page .industry-list { gap: 6px; flex: 1; }
+        .accounting-page .industry-list .card { flex: 1; padding: 9px 12px; gap: 10px; align-items: center; }
+        .accounting-page .industry-list .card-icon { width: 32px; height: 32px; border-radius: 8px; margin-bottom: 0; flex-shrink: 0; }
+        .accounting-page .industry-list .card-icon svg { width: 17px; height: 17px; }
+        .accounting-page .industry-list .card-body h3 { font-size: 12px; margin-bottom: 2px; }
+        .accounting-page .industry-list .card-body p { font-size: 10.5px; line-height: 1.45; }
+
+        .vertical-page {
+            display: flex;
+            flex-direction: column;
+            min-height: 297mm;
+        }
+        .vertical-page .industry-list { flex: 1; gap: 15px; margin-bottom: 0; }
+
+        .about-page .intro-box { margin-bottom: 15px; }
+        .feature-cards,
+        .about-cards,
+        .vertical-page .industry-list,
+        .industries-page .industry-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .feature-card,
+        .about-card,
+        .vertical-page .industry-list .card,
+        .industries-page .industry-list .card {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 30px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #fff;
+            flex: none;
+            height: auto;
+            min-height: 0;
+        }
+        .feature-card .card-icon,
+        .about-card .card-icon,
+        .vertical-page .industry-list .card-icon,
+        .industries-page .industry-list .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            margin: 0;
+            flex-shrink: 0;
+        }
+        .feature-card .card-icon svg,
+        .about-card .card-icon svg,
+        .vertical-page .industry-list .card-icon svg,
+        .industries-page .industry-list .card-icon svg { width: 18px; height: 18px; }
+        .feature-card .card-body,
+        .about-card .card-body,
+        .vertical-page .industry-list .card-body,
+        .industries-page .industry-list .card-body {
+            flex: 1;
+            min-width: 0;
+        }
+        .feature-card .card-body h3,
+        .about-card .card-body h3,
+        .vertical-page .industry-list .card-body h3,
+        .industries-page .industry-list .card-body h3 {
+            font-size: 14px;
+            line-height: 1.3;
+            margin: 0 0 10px;
+        }
+        .feature-card .card-body p,
+        .about-card .card-body p,
+        .vertical-page .industry-list .card-body p,
+        .industries-page .industry-list .card-body p {
+            font-size: 12px;
+            line-height: 1.45;
+            margin: 0;
+        }
+
+        @media print {
+            .about-page .about-cards,
+            .vertical-page .industry-list,
+            .industries-page .industry-list {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .about-page .about-card,
+            .vertical-page .industry-list .card,
+            .industries-page .industry-list .card {
+                display: flex;
+                flex: none;
+                flex-grow: 0;
+                flex-shrink: 0;
+                align-items: flex-start;
+                height: auto;
+                min-height: 0;
+                max-height: none;
+                padding: 30px 14px;
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            .about-page .about-card .card-body h3,
+            .about-page .about-card .card-body p,
+            .vertical-page .industry-list .card-body h3,
+            .vertical-page .industry-list .card-body p,
+            .industries-page .industry-list .card-body h3,
+            .industries-page .industry-list .card-body p {
+                margin: 0;
+            }
+            .about-page .about-card .card-body h3,
+            .vertical-page .industry-list .card-body h3,
+            .industries-page .industry-list .card-body h3 {
+                margin-bottom: 10px;
+            }
+        }
+
+        .steps { display: flex; flex-direction: column; gap: 32px; margin-bottom: 20px; }
         .step {
             display: flex;
             gap: 14px;
@@ -213,16 +434,40 @@
         th {
             background: var(--dark);
             color: #fff;
-            padding: 10px 12px;
+            padding: 20px 12px;
             text-align: right;
             font-weight: 600;
         }
         td {
-            padding: 9px 12px;
+            padding: 18px 12px;
             border-bottom: 1px solid var(--border);
             color: var(--gray);
         }
         tr:nth-child(even) td { background: var(--light); }
+
+        td.service-col { vertical-align: middle; width: 28%; }
+        .service-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .svc-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            background: rgba(27,132,255,0.12);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        .svc-icon.orange { background: rgba(255,106,0,0.12); color: var(--secondary); }
+        .svc-icon.dark { background: rgba(15,23,42,0.08); color: var(--dark); }
 
         .arch-diagram {
             background: var(--light);
@@ -298,23 +543,42 @@
         ul.feature-list li {
             font-size: 12px;
             color: var(--gray);
-            padding: 4px 0;
+            padding: 10px 0;
             padding-right: 18px;
             position: relative;
         }
         ul.feature-list li::before {
-            content: '✓';
+            content: '';
             position: absolute;
             right: 0;
-            color: var(--secondary);
+            top: 13px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--secondary);
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") center/contain no-repeat;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") center/contain no-repeat;
+        }
+
+        .arch-arrow svg { width: 22px; height: 22px; fill: var(--primary); display: block; }
+        .step-dot {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 11px;
             font-weight: 700;
+            margin-left: 6px;
         }
     </style>
 </head>
 <body>
 
 <!-- صفحة الغلاف -->
-<div class="page cover">
+<div class="page cover fill">
     <div class="cover-top">
         <img src="../imgs/logo.png" alt="Trakmile" class="cover-logo">
         <img src="../imgs/visionn3.png" alt="Vision 2030" class="cover-vision">
@@ -340,7 +604,7 @@
 </div>
 
 <!-- نظرة عامة -->
-<div class="page">
+<div class="page compact about-page">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
         <span>الملف التعريفي · نظرة عامة</span>
@@ -353,46 +617,127 @@
         <p><strong>Trakmile (تراك مايل)</strong> هو نظام تشغيل لوجستي يُمكّن شركات التوصيل ومقدمي الخدمات اللوجستية (3PL) من إدارة عملياتهم بالكامل من منصة واحدة — من استلام الطلب حتى إثبات التسليم.</p>
     </div>
 
-    <div class="grid-2">
-        <div class="card">
-            <div class="card-icon">🎯</div>
-            <h3>الرؤية</h3>
-            <p>تمكين قطاع اللوجستيات في الشرق الأوسط من التحول الرقمي الكامل وفق رؤية المملكة 2030.</p>
+    <div class="about-cards">
+        <div class="about-card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+            <div class="card-body">
+                <h3>الرؤية</h3>
+                <p>تمكين قطاع اللوجستيات في الشرق الأوسط من التحول الرقمي الكامل وفق رؤية المملكة 2030.</p>
+            </div>
         </div>
-        <div class="card">
-            <div class="card-icon">💡</div>
-            <h3>الرسالة</h3>
-            <p>تقديم حلول لوجستية ذكية تُقلّل التكلفة، تزيد الكفاءة، وتحسّن تجربة العميل النهائي.</p>
+        <div class="about-card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
+            <div class="card-body">
+                <h3>الرسالة</h3>
+                <p>تقديم حلول لوجستية ذكية تُقلّل التكلفة، تزيد الكفاءة، وتحسّن تجربة العميل النهائي.</p>
+            </div>
         </div>
-        <div class="card">
-            <div class="card-icon">👥</div>
-            <h3>الفئة المستهدفة</h3>
-            <p>شركات التوصيل، مقدمو الخدمات اللوجستية (3PL)، ومراكز التوزيع — بمختلف الأحجام والمستويات.</p>
+        <div class="about-card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+            <div class="card-body">
+                <h3>الفئة المستهدفة</h3>
+                <p>شركات التوصيل، مقدمو الخدمات اللوجستية (3PL)، ومراكز التوزيع — بمختلف الأحجام والمستويات.</p>
+            </div>
         </div>
-        <div class="card">
-            <div class="card-icon">🌍</div>
-            <h3>التغطية</h3>
-            <p>مصمم خصيصاً لمنطقة الشرق الأوسط مع دعم كامل للغة العربية والعمليات المحلية (COD، SMS، إلخ).</p>
+        <div class="about-card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
+            <div class="card-body">
+                <h3>التغطية</h3>
+                <p>مصمم خصيصاً لمنطقة الشرق الأوسط مع دعم كامل للغة العربية والعمليات المحلية (COD، SMS، إلخ).</p>
+            </div>
         </div>
+    </div>
+
+    <div class="page-num">2</div>
+</div>
+
+<!-- مكوّنات الخدمة -->
+<div class="page compact">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · مكوّنات الخدمة</span>
     </div>
 
     <span class="section-label">Service Components</span>
     <h2>مكوّنات الخدمة</h2>
     <table>
         <tr><th>الخدمة</th><th>الوصف</th><th>الفائدة للعميل</th></tr>
-        <tr><td><strong>منصة التشغيل</strong></td><td>لوحة تحكم مركزية لإدارة الشحنات والسائقين والمستودعات والتقارير</td><td>رؤية شاملة وتحكم كامل بعمليات التوصيل</td></tr>
-        <tr><td><strong>تطبيق المندوبين</strong></td><td>تطبيق جوال بإحصائيات الطلبات، إدارة المسندة، وماسح باركود لتأكيد استلام الشحنات</td><td>تنفيذ أسرع وأدق على أرض الواقع</td></tr>
-        <tr><td><strong>مساعد الذكاء الاصطناعي</strong></td><td>مساعد ذكي مدمج يجيب على استفسارات التشغيل ويساعد في اتخاذ القرار</td><td>دعم فوري وتسريع حل المشكلات التشغيلية</td></tr>
-        <tr><td><strong>تكامل المتاجر</strong></td><td>ربط متاجر عملائك (Salla، Zid، Shopify وغيرها) لاستقبال الطلبات تلقائياً</td><td>تقليل العمل اليدوي وتسريع بدء التوصيل</td></tr>
-        <tr><td><strong>النظام المحاسبي المدمج</strong></td><td>فواتير، مقبوضات، مدفوعات، وتسويات مالية مرتبطة مباشرة بعمليات التوصيل</td><td>رقابة مالية دقيقة دون أنظمة منفصلة</td></tr>
-        <tr><td><strong>إدارة COD</strong></td><td>متابعة تحصيل الدفع عند الاستلام وتسوية المبالغ مع السائقين</td><td>شفافية مالية وتحكم بالتحصيلات</td></tr>
-        <tr><td><strong>الاستشارات والدعم</strong></td><td>استشارة تشغيلية، تدريب الفريق، ومتابعة بعد التشغيل</td><td>انطلاق سلس ونجاح مستدام للعمليات</td></tr>
+        <tr>
+            <td class="service-col">
+                <div class="service-name">
+                    <span class="svc-icon"><svg viewBox="0 0 24 24"><path d="M3 3h8v10H3V3zm10 0h8v6h-8V3zM3 15h8v6H3v-6zm10 4h8v2h-8v-2z"/></svg></span>
+                    <span>منصة التشغيل</span>
+                </div>
+            </td>
+            <td>لوحة تحكم مركزية لإدارة الشحنات والسائقين والمستودعات والتقارير</td>
+            <td>رؤية شاملة وتحكم كامل بعمليات التوصيل</td>
+        </tr>
+        <tr>
+            <td class="service-col">
+                <div class="service-name">
+                    <span class="svc-icon"><svg viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-5 20c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-4H7V4h10v13z"/></svg></span>
+                    <span>تطبيق المندوبين</span>
+                </div>
+            </td>
+            <td>تطبيق جوال بإحصائيات الطلبات، إدارة المسندة، وماسح باركود لتأكيد استلام الشحنات</td>
+            <td>تنفيذ أسرع وأدق على أرض الواقع</td>
+        </tr>
+        <tr>
+            <td class="service-col">
+                <div class="service-name">
+                    <span class="svc-icon orange"><svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zM11.5 9.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5z"/></svg></span>
+                    <span>مساعد الذكاء الاصطناعي</span>
+                </div>
+            </td>
+            <td>مساعد ذكي مدمج يجيب على استفسارات التشغيل ويساعد في اتخاذ القرار</td>
+            <td>دعم فوري وتسريع حل المشكلات التشغيلية</td>
+        </tr>
+        <tr>
+            <td class="service-col">
+                <div class="service-name">
+                    <span class="svc-icon"><svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span>
+                    <span>تكامل المتاجر</span>
+                </div>
+            </td>
+            <td>ربط متاجر عملائك (Salla، Zid، Shopify وغيرها) لاستقبال الطلبات تلقائياً</td>
+            <td>تقليل العمل اليدوي وتسريع بدء التوصيل</td>
+        </tr>
+        <tr>
+            <td class="service-col">
+                <div class="service-name">
+                    <span class="svc-icon dark"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></span>
+                    <span>النظام المحاسبي المدمج</span>
+                </div>
+            </td>
+            <td>فواتير، مقبوضات، مدفوعات، وتسويات مالية مرتبطة مباشرة بعمليات التوصيل</td>
+            <td>رقابة مالية دقيقة دون أنظمة منفصلة</td>
+        </tr>
+        <tr>
+            <td class="service-col">
+                <div class="service-name">
+                    <span class="svc-icon orange"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg></span>
+                    <span>إدارة COD</span>
+                </div>
+            </td>
+            <td>متابعة تحصيل الدفع عند الاستلام وتسوية المبالغ مع السائقين</td>
+            <td>شفافية مالية وتحكم بالتحصيلات</td>
+        </tr>
+        <tr>
+            <td class="service-col">
+                <div class="service-name">
+                    <span class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z"/></svg></span>
+                    <span>الاستشارات والدعم</span>
+                </div>
+            </td>
+            <td>استشارة تشغيلية، تدريب الفريق، ومتابعة بعد التشغيل</td>
+            <td>انطلاق سلس ونجاح مستدام للعمليات</td>
+        </tr>
     </table>
-    <div class="page-num">2</div>
+    <div class="page-num">3</div>
 </div>
 
 <!-- المميزات -->
-<div class="page">
+<div class="page compact">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
         <span>الملف التعريفي · المميزات</span>
@@ -403,42 +748,42 @@
 
     <div class="grid-2">
         <div class="card">
-            <div class="card-icon">📦</div>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z"/></svg></div>
             <h3>إدارة الشحنات</h3>
             <p>إنشاء وتعيين وتتبع الشحنات طوال دورة التوصيل — من الاستلام إلى إثبات التسليم (POD).</p>
         </div>
         <div class="card">
-            <div class="card-icon">🚗</div>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             <h3>إدارة السائقين</h3>
             <p>إدارة السائقين، جداول العمل، التكليفات، مدفوعات COD، ومؤشرات الأداء اللحظية.</p>
         </div>
         <div class="card">
-            <div class="card-icon">📍</div>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
             <h3>تتبع الأسطول</h3>
             <p>مراقبة مواقع المركبات مباشرة وتحسين مسارات التوصيل ديناميكياً.</p>
         </div>
         <div class="card">
-            <div class="card-icon">🏭</div>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg></div>
             <h3>إدارة المستودعات</h3>
             <p>تحكم بالمخزون متعدد المراكز، مسح الباركود، وإدارة مراكز الفرز.</p>
         </div>
         <div class="card">
-            <div class="card-icon">✅</div>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></div>
             <h3>إثبات التسليم (POD)</h3>
             <p>التوقيعات الرقمية، الصور الفورية، ورمز OTP عند التسليم.</p>
         </div>
         <div class="card">
-            <div class="card-icon">💼</div>
+            <div class="card-icon dark"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg></div>
             <h3>النظام المحاسبي المدمج</h3>
             <p>فواتير العملاء، مقبوضات ومدفوعات، تسوية السائقين، وكشوف حساب — مرتبطة تلقائياً بالشحنات.</p>
         </div>
         <div class="card">
-            <div class="card-icon">📊</div>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg></div>
             <h3>التقارير والتحليلات</h3>
             <p>تقارير تشغيلية ومالية تفاعلية — إيرادات، مصروفات، COD، وأداء الفروع والعملاء.</p>
         </div>
         <div class="card">
-            <div class="card-icon">🤖</div>
+            <div class="card-icon orange"><svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zM11.5 9.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5z"/></svg></div>
             <h3>مساعد الذكاء الاصطناعي</h3>
             <p>مساعد ذكي مدمج داخل المنصة — استفسارات تشغيلية، تحليلات سريعة، ودعم لاتخاذ القرار.</p>
         </div>
@@ -460,11 +805,11 @@
             <p>منصة سحابية تتحمل 3× الحجم في مواسم التجارة والعروض.</p>
         </div>
     </div>
-    <div class="page-num">3</div>
+    <div class="page-num">4</div>
 </div>
 
 <!-- كيف يعمل + التكامل -->
-<div class="page">
+<div class="page compact">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
         <span>الملف التعريفي · آلية العمل</span>
@@ -515,14 +860,23 @@
     <div class="arch-diagram">
         <div class="arch-row">
             <div class="arch-box">متجر العميل</div>
-            <span class="arch-arrow">←</span>
+            <span class="arch-arrow"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/></svg></span>
             <div class="arch-box dark">Trakmile</div>
-            <span class="arch-arrow">→</span>
+            <span class="arch-arrow"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></span>
             <div class="arch-box orange">السائق</div>
-            <span class="arch-arrow">→</span>
+            <span class="arch-arrow"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/></svg></span>
             <div class="arch-box">المستلم</div>
         </div>
         <p style="text-align:center;font-size:11px;color:var(--gray);margin:8px 0 0">من استلام الطلب حتى إثبات التسليم — دورة واحدة متكاملة وقابلة للمتابعة</p>
+    </div>
+    <div class="page-num">5</div>
+</div>
+
+<!-- مساعد الذكاء الاصطناعي -->
+<div class="page compact vertical-page fill">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · الذكاء الاصطناعي</span>
     </div>
 
     <span class="section-label">AI Assistant</span>
@@ -530,29 +884,41 @@
     <div class="intro-box">
         <p>مساعد ذكي <strong>مدمج داخل منصة Trakmile</strong> — يساعد فرق التشغيل والإدارة على الفهم السريع للبيانات وحل الاستفسارات دون مغادرة النظام.</p>
     </div>
-    <div class="grid-2">
+    <div class="industry-list">
         <div class="card">
-            <h3>إجابات فورية</h3>
-            <p>اسأل عن حالة الشحنات، أداء المندوبين، أو ملخص العمليات — ويُجيب المساعد فوراً.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+            <div class="card-body">
+                <h3>إجابات فورية</h3>
+                <p>اسأل عن حالة الشحنات، أداء المندوبين، أو ملخص العمليات — ويُجيب المساعد فوراً.</p>
+            </div>
         </div>
         <div class="card">
-            <h3>دعم القرار</h3>
-            <p>تحليلات وتوصيات مبنية على بياناتك التشغيلية لتحسين الكفاءة وتوزيع الأحمال.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg></div>
+            <div class="card-body">
+                <h3>دعم القرار</h3>
+                <p>تحليلات وتوصيات مبنية على بياناتك التشغيلية لتحسين الكفاءة وتوزيع الأحمال.</p>
+            </div>
         </div>
         <div class="card">
-            <h3>تقليل الاعتماد على الدعم</h3>
-            <p>إرشاد داخل المنصة للموظفين الجدد وشرح خطوات التشغيل الشائعة.</p>
+            <div class="card-icon orange"><svg viewBox="0 0 24 24"><path d="M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z"/></svg></div>
+            <div class="card-body">
+                <h3>تقليل الاعتماد على الدعم</h3>
+                <p>إرشاد داخل المنصة للموظفين الجدد وشرح خطوات التشغيل الشائعة.</p>
+            </div>
         </div>
         <div class="card">
-            <h3>متاح دائماً</h3>
-            <p>مساعد يعمل على مدار الساعة ضمن بيئة عملك — دون انتظار أو تحويل بين الأنظمة.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+            <div class="card-body">
+                <h3>متاح دائماً</h3>
+                <p>مساعد يعمل على مدار الساعة ضمن بيئة عملك — دون انتظار أو تحويل بين الأنظمة.</p>
+            </div>
         </div>
     </div>
-    <div class="page-num">4</div>
+    <div class="page-num">6</div>
 </div>
 
 <!-- تطبيق الجوال -->
-<div class="page">
+<div class="page compact vertical-page fill">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
         <span>الملف التعريفي · تطبيق الجوال</span>
@@ -560,37 +926,56 @@
 
     <span class="section-label">Mobile App</span>
     <h2>تطبيق الجوال للمندوبين</h2>
-    <p>تطبيق جوال مخصص للمندوبين وفرق التوصيل — يربط الميدان بمنصة التشغيل لحظياً.</p>
+    <p style="margin-bottom:10px">تطبيق جوال مخصص للمندوبين وفرق التوصيل — يربط الميدان بمنصة التشغيل لحظياً.</p>
 
     <span class="section-label">Order Stats</span>
     <h2>إحصائيات الطلبات وإدارتها</h2>
-    <div class="grid-2">
+    <div class="industry-list">
         <div class="card">
-            <div class="card-icon">📈</div>
-            <h3>لوحة إحصائيات شخصية</h3>
-            <p>عرض عدد الطلبات المسندة للمندوب — قيد التنفيذ، المُسلّمة، والمعلّقة — بلمحة واحدة.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg></div>
+            <div class="card-body">
+                <h3>لوحة إحصائيات شخصية</h3>
+                <p>عرض عدد الطلبات المسندة للمندوب — قيد التنفيذ، المُسلّمة، والمعلّقة — بلمحة واحدة.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">📋</div>
-            <h3>إدارة الطلبات المسندة</h3>
-            <p>استعراض كل الطلبات المكلف بها المندوب، قبولها، متابعتها، وتحديث حالتها خطوة بخطوة.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+            <div class="card-body">
+                <h3>إدارة الطلبات المسندة</h3>
+                <p>استعراض كل الطلبات المكلف بها المندوب، قبولها، متابعتها، وتحديث حالتها خطوة بخطوة.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">⏱️</div>
-            <h3>مؤشرات الأداء اليومي</h3>
-            <p>متابعة إنجازات اليوم — عدد التسليمات، معدل النجاح، وCOD المحصّل.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg></div>
+            <div class="card-body">
+                <h3>مؤشرات الأداء اليومي</h3>
+                <p>متابعة إنجازات اليوم — عدد التسليمات، معدل النجاح، وCOD المحصّل.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">📜</div>
-            <h3>سجل الطلبات</h3>
-            <p>أرشيف كامل للطلبات السابقة مع إمكانية البحث والمراجعة.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+            <div class="card-body">
+                <h3>سجل الطلبات</h3>
+                <p>أرشيف كامل للطلبات السابقة مع إمكانية البحث والمراجعة.</p>
+            </div>
         </div>
+    </div>
+
+    <div class="page-num">7</div>
+</div>
+
+<!-- ماسح الباركود -->
+<div class="page compact">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · تطبيق الجوال</span>
     </div>
 
     <span class="section-label">Barcode Scanner</span>
     <h2>ماسح الباركود للشحنات</h2>
-    <div class="intro-box">
-        <p>ماسح باركود <strong>مدمج في التطبيق</strong> — يمسح المندوب باركود الشحنة لتأكيد استلامها فوراً، مع تقليل الأخطاء اليدوية وتسريع عمليات الفرز والاستلام.</p>
+    <div class="intro-box" style="display:flex;align-items:flex-start;gap:14px">
+        <div class="card-icon" style="margin:0;min-width:36px"><svg viewBox="0 0 24 24"><path d="M4 6h2v12H4V6zm3 0h1v12H7V6zm2 0h3v12H9V6zm4 0h1v12h-1V6zm2 0h2v12h-2V6zm3 0h1v12h-1V6z"/></svg></div>
+        <p style="margin:0">ماسح باركود <strong>مدمج في التطبيق</strong> — يمسح المندوب باركود الشحنة لتأكيد استلامها فوراً، مع تقليل الأخطاء اليدوية وتسريع عمليات الفرز والاستلام.</p>
     </div>
     <ul class="feature-list">
         <li>مسح باركود الشحنة لتأكيد الاستلام من المستودع أو نقطة التجميع</li>
@@ -606,39 +991,57 @@
         <li>تحصيل COD ومزامنة فورية مع منصة التشغيل</li>
         <li>إشعارات فورية بالطلبات الجديدة والتحديثات</li>
     </ul>
-    <div class="page-num">5</div>
+    <div class="page-num">8</div>
 </div>
 
-<!-- المحاسبة + التشغيل -->
-<div class="page">
+<!-- التشغيل -->
+<div class="page compact vertical-page fill">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
-        <span>الملف التعريفي · المحاسبة والتشغيل</span>
+        <span>الملف التعريفي · التشغيل</span>
     </div>
 
     <span class="section-label">Operations</span>
     <h2>خدمات التشغيل اليومي</h2>
-    <div class="grid-2">
+    <div class="industry-list">
         <div class="card">
-            <div class="card-icon">📋</div>
-            <h3>إدارة الطلبات</h3>
-            <p>استلام الطلبات، فرزها، تعيينها للمندوبين، ومتابعة حالتها حتى التسليم.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+            <div class="card-body">
+                <h3>إدارة الطلبات</h3>
+                <p>استلام الطلبات، فرزها، تعيينها للمندوبين، ومتابعة حالتها حتى التسليم.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">🗺️</div>
-            <h3>تخطيط المناطق</h3>
-            <p>تقسيم مناطق التوصيل، تحديد الأولويات، وتوزيع الأحمال على الفرق.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg></div>
+            <div class="card-body">
+                <h3>تخطيط المناطق</h3>
+                <p>تقسيم مناطق التوصيل، تحديد الأولويات، وتوزيع الأحمال على الفرق.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">💬</div>
-            <h3>تواصل العملاء</h3>
-            <p>إرسال تحديثات الحالة عبر SMS وواتساب لرفع رضا العملاء.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg></div>
+            <div class="card-body">
+                <h3>تواصل العملاء</h3>
+                <p>إرسال تحديثات الحالة عبر SMS وواتساب لرفع رضا العملاء.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">💰</div>
-            <h3>إدارة التحصيلات</h3>
-            <p>متابعة مبالغ COD، تسوية المندوبين، وتقارير التحصيل اليومية.</p>
+            <div class="card-icon orange"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+            <div class="card-body">
+                <h3>إدارة التحصيلات</h3>
+                <p>متابعة مبالغ COD، تسوية المندوبين، وتقارير التحصيل اليومية.</p>
+            </div>
         </div>
+    </div>
+
+    <div class="page-num">9</div>
+</div>
+
+<!-- النظام المحاسبي -->
+<div class="page compact accounting-page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · المحاسبة</span>
     </div>
 
     <span class="section-label">Accounting</span>
@@ -646,23 +1049,73 @@
     <div class="intro-box">
         <p>نظام محاسبي <strong>مدمج داخل المنصة</strong> — لا حاجة لبرامج منفصلة. كل عملية توصيل أو تحصيل تنعكس تلقائياً في السجلات المالية.</p>
     </div>
-    <div class="grid-2">
+    <div class="industry-list">
         <div class="card">
-            <h3>فواتير العملاء</h3>
-            <p>إصدار فواتير مرتبطة بالشحنات وخدمات التوصيل، مع متابعة حالة السداد.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M3 3h8v10H3V3zm10 0h8v6h-8V3zM3 15h8v6H3v-6zm10 4h8v2h-8v-2z"/></svg></div>
+            <div class="card-body">
+                <h3>لوحة المعلومات المالية</h3>
+                <p>نظرة شاملة على الإيرادات والمصروفات والتحصيلات ومؤشرات الأداء — لحظياً ومن مكان واحد.</p>
+            </div>
         </div>
         <div class="card">
-            <h3>المقبوضات والمدفوعات</h3>
-            <p>تسجيل التحصيلات النقدية والتحويلات، وصرف مستحقات السائقين والموردين.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/></svg></div>
+            <div class="card-body">
+                <h3>دليل الحسابات</h3>
+                <p>إدارة حسابات العملاء والسائقين والموردين مع أرصدة محدّثة وكشوف تفصيلية.</p>
+            </div>
         </div>
         <div class="card">
-            <h3>تسوية السائقين</h3>
-            <p>احتساب COD والعمولات والخصومات، وإغلاق حساب كل سائق بشكل دوري.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+            <div class="card-body">
+                <h3>الفواتير</h3>
+                <p>إصدار فواتير مرتبطة بالشحنات وخدمات التوصيل، مع متابعة حالة السداد.</p>
+            </div>
         </div>
         <div class="card">
-            <h3>كشوف الحساب</h3>
-            <p>كشف حساب تفصيلي لكل عميل وسائق — مدين، دائن، ورصيد مستحق.</p>
+            <div class="card-icon orange"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+            <div class="card-body">
+                <h3>المقبوضات والمدفوعات</h3>
+                <p>تسجيل التحصيلات النقدية والتحويلات، وصرف مستحقات السائقين والموردين.</p>
+            </div>
         </div>
+        <div class="card">
+            <div class="card-icon orange"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+            <div class="card-body">
+                <h3>المصروفات</h3>
+                <p>تسجيل ومتابعة مصروفات التشغيل — رواتب، وقود، صيانة — مع تصنيفها محاسبياً.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
+            <div class="card-body">
+                <h3>التسويات</h3>
+                <p>احتساب COD والعمولات والخصومات، وإغلاق حساب كل سائق بشكل دوري.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg></div>
+            <div class="card-body">
+                <h3>التقارير المحاسبية</h3>
+                <p>تقارير الإيرادات والمصروفات والأرباح، COD، الذمم، ومستحقات السائقين — قابلة للتصدير.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon dark"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></div>
+            <div class="card-body">
+                <h3>الإعدادات المحاسبية</h3>
+                <p>ضبط العملة، طرق الدفع، سياسات الفوترة، وصلاحيات الوصول للبيانات المالية.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-num">10</div>
+</div>
+
+<!-- التقارير المحاسبية -->
+<div class="page compact">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · التقارير المحاسبية</span>
     </div>
 
     <span class="section-label">Financial Reports</span>
@@ -681,39 +1134,56 @@
     <div class="intro-box">
         <p>كل شركة لوجستية تحصل على <strong>بيئة تشغيل خاصة</strong> ببياناتها وعملياتها — مع إمكانية تجربة المنصة عبر نسخة تجريبية قبل التشغيل الكامل.</p>
     </div>
-    <div class="page-num">6</div>
+    <div class="page-num">11</div>
 </div>
 
-<!-- القطاعات + الدعم -->
-<div class="page">
+<!-- القطاعات -->
+<div class="page compact industries-page fill">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
-        <span>الملف التعريفي · القطاعات والدعم</span>
+        <span>الملف التعريفي · القطاعات</span>
     </div>
 
     <span class="section-label">Industries</span>
     <h2>القطاعات التي نخدمها</h2>
-    <div class="grid-2">
+    <div class="industry-list">
         <div class="card">
-            <div class="card-icon">🚚</div>
-            <h3>شركات التوصيل</h3>
-            <p>إدارة الأسطول والسائقين والشحنات اليومية بكفاءة عالية.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
+            <div class="card-body">
+                <h3>شركات التوصيل</h3>
+                <p>إدارة الأسطول والسائقين والشحنات اليومية بكفاءة عالية.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">📦</div>
-            <h3>مقدمو الخدمات اللوجستية (3PL)</h3>
-            <p>تشغيل عمليات متعددة العملاء من منصة واحدة منظمة.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z"/></svg></div>
+            <div class="card-body">
+                <h3>مقدمو الخدمات اللوجستية (3PL)</h3>
+                <p>تشغيل عمليات متعددة العملاء من منصة واحدة منظمة.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">📈</div>
-            <h3>شركات بمختلف الأحجام</h3>
-            <p>من الشركات الناشئة إلى المؤسسات الكبرى — حلول مرنة تنمو مع توسع عملياتك.</p>
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6h-6z"/></svg></div>
+            <div class="card-body">
+                <h3>شركات بمختلف الأحجام</h3>
+                <p>من الشركات الناشئة إلى المؤسسات الكبرى — حلول مرنة تنمو مع توسع عملياتك.</p>
+            </div>
         </div>
         <div class="card">
-            <div class="card-icon">🏢</div>
-            <h3>مراكز التوزيع</h3>
-            <p>إدارة المستودعات والفرز والتوزيع للمرحلة الأخيرة.</p>
+            <div class="card-icon dark"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg></div>
+            <div class="card-body">
+                <h3>مراكز التوزيع</h3>
+                <p>إدارة المستودعات والفرز والتوزيع للمرحلة الأخيرة.</p>
+            </div>
         </div>
+    </div>
+    <div class="page-num">12</div>
+</div>
+
+<!-- الدعم والتقارير -->
+<div class="page compact">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · الدعم والتقارير</span>
     </div>
 
     <span class="section-label">Support & Onboarding</span>
@@ -745,25 +1215,25 @@
     <span class="section-label">Reports</span>
     <h2>التقارير التشغيلية</h2>
     <ul class="feature-list">
-        <li>تقارير أداء السائقين ومعدلات التسليم في الوقت</li>
+        <li>تقارير أداء السائقين ومعدلات التسليم</li>
         <li>تحليل مناطق التوصيل والأحمال التشغيلية</li>
         <li>متابعة حالات الشحنات والتأخيرات</li>
         <li>لوحات مؤشرات لحظية لصناع القرار</li>
     </ul>
-    <div class="page-num">7</div>
+    <div class="page-num">13</div>
 </div>
 
-<!-- صفحة التواصل -->
-<div class="page">
+<!-- التواصل -->
+<div class="page fill">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
         <span>الملف التعريفي · تواصل معنا</span>
     </div>
 
-    <div style="text-align:center;padding:40px 0 30px">
+    <div style="text-align:center;padding:48px 0 32px">
         <span class="section-label">Get Started</span>
-        <h2 style="font-size:32px;margin-bottom:12px">ابدأ رحلتك مع Trakmile</h2>
-        <p style="font-size:15px;max-width:460px;margin:0 auto 30px">انضم إلى أكثر من 500 شركة لوجستية تثق بـ Trakmile لإدارة عمليات التوصيل.</p>
+        <h2 style="font-size:28px;margin-bottom:10px">ابدأ رحلتك مع Trakmile</h2>
+        <p style="font-size:14px;max-width:520px;margin:0 auto">انضم إلى أكثر من 500 شركة لوجستية تثق بـ Trakmile لإدارة عمليات التوصيل.</p>
     </div>
 
     <div class="contact-bar">
@@ -777,24 +1247,21 @@
         </div>
         <div>
             <h3>الخطوات التالية</h3>
-            <div class="contact-item">① جرب المنصة التجريبية مجاناً</div>
-            <div class="contact-item">② اطلب استشارة عبر الموقع</div>
-            <div class="contact-item">③ تواصل مع فريق المبيعات</div>
-            <div class="contact-item">④ ابدأ التشغيل خلال 1-2 أسبوع</div>
+            <div class="contact-item"><span class="step-dot">1</span> جرب المنصة التجريبية مجاناً</div>
+            <div class="contact-item"><span class="step-dot">2</span> اطلب استشارة عبر الموقع</div>
+            <div class="contact-item"><span class="step-dot">3</span> تواصل مع فريق المبيعات</div>
+            <div class="contact-item"><span class="step-dot">4</span> ابدأ التشغيل خلال واحد أسبوع فقط</div>
         </div>
     </div>
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--border)">
         <img src="../imgs/logo.png" alt="Trakmile" style="height:40px">
         <img src="../imgs/visionn3.png" alt="Vision 2030" style="height:60px">
     </div>
 
-    <p style="text-align:center;font-size:11px;color:var(--gray);margin-top:30px">
+    <p style="text-align:center;font-size:11px;color:var(--gray);margin-top:24px;margin-bottom:0">
         © 2026 Trakmile. جميع الحقوق محفوظة.<br>
         Smart Logistics Management Platform — Built for Smarter Fulfillment Ecosystems
     </p>
-    <div class="page-num">8</div>
+    <div class="page-num">14</div>
 </div>
-
-</body>
-</html>
