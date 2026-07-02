@@ -3,8 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Trakmile — الملف التعريفي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        @font-face {
+            font-family: 'Cairo';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: url('fonts/Cairo-Regular.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Cairo';
+            font-style: normal;
+            font-weight: 600;
+            font-display: swap;
+            src: url('fonts/Cairo-SemiBold.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Cairo';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: url('fonts/Cairo-Bold.ttf') format('truetype');
+        }
+        @font-face {
+            font-family: 'Cairo';
+            font-style: normal;
+            font-weight: 800;
+            font-display: swap;
+            src: url('fonts/Cairo-ExtraBold.ttf') format('truetype');
+        }
+
         :root {
             --primary: #1B84FF;
             --secondary: #FF6A00;
@@ -22,12 +50,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Arial, sans-serif;
             color: var(--dark);
             background: #fff;
             line-height: 1.7;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+            font-feature-settings: 'liga' 1, 'calt' 1;
+            text-rendering: optimizeLegibility;
         }
 
         .page {
@@ -351,7 +381,8 @@
     <table>
         <tr><th>الخدمة</th><th>الوصف</th><th>الفائدة للعميل</th></tr>
         <tr><td><strong>منصة التشغيل</strong></td><td>لوحة تحكم مركزية لإدارة الشحنات والسائقين والمستودعات والتقارير</td><td>رؤية شاملة وتحكم كامل بعمليات التوصيل</td></tr>
-        <tr><td><strong>تطبيق السائقين</strong></td><td>تطبيق جوال يمكّن السائقين من استلام الطلبات والتنقل وإثبات التسليم</td><td>تنفيذ أسرع وأدق على أرض الواقع</td></tr>
+        <tr><td><strong>تطبيق المندوبين</strong></td><td>تطبيق جوال بإحصائيات الطلبات، إدارة المسندة، وماسح باركود لتأكيد استلام الشحنات</td><td>تنفيذ أسرع وأدق على أرض الواقع</td></tr>
+        <tr><td><strong>مساعد الذكاء الاصطناعي</strong></td><td>مساعد ذكي مدمج يجيب على استفسارات التشغيل ويساعد في اتخاذ القرار</td><td>دعم فوري وتسريع حل المشكلات التشغيلية</td></tr>
         <tr><td><strong>تكامل المتاجر</strong></td><td>ربط متاجر عملائك (Salla، Zid، Shopify وغيرها) لاستقبال الطلبات تلقائياً</td><td>تقليل العمل اليدوي وتسريع بدء التوصيل</td></tr>
         <tr><td><strong>النظام المحاسبي المدمج</strong></td><td>فواتير، مقبوضات، مدفوعات، وتسويات مالية مرتبطة مباشرة بعمليات التوصيل</td><td>رقابة مالية دقيقة دون أنظمة منفصلة</td></tr>
         <tr><td><strong>إدارة COD</strong></td><td>متابعة تحصيل الدفع عند الاستلام وتسوية المبالغ مع السائقين</td><td>شفافية مالية وتحكم بالتحصيلات</td></tr>
@@ -405,6 +436,11 @@
             <div class="card-icon">📊</div>
             <h3>التقارير والتحليلات</h3>
             <p>تقارير تشغيلية ومالية تفاعلية — إيرادات، مصروفات، COD، وأداء الفروع والعملاء.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">🤖</div>
+            <h3>مساعد الذكاء الاصطناعي</h3>
+            <p>مساعد ذكي مدمج داخل المنصة — استفسارات تشغيلية، تحليلات سريعة، ودعم لاتخاذ القرار.</p>
         </div>
     </div>
 
@@ -488,27 +524,97 @@
         </div>
         <p style="text-align:center;font-size:11px;color:var(--gray);margin:8px 0 0">من استلام الطلب حتى إثبات التسليم — دورة واحدة متكاملة وقابلة للمتابعة</p>
     </div>
+
+    <span class="section-label">AI Assistant</span>
+    <h2>مساعد الذكاء الاصطناعي المدمج</h2>
+    <div class="intro-box">
+        <p>مساعد ذكي <strong>مدمج داخل منصة Trakmile</strong> — يساعد فرق التشغيل والإدارة على الفهم السريع للبيانات وحل الاستفسارات دون مغادرة النظام.</p>
+    </div>
+    <div class="grid-2">
+        <div class="card">
+            <h3>إجابات فورية</h3>
+            <p>اسأل عن حالة الشحنات، أداء المندوبين، أو ملخص العمليات — ويُجيب المساعد فوراً.</p>
+        </div>
+        <div class="card">
+            <h3>دعم القرار</h3>
+            <p>تحليلات وتوصيات مبنية على بياناتك التشغيلية لتحسين الكفاءة وتوزيع الأحمال.</p>
+        </div>
+        <div class="card">
+            <h3>تقليل الاعتماد على الدعم</h3>
+            <p>إرشاد داخل المنصة للموظفين الجدد وشرح خطوات التشغيل الشائعة.</p>
+        </div>
+        <div class="card">
+            <h3>متاح دائماً</h3>
+            <p>مساعد يعمل على مدار الساعة ضمن بيئة عملك — دون انتظار أو تحويل بين الأنظمة.</p>
+        </div>
+    </div>
     <div class="page-num">4</div>
 </div>
 
-<!-- تطبيق الجوال + خدمات التشغيل -->
+<!-- تطبيق الجوال -->
 <div class="page">
     <div class="page-header">
         <img src="../imgs/logo.png" alt="Trakmile">
-        <span>الملف التعريفي · خدمات التشغيل</span>
+        <span>الملف التعريفي · تطبيق الجوال</span>
     </div>
 
     <span class="section-label">Mobile App</span>
-    <h2>تطبيق السائقين</h2>
-    <p>تطبيق جوال مخصص لفرق التوصيل والميدان، يُمكّن السائقين من:</p>
+    <h2>تطبيق الجوال للمندوبين</h2>
+    <p>تطبيق جوال مخصص للمندوبين وفرق التوصيل — يربط الميدان بمنصة التشغيل لحظياً.</p>
+
+    <span class="section-label">Order Stats</span>
+    <h2>إحصائيات الطلبات وإدارتها</h2>
+    <div class="grid-2">
+        <div class="card">
+            <div class="card-icon">📈</div>
+            <h3>لوحة إحصائيات شخصية</h3>
+            <p>عرض عدد الطلبات المسندة للمندوب — قيد التنفيذ، المُسلّمة، والمعلّقة — بلمحة واحدة.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">📋</div>
+            <h3>إدارة الطلبات المسندة</h3>
+            <p>استعراض كل الطلبات المكلف بها المندوب، قبولها، متابعتها، وتحديث حالتها خطوة بخطوة.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">⏱️</div>
+            <h3>مؤشرات الأداء اليومي</h3>
+            <p>متابعة إنجازات اليوم — عدد التسليمات، معدل النجاح، وCOD المحصّل.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">📜</div>
+            <h3>سجل الطلبات</h3>
+            <p>أرشيف كامل للطلبات السابقة مع إمكانية البحث والمراجعة.</p>
+        </div>
+    </div>
+
+    <span class="section-label">Barcode Scanner</span>
+    <h2>ماسح الباركود للشحنات</h2>
+    <div class="intro-box">
+        <p>ماسح باركود <strong>مدمج في التطبيق</strong> — يمسح المندوب باركود الشحنة لتأكيد استلامها فوراً، مع تقليل الأخطاء اليدوية وتسريع عمليات الفرز والاستلام.</p>
+    </div>
     <ul class="feature-list">
-        <li>استلام وتأكيد الطلبات لحظياً</li>
+        <li>مسح باركود الشحنة لتأكيد الاستلام من المستودع أو نقطة التجميع</li>
+        <li>ربط تلقائي بين الباركود والطلب في المنصة</li>
+        <li>تقليل أخطاء الإدخال اليدوي وتسريع عمليات التسليم</li>
+    </ul>
+
+    <span class="section-label">More Features</span>
+    <h2>مزايا إضافية في التطبيق</h2>
+    <ul class="feature-list">
         <li>الملاحة وتحسين مسارات التوصيل</li>
         <li>إثبات التسليم بالصورة والتوقيع الرقمي</li>
         <li>تحصيل COD ومزامنة فورية مع منصة التشغيل</li>
         <li>إشعارات فورية بالطلبات الجديدة والتحديثات</li>
-        <li>عرض سجل الطلبات والأداء اليومي</li>
     </ul>
+    <div class="page-num">5</div>
+</div>
+
+<!-- المحاسبة + التشغيل -->
+<div class="page">
+    <div class="page-header">
+        <img src="../imgs/logo.png" alt="Trakmile">
+        <span>الملف التعريفي · المحاسبة والتشغيل</span>
+    </div>
 
     <span class="section-label">Operations</span>
     <h2>خدمات التشغيل اليومي</h2>
@@ -516,7 +622,7 @@
         <div class="card">
             <div class="card-icon">📋</div>
             <h3>إدارة الطلبات</h3>
-            <p>استلام الطلبات، فرزها، تعيينها للسائقين، ومتابعة حالتها حتى التسليم.</p>
+            <p>استلام الطلبات، فرزها، تعيينها للمندوبين، ومتابعة حالتها حتى التسليم.</p>
         </div>
         <div class="card">
             <div class="card-icon">🗺️</div>
@@ -531,7 +637,7 @@
         <div class="card">
             <div class="card-icon">💰</div>
             <h3>إدارة التحصيلات</h3>
-            <p>متابعة مبالغ COD، تسوية السائقين، وتقارير التحصيل اليومية.</p>
+            <p>متابعة مبالغ COD، تسوية المندوبين، وتقارير التحصيل اليومية.</p>
         </div>
     </div>
 
@@ -575,7 +681,7 @@
     <div class="intro-box">
         <p>كل شركة لوجستية تحصل على <strong>بيئة تشغيل خاصة</strong> ببياناتها وعملياتها — مع إمكانية تجربة المنصة عبر نسخة تجريبية قبل التشغيل الكامل.</p>
     </div>
-    <div class="page-num">5</div>
+    <div class="page-num">6</div>
 </div>
 
 <!-- القطاعات + الدعم -->
@@ -644,7 +750,7 @@
         <li>متابعة حالات الشحنات والتأخيرات</li>
         <li>لوحات مؤشرات لحظية لصناع القرار</li>
     </ul>
-    <div class="page-num">6</div>
+    <div class="page-num">7</div>
 </div>
 
 <!-- صفحة التواصل -->
@@ -687,7 +793,7 @@
         © 2026 Trakmile. جميع الحقوق محفوظة.<br>
         Smart Logistics Management Platform — Built for Smarter Fulfillment Ecosystems
     </p>
-    <div class="page-num">7</div>
+    <div class="page-num">8</div>
 </div>
 
 </body>
