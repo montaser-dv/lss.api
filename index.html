@@ -13,8 +13,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-
     <style>
         :root {
             --primary: #1B84FF;
@@ -425,8 +423,23 @@
             border: none;
             cursor: pointer;
             color: var(--dark);
-            padding: 4px;
+            padding: 0;
+            min-width: 44px;
+            min-height: 44px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1002;
+            -webkit-tap-highlight-color: transparent;
         }
+
+        .menu-icon {
+            font-size: 22px;
+            line-height: 1;
+            font-weight: 700;
+        }
+
+        body.menu-open { overflow: hidden; }
 
         .mobile-nav {
             display: none;
@@ -437,10 +450,25 @@
             flex-direction: column;
             gap: 8px;
             border-top: 1px solid var(--border);
-            z-index: 999;
+            z-index: 1001;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .mobile-nav.open { display: flex; }
+
+        .mobile-lang-toggle {
+            margin-top: 8px;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--light);
+            color: var(--dark);
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+        }
 
         .mobile-nav a {
             text-decoration: none;
@@ -2112,8 +2140,8 @@
                 <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
             </div>
 
-            <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
-                <i data-lucide="menu"></i>
+            <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+                <span class="menu-icon" aria-hidden="true">☰</span>
             </button>
         </div>
     </header>
@@ -2127,6 +2155,7 @@
         <a href="#mobile" data-i18n="nav.mobile">تطبيق الجوال</a>
         <a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a>
         <a href="#contact" data-i18n="nav.contact">تواصل معنا</a>
+        <button type="button" class="mobile-lang-toggle" id="mobileLangToggle">English</button>
         <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب استشارة</a>
         <a href="/admin/" class="btn btn-outline" data-i18n="nav.login">دخول</a>
         <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
@@ -2884,6 +2913,13 @@
 
     <script src="js/i18n.js"></script>
     <script src="js/app.js"></script>
-    <script>if (typeof lucide !== 'undefined') lucide.createIcons();</script>
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+    <script defer>
+        window.addEventListener('DOMContentLoaded', function () {
+            if (typeof lucide !== 'undefined' && lucide.createIcons) {
+                try { lucide.createIcons(); } catch (e) { console.warn(e); }
+            }
+        });
+    </script>
 </body>
 </html>

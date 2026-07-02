@@ -1,4 +1,4 @@
-const translations = {
+var translations = {
     ar: {
         'meta.title': 'Trakmile | منصة إدارة لوجستية ذكية',
         'nav.features': 'المميزات',
