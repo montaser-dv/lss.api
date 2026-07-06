@@ -271,14 +271,56 @@
         }
 
         .btn-quote {
-            background: var(--secondary);
+            background: linear-gradient(135deg, #FF8533 0%, var(--secondary) 45%, var(--secondary-dark) 100%);
             color: var(--white);
+            font-weight: 700;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 18px rgba(255, 106, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-quote::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.5s ease;
+        }
+
+        .btn-quote:hover::after {
+            left: 140%;
         }
 
         .btn-quote:hover {
-            background: var(--secondary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3);
+            background: linear-gradient(135deg, #FF9544 0%, var(--secondary) 45%, #D45500 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(255, 106, 0, 0.5);
+        }
+
+        .btn-quote-pulse {
+            animation: quoteGlow 2.8s ease-in-out infinite;
+        }
+
+        @keyframes quoteGlow {
+            0%, 100% { box-shadow: 0 4px 18px rgba(255, 106, 0, 0.4); }
+            50% { box-shadow: 0 6px 26px rgba(255, 106, 0, 0.55), 0 0 0 3px rgba(255, 106, 0, 0.18); }
+        }
+
+        .btn-quote.btn-lg {
+            padding: 15px 30px;
+            font-size: 16px;
+        }
+
+        .btn-quote i,
+        .btn-quote svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
         }
 
         /* ── Quote Modal ── */
@@ -483,6 +525,12 @@
         .mobile-nav a:hover { background: var(--light); }
 
         .mobile-nav .btn { justify-content: center; margin-top: 8px; }
+
+        .mobile-nav .btn-quote {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 16px;
+        }
 
         /* ── Hero ── */
         .hero {
@@ -2136,7 +2184,10 @@
 
             <div class="nav-actions">
                 <button class="lang-toggle" id="langToggle" type="button">EN</button>
-                <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب استشارة</a>
+                <a href="#" class="btn btn-quote btn-quote-pulse" data-open-quote>
+                    <i data-lucide="message-circle"></i>
+                    <span data-i18n="nav.quote">طلب استشارة</span>
+                </a>
                 <a href="/admin/" class="btn btn-outline" data-i18n="nav.login">دخول</a>
                 <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
             </div>
@@ -2157,7 +2208,10 @@
         <a href="#faq" data-i18n="nav.faq">الأسئلة الشائعة</a>
         <a href="#contact" data-i18n="nav.contact">تواصل معنا</a>
         <button type="button" class="mobile-lang-toggle" id="mobileLangToggle">English</button>
-        <a href="#" class="btn btn-quote" data-open-quote data-i18n="nav.quote">طلب استشارة</a>
+        <a href="#" class="btn btn-quote btn-quote-pulse" data-open-quote>
+            <i data-lucide="message-circle"></i>
+            <span data-i18n="nav.quote">طلب استشارة</span>
+        </a>
         <a href="/admin/" class="btn btn-outline" data-i18n="nav.login">دخول</a>
         <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
     </nav>
@@ -2178,7 +2232,10 @@
                         <a href="https://demo.trakmile.com" class="btn btn-primary btn-lg">
                             <span data-i18n="hero.demo">جرب النسخة التجريبية</span> <i data-lucide="arrow-right"></i>
                         </a>
-                        <a href="#" class="btn btn-outline btn-lg" data-open-quote data-i18n="hero.quote">طلب استشارة</a>
+                        <a href="#" class="btn btn-quote btn-lg btn-quote-pulse" data-open-quote>
+                            <i data-lucide="message-circle"></i>
+                            <span data-i18n="hero.quote">طلب استشارة</span>
+                        </a>
                     </div>
                     <div class="hero-trust">
                         <div class="hero-trust-item">
@@ -2813,7 +2870,8 @@
                     <a href="https://demo.trakmile.com" class="btn btn-secondary btn-lg">
                         <span data-i18n="cta.demo">جرب المنصة التجريبية</span> <i data-lucide="external-link"></i>
                     </a>
-                    <a href="#" class="btn btn-outline btn-lg" data-open-quote style="color:#fff;border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05)">
+                    <a href="#" class="btn btn-quote btn-lg btn-quote-pulse" data-open-quote>
+                        <i data-lucide="message-circle"></i>
                         <span data-i18n="cta.quote">طلب استشارة</span>
                     </a>
                 </div>
