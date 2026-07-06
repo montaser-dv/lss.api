@@ -672,6 +672,23 @@
             margin-bottom: 48px;
         }
 
+        .hero-actions .btn-quote {
+            min-width: 200px;
+            box-shadow: 0 6px 22px rgba(255, 106, 0, 0.45);
+        }
+
+        .hero-actions .btn-primary {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            box-shadow: none;
+        }
+
+        .hero-actions .btn-primary:hover {
+            background: var(--primary-light);
+            box-shadow: 0 4px 16px rgba(27, 132, 255, 0.2);
+        }
+
         .hero-trust {
             display: flex;
             align-items: center;
@@ -2349,12 +2366,12 @@
                     <h1 data-i18n-html="hero.title">نظام <span class="gradient-text">لوجستي</span> متكامل للتوصيل الحديث</h1>
                     <p class="hero-desc" data-i18n="hero.desc">أدر الشحنات والسائقين والأسطول والمستودعات وعمليات التوصيل — من منصة واحدة ذكية.</p>
                     <div class="hero-actions">
-                        <a href="https://demo.trakmile.com" class="btn btn-primary btn-lg">
-                            <span data-i18n="hero.demo">جرب النسخة التجريبية</span> <i data-lucide="arrow-right"></i>
-                        </a>
                         <a href="#" class="btn btn-quote btn-lg btn-quote-pulse" data-open-quote>
                             <i data-lucide="message-circle"></i>
                             <span data-i18n="hero.quote">طلب استشارة</span>
+                        </a>
+                        <a href="https://demo.trakmile.com" class="btn btn-primary btn-lg">
+                            <span data-i18n="hero.demo">جرب النسخة التجريبية</span> <i data-lucide="arrow-right"></i>
                         </a>
                     </div>
                     <div class="hero-trust">
@@ -3090,8 +3107,8 @@
         </div>
     </div>
 
-    <script src="js/i18n.js?v=6"></script>
-    <script src="js/app.js?v=6"></script>
+    <script src="js/i18n.js?v=7"></script>
+    <script src="js/app.js?v=7"></script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script defer>
         window.addEventListener('DOMContentLoaded', function () {
