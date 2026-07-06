@@ -2,10 +2,10 @@
 
           <!-- Include Bootstrap Icons -->
           <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-           <link rel="stylesheet" href="css/style.css?v=1.2">
+           <link rel="stylesheet" href="css/style.css?v=1.3">
            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-           <script src="js/script.js?v=3.7"></script>
+           <script src="js/script.js?v=3.8"></script>
 
 <?php
 ?>
