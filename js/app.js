@@ -95,6 +95,7 @@
         if (!modal) return;
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
+        setStickyQuoteVisible(false);
         document.getElementById('mobileNav')?.classList.remove('open');
         document.body.classList.remove('menu-open');
         setMenuToggleIcon(false);
@@ -106,8 +107,9 @@
 
         function closeModal() {
             if (!modal) return;
-            modal.classList.remove('open');
-            document.body.style.overflow = '';
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        if (typeof window.updateStickyQuote === 'function') window.updateStickyQuote();
         }
 
         document.querySelectorAll('[data-open-quote]').forEach(btn => {
@@ -253,6 +255,53 @@
         document.querySelectorAll('.stat-value[data-target]').forEach(el => counterObserver.observe(el));
     }
 
+    function setStickyQuoteVisible(show) {
+        const sticky = document.getElementById('mobileQuoteSticky');
+        if (!sticky) return;
+        sticky.classList.toggle('is-visible', show);
+        document.body.classList.toggle('sticky-quote-visible', show);
+        sticky.setAttribute('aria-hidden', show ? 'false' : 'true');
+    }
+
+    function initStickyQuote() {
+        const sticky = document.getElementById('mobileQuoteSticky');
+        const heroQuote = document.getElementById('heroQuoteBtn');
+        if (!sticky || !heroQuote) return;
+
+        const mobileMq = window.matchMedia('(max-width: 768px)');
+        let observer = null;
+
+        const updateFromEntry = (isIntersecting) => {
+            if (!mobileMq.matches) {
+                setStickyQuoteVisible(false);
+                return;
+            }
+            setStickyQuoteVisible(!isIntersecting);
+        };
+
+        const startObserver = () => {
+            if (observer) observer.disconnect();
+            if (!mobileMq.matches) {
+                setStickyQuoteVisible(false);
+                return;
+            }
+            observer = new IntersectionObserver(([entry]) => {
+                updateFromEntry(entry.isIntersecting);
+            }, { threshold: 0, rootMargin: '0px' });
+            observer.observe(heroQuote);
+        };
+
+        mobileMq.addEventListener('change', startObserver);
+        startObserver();
+
+        window.updateStickyQuote = () => {
+            if (!mobileMq.matches) return;
+            const rect = heroQuote.getBoundingClientRect();
+            const visible = rect.top < window.innerHeight && rect.bottom > 0;
+            setStickyQuoteVisible(!visible);
+        };
+    }
+
     function initFaq() {
         document.querySelectorAll('.faq-item').forEach(item => {
             item.querySelector('.faq-question')?.addEventListener('click', () => {
@@ -268,6 +317,7 @@
         initQuoteModal();
         initScrollEffects();
         initFaq();
+        initStickyQuote();
 
         document.getElementById('langToggle')?.addEventListener('click', toggleLanguage);
         document.getElementById('mobileLangToggle')?.addEventListener('click', toggleLanguage);

@@ -592,6 +592,22 @@
             -webkit-backdrop-filter: blur(12px);
             border-top: 1px solid var(--border);
             box-shadow: 0 -6px 24px rgba(15, 23, 42, 0.1);
+            transform: translateY(110%);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease, visibility 0.35s;
+        }
+
+        .mobile-quote-sticky.is-visible {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        body.sticky-quote-visible {
+            padding-bottom: 76px;
         }
 
         .mobile-quote-sticky .btn-quote {
@@ -2332,7 +2348,6 @@
             .mobile-header-quote { display: inline-flex; }
             .menu-toggle { display: flex; }
             .mobile-quote-sticky { display: block; }
-            body { padding-bottom: 76px; }
 
             .hero-actions {
                 flex-direction: column;
@@ -2472,7 +2487,7 @@
         <a href="https://demo.trakmile.com" class="btn btn-primary" data-i18n="nav.demo">جرب النسخة التجريبية</a>
     </nav>
 
-    <div class="mobile-quote-sticky" aria-hidden="false">
+    <div class="mobile-quote-sticky" id="mobileQuoteSticky" aria-hidden="true">
         <a href="#" class="btn btn-quote btn-quote-pulse" data-open-quote>
             <i data-lucide="message-circle"></i>
             <span data-i18n="nav.quote">طلب استشارة</span>
@@ -2496,7 +2511,7 @@
                     <h1 data-i18n-html="hero.title">نظام <span class="gradient-text">لوجستي</span> متكامل للتوصيل الحديث</h1>
                     <p class="hero-desc" data-i18n="hero.desc">أدر الشحنات والسائقين والأسطول والمستودعات وعمليات التوصيل — من منصة واحدة ذكية.</p>
                     <div class="hero-actions">
-                        <a href="#" class="btn btn-quote btn-lg btn-quote-pulse" data-open-quote>
+                        <a href="#" class="btn btn-quote btn-lg btn-quote-pulse" id="heroQuoteBtn" data-open-quote>
                             <i data-lucide="message-circle"></i>
                             <span data-i18n="hero.quote">طلب استشارة</span>
                         </a>
@@ -3237,8 +3252,8 @@
         </div>
     </div>
 
-    <script src="js/i18n.js?v=8"></script>
-    <script src="js/app.js?v=8"></script>
+    <script src="js/i18n.js?v=9"></script>
+    <script src="js/app.js?v=9"></script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script defer>
         window.addEventListener('DOMContentLoaded', function () {
