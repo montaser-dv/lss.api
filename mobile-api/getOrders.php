@@ -77,6 +77,8 @@ ini_set('display_errors', 1);
             $cur['created_at'] = $rc['created_at'];
             $cur['updated_at'] = $rc['updated_at'];
 
+            $confirm_align = $mobile_lang === 'ar' ? 'left' : 'right';
+
             if($cur['courier_confirm'] == 0){
                 $box_class = "tbl-item";
                 $btn_content="<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=confirmOrder('".$rc['AWB']."','".$mobile_domain."','".$mobile_token."')>";
@@ -109,7 +111,7 @@ ini_set('display_errors', 1);
             <td>".$cur['Reciver_phone']."</td>
 
             <td>".$cur['payment_method']."</td>
-            <td style='text-align: right;'>
+            <td style='text-align: " . $confirm_align . ";'>
                  $btn_content
             </td>
                  </tr>
