@@ -2,7 +2,7 @@
     const DEFAULT_LANG = 'ar';
     const STORAGE_KEY = 'trakmile_lang';
 
-    let currentLang = localStorage.getItem(STORAGE_KEY);
+    let currentLang = getLangFromUrl() || localStorage.getItem(STORAGE_KEY);
     if (currentLang !== 'ar' && currentLang !== 'en') {
         currentLang = DEFAULT_LANG;
     }
@@ -35,6 +35,73 @@
             : '<span class="menu-icon" aria-hidden="true">☰</span>';
     }
 
+    function setMetaContent(selector, content) {
+        const el = document.querySelector(selector);
+        if (el && content) el.setAttribute('content', content);
+    }
+
+    function updateSeoMeta(lang) {
+        document.title = t('meta.title');
+        setMetaContent('meta[name="description"]', t('meta.description'));
+        setMetaContent('meta[name="keywords"]', t('meta.keywords'));
+        setMetaContent('meta[property="og:title"]', t('meta.title'));
+        setMetaContent('meta[property="og:description"]', t('meta.ogDescription'));
+        setMetaContent('meta[property="og:locale"]', lang === 'ar' ? 'ar_SA' : 'en_US');
+        setMetaContent('meta[name="twitter:title"]', t('meta.title'));
+        setMetaContent('meta[name="twitter:description"]', t('meta.ogDescription'));
+
+        const schemaEl = document.getElementById('schemaOrg');
+        if (schemaEl) {
+            const features = t('meta.schemaFeatures').split(',').map(s => s.trim()).filter(Boolean);
+            schemaEl.textContent = JSON.stringify({
+                '@context': 'https://schema.org',
+                '@graph': [
+                    {
+                        '@type': 'Organization',
+                        '@id': 'https://trakmile.com/#organization',
+                        name: 'Trakmile',
+                        url: 'https://trakmile.com/',
+                        logo: 'https://trakmile.com/imgs/logo.png',
+                        email: 'info@trakmile.com',
+                        description: t('meta.schemaOrgDesc'),
+                        sameAs: ['https://demo.trakmile.com'],
+                    },
+                    {
+                        '@type': 'WebSite',
+                        '@id': 'https://trakmile.com/#website',
+                        url: 'https://trakmile.com/',
+                        name: 'Trakmile',
+                        description: t('meta.schemaWebDesc'),
+                        publisher: { '@id': 'https://trakmile.com/#organization' },
+                        inLanguage: ['ar', 'en'],
+                    },
+                    {
+                        '@type': 'SoftwareApplication',
+                        '@id': 'https://trakmile.com/#software',
+                        name: 'Trakmile',
+                        applicationCategory: 'BusinessApplication',
+                        operatingSystem: 'Web, Android, iOS',
+                        url: 'https://trakmile.com/',
+                        description: t('meta.schemaAppDesc'),
+                        offers: {
+                            '@type': 'Offer',
+                            price: '0',
+                            priceCurrency: 'SAR',
+                            description: t('meta.schemaOfferDesc'),
+                        },
+                        featureList: features,
+                        provider: { '@id': 'https://trakmile.com/#organization' },
+                    },
+                ],
+            });
+        }
+    }
+
+    function getLangFromUrl() {
+        const param = new URLSearchParams(window.location.search).get('lang');
+        return param === 'en' || param === 'ar' ? param : null;
+    }
+
     function applyLanguage(lang) {
         const dict = getTranslations();
         if (!dict) {
@@ -51,7 +118,7 @@
 
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        document.title = t('meta.title');
+        updateSeoMeta(lang);
 
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');

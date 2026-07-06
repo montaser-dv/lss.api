@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /mobile-api/
+Disallow: /git_deploy/
+
+Sitemap: https://trakmile.com/sitemap.xml
