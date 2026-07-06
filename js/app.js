@@ -91,11 +91,14 @@
         const quoteForm = document.getElementById('quoteForm');
         const formMessage = document.getElementById('formMessage');
 
-        function openModal() {
-            if (!modal) return;
-            modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
-            if (formMessage) {
+    function openModal() {
+        if (!modal) return;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('mobileNav')?.classList.remove('open');
+        document.body.classList.remove('menu-open');
+        setMenuToggleIcon(false);
+        if (formMessage) {
                 formMessage.style.display = 'none';
                 formMessage.className = 'form-message';
             }
