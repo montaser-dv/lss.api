@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr"> <head>
+<?php
+include("lang.php");
+$mobile_lang = mobile_get_lang();
+?>
+<html lang="<?php echo htmlspecialchars($mobile_lang); ?>" dir="<?php echo mobile_dir($mobile_lang); ?>"> <head>
     <meta charset="UTF-8">
 <?php
 
@@ -93,53 +97,53 @@ if (strlen($mobile_token) > 10) {
 
           $tbl .= "
                <tr>
-               <td class='cap_oo'> Barcode </td><td style='color:#1b84ff' id='awb'>";
+               <td class='cap_oo'> " . mobile_t('barcode', $mobile_lang) . " </td><td style='color:#1b84ff' id='awb'>";
           $tbl .= "<img src='" . $barcode_url . "' width='170' height='50'/>";
           $tbl .= "</td>
                </tr>
 
                <tr class='hr-btm'>
-               <td class='cap_oo'> AWB </td><td style='color:#1b84ff' id='awb'>" . $cur['AWB'] . "</td>
+               <td class='cap_oo'>" . mobile_t('awb', $mobile_lang) . "</td><td style='color:#1b84ff' id='awb'>" . $cur['AWB'] . "</td>
                </tr>
 
                <tr>
-               <td class='cap_oo'>Reciver name</td><td>" . $cur['Reciver_name'] . "</td>
+               <td class='cap_oo'>" . mobile_t('receiver_name', $mobile_lang) . "</td><td>" . $cur['Reciver_name'] . "</td>
                </tr>
                <tr>
-               <td class='cap_oo'>Reciver phone</td><td>" . $cur['Reciver_phone'] . "</td>
+               <td class='cap_oo'>" . mobile_t('receiver_phone', $mobile_lang) . "</td><td>" . $cur['Reciver_phone'] . "</td>
                </tr>
                <tr>
-               <td class='cap_oo'>City</td><td>" . $cur['city'] . "</td>
+               <td class='cap_oo'>" . mobile_t('city', $mobile_lang) . "</td><td>" . $cur['city'] . "</td>
                </tr>
                <tr>
-               <td class='cap_oo'>Area</td><td>" . $cur['area'] . "</td>
+               <td class='cap_oo'>" . mobile_t('area', $mobile_lang) . "</td><td>" . $cur['area'] . "</td>
                </tr>
                <tr class='hr-btm'>
-               <td class='cap_oo'>Address</td><td>" . $cur['Address'] . "</td>
+               <td class='cap_oo'>" . mobile_t('address', $mobile_lang) . "</td><td>" . $cur['Address'] . "</td>
                </tr>
                <tr>
-               <td class='cap_oo'>Payment method</td><td>" . $cur['payment_method'] . "</td>
+               <td class='cap_oo'>" . mobile_t('payment_method', $mobile_lang) . "</td><td>" . $cur['payment_method'] . "</td>
                </tr>
                <tr class='hr-btm'>
-               <td class='cap_oo'> COD </td><td>" . $cur['COD'] . "</td>
+               <td class='cap_oo'>" . mobile_t('cod', $mobile_lang) . "</td><td>" . $cur['COD'] . "</td>
                </tr>
 
 
 
                <tr class='hr-btm'>
-               <td class='cap_oo'>Pieces</td><td>" . $cur['Pieces'] . "</td>
+               <td class='cap_oo'>" . mobile_t('pieces', $mobile_lang) . "</td><td>" . $cur['Pieces'] . "</td>
                </tr>
 
 
                <tr>
-               <td class='cap_oo'> Client name </td><td>" . $cur['Brand'] . "</td>
+               <td class='cap_oo'>" . mobile_t('client_name', $mobile_lang) . "</td><td>" . $cur['Brand'] . "</td>
                </tr>
 
                <tr>
-               <td class='cap_oo'>Description</td><td>" . $cur['description'] . "</td>
+               <td class='cap_oo'>" . mobile_t('description', $mobile_lang) . "</td><td>" . $cur['description'] . "</td>
                </tr>
                <tr class='hr-btm'>
-               <td class='cap_oo'>Notes</td><td>" . $cur['notes'] . "</td>
+               <td class='cap_oo'>" . mobile_t('notes', $mobile_lang) . "</td><td>" . $cur['notes'] . "</td>
                </tr>
                ";
 
@@ -171,7 +175,7 @@ $tbl .= "<td align='right'>
         if (!empty($cur['lat']) && !empty($cur['lng']) && $cur['lat'] !== 0 && $cur['lng'] !== 0) {
           $tbl .= "
               <button class='btn btn-warning btn-lk' onclick='openLocation(" . $cur['lat'] . "," . $cur['lng'] . ")'>
-                  Open Location
+                  " . mobile_t('open_location', $mobile_lang) . "
                 <i class='bi bi-pin-map-fill'></i>
               </button>
           ";
@@ -181,14 +185,14 @@ $tbl .= "<td align='right'>
         $tbl .= "<br><br>
 
                 <button class='btn btn-primary btn-lk' onclick=delivared('delvery','" . $mobile_AWB . "','" . $mobile_domain . "','" . $mobile_token . "','" . $mobile_ccode . "')>
-                    Delivered &nbsp; &nbsp; &nbsp;
+                    " . mobile_t('delivered', $mobile_lang) . " &nbsp; &nbsp; &nbsp;
                   <i class='bi bi-bag-check'></i>
                 </button>
 
           <br><br>
 
            <button class='btn btn-danger btn-lk' onclick=not_delivared('not','" . $mobile_AWB . "','" . $mobile_domain . "','" . $mobile_token . "','" . $mobile_ccode . "')>
-             Not delivered
+             " . mobile_t('not_delivered', $mobile_lang) . "
              <i class='bi bi-bag-x'></i>
            </button>
        </center>

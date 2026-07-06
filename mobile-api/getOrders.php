@@ -1,4 +1,6 @@
 <?php
+include("lang.php");
+$mobile_lang = mobile_get_lang();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 //header('Content-Type: application/json');
@@ -77,7 +79,7 @@ ini_set('display_errors', 1);
 
             if($cur['courier_confirm'] == 0){
                 $box_class = "tbl-item";
-                $btn_content="<input type='button' value='Confirm' class='confirmOr' onclick=confirmOrder('".$rc['AWB']."','".$mobile_domain."','".$mobile_token."')>";
+                $btn_content="<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=confirmOrder('".$rc['AWB']."','".$mobile_domain."','".$mobile_token."')>";
                 $color="color:#ff533b";
             }else{
                 $box_class = "tbl-item-confirm";
@@ -128,7 +130,7 @@ ini_set('display_errors', 1);
 
           
    }else{
-       $tbl.="<tr><td align='center'> <br> There is no orders. <br><br> </td></tr>";
+       $tbl.="<tr><td align='center'> <br> " . mobile_t('empty_orders', $mobile_lang) . " <br><br> </td></tr>";
        
    }
    

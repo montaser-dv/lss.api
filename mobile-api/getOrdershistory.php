@@ -1,4 +1,6 @@
 <?php
+include("lang.php");
+$mobile_lang = mobile_get_lang();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 //header('Content-Type: application/json');
@@ -124,7 +126,7 @@ ini_set('display_errors', 1);
 
           
    }else{
-       $tbl.="<tr><td align='center'> <br> There is no orders. <br><br> </td></tr>";
+       $tbl.="<tr><td align='center'> <br> " . mobile_t('empty_orders', $mobile_lang) . " <br><br> </td></tr>";
        
    }
    

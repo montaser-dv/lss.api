@@ -1,11 +1,13 @@
 <?php
+    include("lang.php");
+    $mobile_lang = mobile_get_lang();
     $mobile_ccode = $_GET['ccode'];
     $mobile_domain=$_GET['domain'];
     $mobile_token =$_GET['token'];
 ?>
-<html>
+<html lang="<?php echo htmlspecialchars($mobile_lang); ?>" dir="<?php echo mobile_dir($mobile_lang); ?>">
     <head>
-           <title> History </title>
+           <title><?php echo htmlspecialchars(mobile_t('page_title.history', $mobile_lang)); ?></title>
 
 <?php
   include("header.php");
@@ -29,7 +31,7 @@
                    $.ajax({
                        url:"getOrdershistory.php",
                        type:"POST",
-                       data:"ccode="+<?php echo $mobile_ccode; ?>+"&domain="+"<?php echo $mobile_domain; ?>"+"&token="+"<?php echo $mobile_token; ?>",
+                       data:"ccode="+<?php echo $mobile_ccode; ?>+"&domain="+"<?php echo $mobile_domain; ?>"+"&token="+"<?php echo $mobile_token; ?>"+"&lang="+"<?php echo $mobile_lang; ?>",
                        success:function(data){
                            $("#tbl_container").html(data);
                        }
