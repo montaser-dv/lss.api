@@ -976,38 +976,213 @@
 
         .mockup-stat-value.blue { color: var(--primary); }
         .mockup-stat-value.orange { color: var(--secondary); }
+        .mockup-stat-value.green { color: #28CA41; }
 
-        .mockup-chart {
-            background: var(--white);
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            padding: 16px;
-            height: 140px;
+        .mockup-map-view {
             display: flex;
-            align-items: flex-end;
-            gap: 8px;
+            flex-direction: column;
+            gap: 12px;
+            height: 100%;
         }
 
-        .mockup-bar-col {
+        .mockup-map {
+            position: relative;
             flex: 1;
-            border-radius: 4px 4px 0 0;
-            background: linear-gradient(to top, var(--primary), rgba(27, 132, 255, 0.3));
-            animation: barGrow 1.2s ease forwards;
-            transform-origin: bottom;
-            transform: scaleY(0);
+            min-height: 200px;
+            background:
+                linear-gradient(180deg, rgba(219, 234, 254, 0.55) 0%, rgba(240, 249, 255, 0.9) 100%),
+                repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(148, 163, 184, 0.14) 31px, rgba(148, 163, 184, 0.14) 32px),
+                repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(148, 163, 184, 0.14) 31px, rgba(148, 163, 184, 0.14) 32px);
+            border-radius: 12px;
+            border: 1px solid rgba(27, 132, 255, 0.15);
+            overflow: hidden;
         }
 
-        .mockup-bar-col:nth-child(1) { height: 45%; animation-delay: 0.1s; }
-        .mockup-bar-col:nth-child(2) { height: 70%; animation-delay: 0.2s; }
-        .mockup-bar-col:nth-child(3) { height: 55%; animation-delay: 0.3s; }
-        .mockup-bar-col:nth-child(4) { height: 85%; animation-delay: 0.4s; background: linear-gradient(to top, var(--secondary), rgba(255, 106, 0, 0.3)); }
-        .mockup-bar-col:nth-child(5) { height: 60%; animation-delay: 0.5s; }
-        .mockup-bar-col:nth-child(6) { height: 90%; animation-delay: 0.6s; }
-        .mockup-bar-col:nth-child(7) { height: 75%; animation-delay: 0.7s; }
-
-        @keyframes barGrow {
-            to { transform: scaleY(1); }
+        .map-live-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 3;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--dark);
+            box-shadow: var(--shadow-sm);
         }
+
+        [dir="rtl"] .map-live-badge {
+            right: auto;
+            left: 10px;
+        }
+
+        .map-live-dot {
+            width: 7px;
+            height: 7px;
+            background: #28CA41;
+            border-radius: 50%;
+            animation: mapPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes mapPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(40, 202, 65, 0.5); }
+            50% { box-shadow: 0 0 0 6px rgba(40, 202, 65, 0); }
+        }
+
+        .map-routes {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .map-route {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-dasharray: 6 5;
+            opacity: 0.45;
+            animation: routeDash 12s linear infinite;
+        }
+
+        .map-route.alt {
+            stroke: var(--secondary);
+            opacity: 0.35;
+            animation-duration: 16s;
+        }
+
+        @keyframes routeDash {
+            to { stroke-dashoffset: -44; }
+        }
+
+        .map-driver {
+            position: absolute;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            animation: driverFloat 5s ease-in-out infinite;
+        }
+
+        .map-driver:nth-child(odd) { animation-delay: -1.5s; }
+        .map-driver:nth-child(3n) { animation-delay: -3s; }
+
+        @keyframes driverFloat {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-50%, calc(-50% - 4px)); }
+        }
+
+        .map-driver-pin {
+            position: relative;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+            border: 2px solid #fff;
+        }
+
+        .map-driver-pin::before {
+            content: '';
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            opacity: 0.25;
+            animation: driverRing 2.5s ease-out infinite;
+        }
+
+        .map-driver.active .map-driver-pin {
+            background: linear-gradient(135deg, var(--primary), #156BCB);
+            color: var(--primary);
+        }
+
+        .map-driver.delivering .map-driver-pin {
+            background: linear-gradient(135deg, #28CA41, #16A34A);
+            color: #28CA41;
+        }
+
+        .map-driver.idle .map-driver-pin {
+            background: linear-gradient(135deg, var(--secondary), var(--secondary-dark));
+            color: var(--secondary);
+        }
+
+        @keyframes driverRing {
+            0% { transform: scale(0.85); opacity: 0.45; }
+            100% { transform: scale(1.35); opacity: 0; }
+        }
+
+        .map-driver-label {
+            padding: 2px 7px;
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--dark);
+            white-space: nowrap;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .map-zone {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(27, 132, 255, 0.25);
+            background: rgba(27, 132, 255, 0.06);
+            pointer-events: none;
+        }
+
+        .map-zone-1 { width: 90px; height: 90px; top: 18%; left: 58%; }
+        .map-zone-2 { width: 70px; height: 70px; top: 52%; left: 22%; }
+
+        .map-legend {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            z-index: 3;
+            display: flex;
+            gap: 8px;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 9px;
+            color: var(--gray);
+        }
+
+        [dir="rtl"] .map-legend {
+            left: auto;
+            right: 10px;
+        }
+
+        .map-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .map-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .map-legend-dot.blue { background: var(--primary); }
+        .map-legend-dot.green { background: #28CA41; }
+        .map-legend-dot.orange { background: var(--secondary); }
 
         .mockup-float {
             position: absolute;
@@ -1035,11 +1210,21 @@
             animation-delay: -2s;
         }
 
+        [dir="rtl"] .mockup-float-1 {
+            left: auto;
+            right: -30px;
+        }
+
+        [dir="rtl"] .mockup-float-2 {
+            right: auto;
+            left: -20px;
+        }
+
         .float-icon {
             width: 32px;
             height: 32px;
-            background: rgba(40, 202, 65, 0.12);
-            color: #28CA41;
+            background: rgba(27, 132, 255, 0.12);
+            color: var(--primary);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -2559,55 +2744,90 @@
 
                 <div class="dashboard-mockup reveal">
                     <div class="mockup-float mockup-float-1">
-                        <div class="float-icon"><i data-lucide="check"></i></div>
+                        <div class="float-icon"><i data-lucide="truck"></i></div>
                         <div>
-                            <strong style="font-size:13px;display:block">Delivered</strong>
-                            <span style="color:var(--gray);font-size:11px">Order #TM-4821</span>
+                            <strong style="font-size:13px;display:block" data-i18n="hero.mockup.floatTitle">On the way</strong>
+                            <span style="color:var(--gray);font-size:11px" data-i18n="hero.mockup.floatOrder">Driver #TM-4821 · 4 min</span>
                         </div>
                     </div>
                     <div class="mockup-bar">
                         <div class="mockup-dot"></div>
                         <div class="mockup-dot"></div>
                         <div class="mockup-dot"></div>
-                        <div class="mockup-url">trakmile.com/admin</div>
+                        <div class="mockup-url">trakmile.com/live-map</div>
                     </div>
                     <div class="mockup-body">
                         <div class="mockup-sidebar">
                             <div class="mockup-sidebar-logo">Trak<span>mile</span></div>
-                            <div class="mockup-nav-item active"><i data-lucide="layout-dashboard"></i> Dashboard</div>
-                            <div class="mockup-nav-item"><i data-lucide="package"></i> Shipments</div>
-                            <div class="mockup-nav-item"><i data-lucide="users"></i> Drivers</div>
-                            <div class="mockup-nav-item"><i data-lucide="warehouse"></i> Warehouses</div>
-                            <div class="mockup-nav-item"><i data-lucide="bar-chart-3"></i> Reports</div>
+                            <div class="mockup-nav-item active"><i data-lucide="map"></i> <span data-i18n="hero.mockup.navMap">Live Map</span></div>
+                            <div class="mockup-nav-item"><i data-lucide="package"></i> <span data-i18n="hero.mockup.navShipments">Shipments</span></div>
+                            <div class="mockup-nav-item"><i data-lucide="users"></i> <span data-i18n="hero.mockup.navDrivers">Drivers</span></div>
+                            <div class="mockup-nav-item"><i data-lucide="warehouse"></i> <span data-i18n="hero.mockup.navWarehouses">Warehouses</span></div>
+                            <div class="mockup-nav-item"><i data-lucide="bar-chart-3"></i> <span data-i18n="hero.mockup.navReports">Reports</span></div>
                         </div>
                         <div class="mockup-main">
-                            <div class="mockup-stats">
-                                <div class="mockup-stat">
-                                    <div class="mockup-stat-label">Active Shipments</div>
-                                    <div class="mockup-stat-value blue">1,284</div>
+                            <div class="mockup-map-view">
+                                <div class="mockup-stats">
+                                    <div class="mockup-stat">
+                                        <div class="mockup-stat-label" data-i18n="hero.mockup.statDrivers">Active Drivers</div>
+                                        <div class="mockup-stat-value blue">48</div>
+                                    </div>
+                                    <div class="mockup-stat">
+                                        <div class="mockup-stat-label" data-i18n="hero.mockup.statOnRoute">On Route</div>
+                                        <div class="mockup-stat-value green">36</div>
+                                    </div>
+                                    <div class="mockup-stat">
+                                        <div class="mockup-stat-label" data-i18n="hero.mockup.statDeliveries">Today's Deliveries</div>
+                                        <div class="mockup-stat-value orange">127</div>
+                                    </div>
                                 </div>
-                                <div class="mockup-stat">
-                                    <div class="mockup-stat-label">On-Time Rate</div>
-                                    <div class="mockup-stat-value">96.8%</div>
+                                <div class="mockup-map">
+                                    <div class="map-live-badge">
+                                        <span class="map-live-dot"></span>
+                                        <span data-i18n="hero.mockup.live">Live Tracking</span>
+                                    </div>
+                                    <div class="map-zone map-zone-1"></div>
+                                    <div class="map-zone map-zone-2"></div>
+                                    <svg class="map-routes" viewBox="0 0 400 220" preserveAspectRatio="none" aria-hidden="true">
+                                        <path class="map-route" d="M70,160 C120,120 160,90 210,75 S300,55 340,45"/>
+                                        <path class="map-route alt" d="M55,95 C110,110 150,130 200,145 S290,165 350,175"/>
+                                        <path class="map-route" d="M120,180 C160,150 190,120 240,100 S310,70 360,60"/>
+                                    </svg>
+                                    <div class="map-driver active" style="top:72%; left:18%;">
+                                        <div class="map-driver-pin"><i data-lucide="bike"></i></div>
+                                        <span class="map-driver-label">Ahmed</span>
+                                    </div>
+                                    <div class="map-driver delivering" style="top:34%; left:52%;">
+                                        <div class="map-driver-pin"><i data-lucide="truck"></i></div>
+                                        <span class="map-driver-label">Khalid</span>
+                                    </div>
+                                    <div class="map-driver active" style="top:48%; left:78%;">
+                                        <div class="map-driver-pin"><i data-lucide="bike"></i></div>
+                                        <span class="map-driver-label">Fahad</span>
+                                    </div>
+                                    <div class="map-driver idle" style="top:22%; left:28%;">
+                                        <div class="map-driver-pin"><i data-lucide="truck"></i></div>
+                                        <span class="map-driver-label">Salem</span>
+                                    </div>
+                                    <div class="map-driver delivering" style="top:58%; left:42%;">
+                                        <div class="map-driver-pin"><i data-lucide="bike"></i></div>
+                                        <span class="map-driver-label">Nasser</span>
+                                    </div>
+                                    <div class="map-driver active" style="top:18%; left:68%;">
+                                        <div class="map-driver-pin"><i data-lucide="truck"></i></div>
+                                        <span class="map-driver-label">Omar</span>
+                                    </div>
+                                    <div class="map-legend">
+                                        <span class="map-legend-item"><span class="map-legend-dot blue"></span> <span data-i18n="hero.mockup.legendRoute">On route</span></span>
+                                        <span class="map-legend-item"><span class="map-legend-dot green"></span> <span data-i18n="hero.mockup.legendDelivering">Delivering</span></span>
+                                        <span class="map-legend-item"><span class="map-legend-dot orange"></span> <span data-i18n="hero.mockup.legendIdle">Idle</span></span>
+                                    </div>
                                 </div>
-                                <div class="mockup-stat">
-                                    <div class="mockup-stat-label">COD Collected</div>
-                                    <div class="mockup-stat-value orange">SAR 48K</div>
-                                </div>
-                            </div>
-                            <div class="mockup-chart">
-                                <div class="mockup-bar-col"></div>
-                                <div class="mockup-bar-col"></div>
-                                <div class="mockup-bar-col"></div>
-                                <div class="mockup-bar-col"></div>
-                                <div class="mockup-bar-col"></div>
-                                <div class="mockup-bar-col"></div>
-                                <div class="mockup-bar-col"></div>
                             </div>
                         </div>
                     </div>
                     <div class="mockup-float mockup-float-2">
-                        <strong style="color:#28CA41;font-size:13px">+127 deliveries today</strong>
+                        <strong style="color:#28CA41;font-size:13px" data-i18n="hero.mockup.floatDeliveries">+127 deliveries today</strong>
                     </div>
                 </div>
             </div>
@@ -3277,7 +3497,7 @@
         </div>
     </div>
 
-    <script src="js/i18n.js?v=10"></script>
+    <script src="js/i18n.js?v=14"></script>
     <script src="js/app.js?v=10"></script>
     <script src="https://unpkg.com/lucide@latest" defer></script>
     <script defer>
