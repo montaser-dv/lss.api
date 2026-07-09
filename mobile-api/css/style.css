@@ -78,6 +78,30 @@
     width: 200px;
 }
 
+.order-badge{
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.order-badge-type{
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.order-badge-status{
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.btn-info.btn-lk{
+    background-color: #0ea5e9;
+    border-color: #0ea5e9;
+    color: #fff;
+}
+
 .orderDetail td{
     border: 0px solid #ccc;
     padding: 10px;

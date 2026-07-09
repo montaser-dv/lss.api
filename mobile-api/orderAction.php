@@ -1,5 +1,7 @@
 <?php
 
+include("order_helpers.php");
+
 $mobile_AWB = $_POST['awb'];
 $mobile_ccode = $_POST['ccode'];
 $mobile_domain = $_POST['domain'];
@@ -53,7 +55,7 @@ if (strlen($mobile_token) > 10) {
             $db = new mysqli('localhost', $DB_User, $DB_Pass, $DB_Name);
 
 
-            $getOrders = $db->query("SELECT * from orders where AWB='$mobile_AWB' ");
+            $getOrders = $db->query("SELECT o.*, c.client_access_type_id FROM orders o LEFT JOIN clients c ON c.user_id = o.Brand WHERE o.AWB='$mobile_AWB' ");
 
 
             if ($getOrders->num_rows > 0) {
@@ -66,6 +68,27 @@ if (strlen($mobile_token) > 10) {
                 $idw = $rc['id'];
                 $payment_method = $rc['payment_method'];
                 $COD = $rc['COD'];
+                $order_type = mobile_get_order_type_from_row($rc);
+                $current_status = mobile_get_status_name_from_row($db, $rc);
+
+                if ($mobile_type == 'picked') {
+                    if (!mobile_should_show_picked_action($order_type, $current_status)) {
+                        echo 8;
+                        exit;
+                    }
+
+                    $status_id = mobile_find_status_id($db, 'picked');
+                    if (!$status_id) {
+                        echo 6;
+                        exit;
+                    }
+
+                    $upp = $db->query("UPDATE orders SET Status='$status_id',archive='0' WHERE AWB='$mobile_AWB' ");
+                    $insert = $db->query("INSERT INTO order_paths value('0','$mobile_AWB','status','$status_id','$mobile_ccode','0','$mobile_comment','$today','$today','$c_code')");
+
+                    echo ($upp && $insert) ? 1 : 2;
+                    exit;
+                }
 
                 if ($mobile_type == 'delvery') {
                     $ttype = 'Delivered';

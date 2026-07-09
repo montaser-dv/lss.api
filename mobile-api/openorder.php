@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <?php
 include("lang.php");
+include("order_helpers.php");
 $mobile_lang = mobile_get_lang();
 ?>
 <html lang="<?php echo htmlspecialchars($mobile_lang); ?>" dir="<?php echo mobile_dir($mobile_lang); ?>"> <head>
@@ -57,13 +58,14 @@ if (strlen($mobile_token) > 10) {
 
 
       $get_message = $db->query("SELECT message_text FROM whatsapp_message where status='Active' and message_type='Assign' ");
-      if ($get_message->num_rows > 0) {
+      $safe_msg = 'null';
+      if ($get_message && $get_message->num_rows > 0) {
         $message_text = $get_message->fetch_array(MYSQLI_ASSOC)['message_text'];
         $new_message = str_replace("[AWB]", $mobile_AWB, $message_text);
         $safe_msg = htmlspecialchars(json_encode($new_message, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
       }
 
-      $getOrders = $db->query("SELECT o.*,a.Name AS area_name,z.Name AS zone_name ,u.name AS client_name FROM orders o INNER JOIN zones z,areas a,users u where o.city=z.ID and o.area=a.ID and o.courier_code='$mobile_ccode' and o.Brand=u.id and o.AWB='$mobile_AWB' and o.archive='0' ");
+      $getOrders = $db->query("SELECT o.*,a.Name AS area_name,z.Name AS zone_name,u.name AS client_name,c.client_access_type_id,c.business_name AS client_business_name FROM orders o INNER JOIN zones z ON o.city=z.ID INNER JOIN areas a ON o.area=a.ID INNER JOIN users u ON o.Brand=u.id LEFT JOIN clients c ON c.user_id=u.id WHERE o.courier_code='$mobile_ccode' AND o.AWB='$mobile_AWB' AND o.archive='0' ");
 
 
       if ($getOrders->num_rows > 0) {
@@ -76,7 +78,7 @@ if (strlen($mobile_token) > 10) {
 
           $cur['id'] = $rc['id'];
           $cur['AWB'] = $rc['AWB'];
-          $cur['Brand'] = $rc['client_name'];
+          $cur['Brand'] = !empty($rc['client_business_name']) ? $rc['client_business_name'] : $rc['client_name'];
           $cur['Reciver_name'] = $rc['Reciver_name'];
           $cur['Reciver_phone'] = $rc['Reciver_phone'];
           $cur['COD'] = $rc['COD'];
@@ -93,9 +95,21 @@ if (strlen($mobile_token) > 10) {
           $cur['created_at'] = $rc['created_at'];
           $cur['updated_at'] = $rc['updated_at'];
 
+          $order_type = mobile_get_order_type_from_row($rc);
+          $status_name = mobile_get_status_name_from_row($db, $rc);
+          $show_picked_action = mobile_should_show_picked_action($order_type, $status_name);
+
           $barcode_url = "https://" . $subdomain . "." . $domain . "/assets/order_barcode/" . $cur['AWB'] . ".png";
 
           $tbl .= "
+               <tr>
+               <td class='cap_oo'>" . mobile_t('order_type', $mobile_lang) . "</td>
+               <td><span class='order-badge order-badge-type'>" . htmlspecialchars(mobile_order_type_label($order_type, $mobile_lang)) . "</span></td>
+               </tr>
+               <tr class='hr-btm'>
+               <td class='cap_oo'>" . mobile_t('order_status', $mobile_lang) . "</td>
+               <td><span class='order-badge order-badge-status'>" . htmlspecialchars(mobile_status_label($status_name, $mobile_lang)) . "</span></td>
+               </tr>
                <tr>
                <td class='cap_oo'> " . mobile_t('barcode', $mobile_lang) . " </td><td style='color:#1b84ff' id='awb'>";
           $tbl .= "<img src='" . $barcode_url . "' width='170' height='50'/>";
@@ -181,9 +195,17 @@ $tbl .= "<td align='right'>
           ";
         }
 
+        $tbl .= "<br><br>";
 
-        $tbl .= "<br><br>
-
+        if ($show_picked_action) {
+          $tbl .= "
+                <button class='btn btn-info btn-lk' onclick=pickedOrder('" . $mobile_AWB . "','" . $mobile_domain . "','" . $mobile_token . "','" . $mobile_ccode . "')>
+                    " . mobile_t('picked', $mobile_lang) . " &nbsp; &nbsp; &nbsp;
+                  <i class='bi bi-box-seam'></i>
+                </button>
+          ";
+        } else {
+          $tbl .= "
                 <button class='btn btn-primary btn-lk' onclick=delivared('delvery','" . $mobile_AWB . "','" . $mobile_domain . "','" . $mobile_token . "','" . $mobile_ccode . "')>
                     " . mobile_t('delivered', $mobile_lang) . " &nbsp; &nbsp; &nbsp;
                   <i class='bi bi-bag-check'></i>
@@ -195,6 +217,10 @@ $tbl .= "<td align='right'>
              " . mobile_t('not_delivered', $mobile_lang) . "
              <i class='bi bi-bag-x'></i>
            </button>
+          ";
+        }
+
+        $tbl .= "
        </center>
    <br><br><br>
            ";

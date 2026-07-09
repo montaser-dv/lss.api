@@ -12,6 +12,9 @@ function t(key){
             confirmText: 'Have you actually received this order:',
             cancel: 'No',
             confirm: 'Yes, confirm it!',
+            pickedTitle: 'Confirm pickup',
+            pickedText: 'Mark this order as picked?',
+            pickedConfirm: 'Yes, picked',
             deliverTitle: 'Are you sure',
             deliverText: 'Order delivered?',
             deliverConfirm: 'Yes, delivered.',
@@ -43,6 +46,9 @@ function t(key){
             confirmText: 'هل استلمت هذا الطلب بالفعل:',
             cancel: 'لا',
             confirm: 'نعم، أكد الطلب!',
+            pickedTitle: 'تأكيد الاستلام',
+            pickedText: 'هل تريد تحديد هذا الطلب كمستلم؟',
+            pickedConfirm: 'نعم، تم الاستلام',
             deliverTitle: 'هل أنت متأكد',
             deliverText: 'هل تم تسليم الطلب؟',
             deliverConfirm: 'نعم، تم التسليم.',
@@ -102,6 +108,28 @@ function confirmOrder(awb,domain,token){
 
 
 
+function pickedOrder(awb, domain, token, ccode){
+    Swal.fire({
+        title: t('pickedTitle'),
+        text: t('pickedText'),
+        icon: "question",
+        customClass: {
+            icon: 'custom-swal-icon-size'
+        },
+        width: 300,
+        showCancelButton: true,
+        cancelButtonText: t('cancel'),
+        confirmButtonColor: "#0ea5e9",
+        cancelButtonColor: "#d33",
+        confirmButtonText: t('pickedConfirm')
+    }).then((result) => {
+        if (result.isConfirmed) {
+            delivaredDone('picked', awb, domain, token, ccode, 0);
+        }
+    });
+}
+
+
 function delivared(otype,awb,domain,token,ccode){
   var comment=0;
     Swal.fire({
@@ -146,6 +174,14 @@ function delivaredDone(otype,awb,domain,token,ccode,comment){
 
     // تحويله لنص JSON وإرساله
               window.ReactNativeWebView.postMessage(JSON.stringify(dataObj));
+         }
+         else if(data==8){
+            Swal.fire({
+                    title: t('errorTitle'),
+                    text: 'Invalid order state for picked action',
+                    icon: 'warning',
+                    confirmButtonText: t('errorOk')
+                })
          }
          else{
             Swal.fire({
