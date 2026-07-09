@@ -1,5 +1,4 @@
 -- Trakmile: Quote requests & Admin tables
--- Run on database: trak_db
 
 SET NAMES utf8mb4;
 
@@ -9,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `quote_requests` (
   `phone` varchar(20) NOT NULL,
   `email` varchar(150) NOT NULL,
   `description` text DEFAULT NULL,
+  `lang` enum('ar','en') NOT NULL DEFAULT 'ar',
   `status` enum('new','read','contacted') NOT NULL DEFAULT 'new',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),

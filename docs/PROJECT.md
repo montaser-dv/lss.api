@@ -2,19 +2,20 @@
 
 ## نظرة عامة
 
-هذا الموقع هو **موقع تعريفي** لمنصة **Trakmile** (تراك مايل) — منصة إدارة لوجستية ذكية.
+هذا المستودع يضم **الموقع التعريفي** لمنصة **Trakmile** (تراك مايل) — منصة إدارة لوجستية ذكية، مع:
 
-المشروع يتكون من:
+- صفحة هبوط ثنائية اللغة (**عربي افتراضي** + إنجليزي)
+- نموذج **طلب استشارة** للعملاء المحتملين
+- **لوحة إدارة** لطلبات الاستشارة
+- **API عام** للمنصة واستقبال الطلبات
+- **mobile-api** لربط تطبيق المندوبين (React Native WebView)
+- وثائق المنتج والبروفايلات (عربي/إنجليزي)
 
-- صفحة تعريفية ثنائية اللغة (`index.html`) — **عربي (افتراضي)** + إنجليزي
-- نموذج **طلب عرض** للعملاء
-- **لوحة إدارة** لاستعراض طلبات العروض
-- واجهات API لربط **تطبيق الجوال** (مجلد `mobile-api`)
-- وثائق النظام ونسخة من قاعدة البيانات (مجلد `docs`)
+> المنصة التشغيلية الكاملة (شحنات، محاسبة، AI، مستودعات) تعمل على `demo.trakmile.com` وقواعد بيانات العملاء المنفصلة.
 
 ---
 
-## سير عمل التطوير والنشر
+## سير العمل والنشر
 
 ```
 محلي (Laragon)  →  GitHub  →  الخادم (Ubuntu + CyberPanel)  →  trakmile.com
@@ -23,19 +24,10 @@
 
 | البيئة | الوصف |
 |--------|-------|
-| **محلي** | التطوير على Laragon في Windows (`d:\laragon\www\repos\lss.api`) |
-| **GitHub** | مستودع Git مربوط بالمشروع — يُرفع إليه الكود بعد الانتهاء |
-| **الإنتاج** | خادم Ubuntu مع لوحة **CyberPanel** — الموقع live على `trakmile.com` |
-| **النشر** | عند `push` إلى `main`، GitHub يرسل webhook إلى `git_deploy/index.php` فينفّذ `git fetch` + `git reset --hard origin/main` تلقائياً |
-
-### خطوات العمل اليومية
-
-1. البرمجة والمعاينة محلياً على Laragon
-2. `git add` → `git commit` → `git push` إلى GitHub
-3. GitHub webhook ينشر التحديثات على الخادم تلقائياً
-4. استعراض النتيجة مباشرة على الموقع الحي
-
-> **ملاحظة:** إعداد قاعدة البيانات (مثل `quote_tables.sql`) يُنفَّذ على **خادم الإنتاج** في قاعدة `trak_db` عبر CyberPanel/phpMyAdmin.
+| **محلي** | `d:\laragon\www\repos\lss.api` على Laragon |
+| **GitHub** | مستودع Git — `push` إلى `main` |
+| **الإنتاج** | Ubuntu + CyberPanel — `trakmile.com` |
+| **النشر** | webhook → `git_deploy/index.php` → `git fetch` + `git reset --hard origin/main` |
 
 ---
 
@@ -43,58 +35,93 @@
 
 ```
 lss.api/
-├── index.html              # الصفحة التعريفية (عربي/إنجليزي)
+├── index.html                  # الصفحة التعريفية (عربي/إنجليزي)
+├── robots.txt                  # سياسة الفهرسة
+├── sitemap.xml                 # خريطة الموقع
 ├── js/
-│   ├── i18n.js             # ملف الترجمة
-│   └── app.js              # تبديل اللغة + نموذج طلب العرض
-├── config.php              # يحمّل api/db.php
+│   ├── i18n.js                 # الترجمة (~200 مفتاح)
+│   └── app.js                  # اللغة، SEO، نموذج الاستشارة، الشريط السفلي
+├── config.php                  # يحمّل api/db.php
 ├── api/
-│   ├── db.php              # اتصال قاعدة البيانات ($db)
-│   ├── submit_quote.php    # استقبال طلبات العروض
-│   ├── test_db.php         # اختبار الاتصال
-│   └── ping.php            # اختبار PHP
+│   ├── db.php                  # اتصال mysqli ($db)
+│   ├── ping.php                # فحص صحة الخدمة
+│   ├── platform.php            # بيانات المنصة والميزات (جديد)
+│   ├── submit_quote.php        # استقبال طلبات الاستشارة
+│   ├── test_db.php             # تشخيص قاعدة البيانات
+│   └── setup_db.php            # إعداد الجداول (تطوير فقط)
 ├── admin/
-│   ├── login.php           # تسجيل دخول الأدمن
-│   ├── index.php           # استعراض طلبات العروض
+│   ├── login.php
+│   ├── index.php               # إدارة طلبات الاستشارة
 │   └── logout.php
-├── mobile-api/             # API ربط تطبيق الجوال
+├── mobile-api/                 # API تطبيق المندوبين
 ├── docs/
-│   ├── PROJECT.md
+│   ├── PROJECT.md              # هذا الملف
+│   ├── API.md                  # مرجع API كامل
+│   ├── Trakmile-Overview.html  # البروفايل العربي
+│   ├── Trakmile-Overview-en.html
 │   └── DB/
-│       ├── trak_db.sql
-│       └── quote_tables.sql  # جداول طلبات العروض والأدمن
+│       ├── quote_tables.sql
+│       ├── migrate_quote_lang.sql
+│       └── trak_db.sql
 └── git_deploy/
-    └── index.php           # webhook النشر التلقائي من GitHub
+    └── index.php
 ```
 
 ---
 
-## الموقع التعريفي
+## الموقع التعريفي (`index.html`)
 
-### اللغات
+### الأقسام الرئيسية
 
-- اللغة الافتراضية: **العربية** (RTL)
-- زر **EN / عربي** في الشريط العلوي للتبديل
-- يتم حفظ اختيار اللغة في `localStorage`
+| القسم | المعرف | الوصف |
+|-------|--------|-------|
+| Hero | — | عنوان ذكي، خريطة تتبع مباشرة للمناديب، أزرار استشارة وتجريبي |
+| المميزات | `#features` | شحنات، سائقين، أسطول، مستودعات، POD |
+| الذكاء الاصطناعي | `#ai` | مساعد AI مدمج (عرض تسويقي) |
+| المحاسبة | `#accounting` | نظام محاسبي مدمج (عرض تسويقي) |
+| المستودعات | `#warehouses` | مستودعات متعددة المراكز |
+| كيف يعمل | `#how-it-works` | خطوات البدء |
+| تطبيق الجوال | `#mobile` | مندوبين + باركود |
+| الأسئلة الشائعة | `#faq` | FAQ |
+| التواصل | `#contact` | CTA ونموذج |
 
-### نموذج طلب عرض
+### اللغات وSEO
 
-- زر **"طلب عرض"** في الشريط العلوي والصفحة الرئيسية وقسم CTA
-- الحقول: الاسم، رقم الجوال، البريد الإلكتروني، الوصف
-- يُرسل إلى `api/submit_quote.php` ويُخزَّن في جدول `quote_requests`
+- افتراضي: **العربية** (RTL) — تبديل عبر زر EN أو `?lang=en`
+- حفظ اللغة في `localStorage`
+- وسوم SEO: description, keywords, Open Graph, Twitter, JSON-LD
+- `hreflang` + `canonical` + `robots.txt` + `sitemap.xml`
+- تحديث ديناميكي للـ meta عند تبديل اللغة (`updateSeoMeta` في `app.js`)
+
+### نموذج طلب استشارة
+
+- زر **«طلب استشارة»** في الهيدر، Hero، الجوال، والشريط السفلي
+- شريط سفلي للجوال يظهر بعد اختفاء زر Hero (`initStickyQuote`)
+- الحقول: الاسم، الجوال، البريد، الوصف + **لغة الواجهة** (`lang`)
+- الإرسال إلى `api/submit_quote.php` → جدول `quote_requests`
 
 ---
 
-## لوحة الإدارة
+## API العام (`api/`)
 
-**الرابط:** `https://trakmile.com/admin/`
+مرجع تفصيلي: **[docs/API.md](API.md)**
+
+| الملف | الطريقة | الوظيفة |
+|-------|---------|---------|
+| `ping.php` | GET | فحص صحة + إصدار API |
+| `platform.php` | GET | ميزات المنصة، تكاملات، نقاط النهاية |
+| `submit_quote.php` | POST | طلب استشارة |
+| `test_db.php` | GET | تشخيص DB (تطوير) |
+| `setup_db.php` | GET | إنشاء الجداول (تطوير — لا تُعرّض في الإنتاج) |
+
+---
+
+## لوحة الإدارة (`/admin/`)
 
 | الرابط | الوصف |
 |--------|-------|
 | `/admin/` | تسجيل الدخول |
-| `/admin/index.php` | استعراض وإدارة طلبات العروض |
-
-اللوحة موجودة في مجلد `admin/` داخل الموقع الرئيسي (بدون نطاق فرعي).
+| `/admin/index.php` | طلبات الاستشارة (فلترة: جديد / مقروء / تم التواصل) |
 
 ### بيانات الدخول الافتراضية
 
@@ -103,55 +130,90 @@ lss.api/
 | اسم المستخدم | `admin` |
 | كلمة المرور | `Trakmile@2026` |
 
-> **مهم:** غيّر كلمة المرور بعد أول دخول.
+> غيّر كلمة المرور بعد أول دخول.
 
-### إعداد قاعدة البيانات
+---
 
-نفّذ ملف SQL على قاعدة `trak_db`:
+## قاعدة البيانات
+
+### إعداد أولي
 
 ```bash
 mysql -u trak_user -p trak_db < docs/DB/quote_tables.sql
 ```
 
-> **ملاحظة:** جميع ملفات PHP تستخدم `config.php` في جذر المشروع ومتغير `$db`.
+### ترقية موجودة (حقل اللغة)
 
----
-
-## قاعدة البيانات
+```bash
+mysql -u trak_user -p trak_db < docs/DB/migrate_quote_lang.sql
+```
 
 ### جدول `quote_requests`
 
 | العمود | الوصف |
 |--------|-------|
 | `name` | اسم العميل |
-| `phone` | رقم الجوال |
-| `email` | البريد الإلكتروني |
+| `phone` | جوال سعودي (`5xxxxxxxx`) |
+| `email` | البريد |
 | `description` | الوصف |
+| `lang` | `ar` / `en` — لغة واجهة الموقع عند الإرسال |
 | `status` | `new` / `read` / `contacted` |
-| `created_at` | تاريخ الإرسال |
+| `created_at` | التاريخ |
 
-### جدول `admin_users`
+### جدول `domains` (`trak_db.sql`)
 
-مستخدمو لوحة الإدارة.
+سجل النطاقات الفرعية للعملاء وربطها بقواعد بياناتهم (لـ `mobile-api`).
 
 ---
 
-## تطبيق الجوال (`mobile-api`)
+## تطبيق الجوال (`mobile-api/`)
 
-تتواصل نقاط API مع تطبيق React Native عبر **WebView**.
+تكامل مع React Native عبر **WebView** + `postMessage`.
 
 | الملف | الوظيفة |
 |-------|---------|
-| `check_domain.php` | التحقق من النطاق الفرعي |
-| `login.php` | تسجيل الدخول |
-| `home.php` | بيانات لوحة التحكم |
-| `getOrders.php` | جلب الطلبات |
+| `check_domain.php` | التحقق من النطاق |
+| `login.php` | دخول المندوب |
+| `home.php` | إحصائيات لوحة المندوب |
+| `getOrders.php` | الطلبات النشطة |
+| `getOrdershistory.php` | الأرشيف |
+| `openorder.php` | تفاصيل الطلب + خريطة |
+| `confirmOrder.php` | تأكيد استلام |
+| `confirmOrderApi.php` | تأكيد بالباركود |
+| `orderAction.php` | تسليم / عدم تسليم |
+| `update_password.php` | تغيير كلمة المرور |
+
+---
+
+## البروفايلات التعريفية
+
+| الملف | اللغة |
+|-------|-------|
+| `docs/Trakmile-Overview.html` / `.pdf` | عربي |
+| `docs/Trakmile-Overview-en.html` / `.pdf` | إنجليزي |
+
+العنوان الإنجليزي: **Trakmile: Smart Logistics Management Platform**
 
 ---
 
 ## النشر (`git_deploy`)
 
-- **الخادم:** Ubuntu + CyberPanel
 - **المسار:** `/home/trakmile.com/public_html`
-- **الآلية:** GitHub webhook → `git_deploy/index.php` → `git fetch` + `git reset --hard origin/main`
-- **السجلات:** `git_deploy/deploy.log` و `git_deploy/deploy_error.log`
+- **Webhook:** GitHub → `git_deploy/index.php`
+- **السجلات:** `deploy.log`, `deploy_error.log`
+
+### التحقق بعد النشر
+
+1. View Source → `LANDING-SINGLE:v6` مرة واحدة فقط
+2. `https://trakmile.com/api/ping.php`
+3. `https://trakmile.com/api/platform.php`
+4. `https://trakmile.com/robots.txt`
+
+---
+
+## إصدار API
+
+| الإصدار | التاريخ | ملاحظات |
+|---------|---------|---------|
+| **2.0** | 2026-07-09 | `platform.php`، حقل `lang`، توثيق كامل، تحديث الاستشارة |
+| 1.0 | 2026-06 | طلبات العروض + admin + mobile-api أساسي |

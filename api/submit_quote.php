@@ -76,6 +76,7 @@ $name        = trim($input['name'] ?? '');
 $phone       = preg_replace('/[^\d+]/', '', trim($input['phone'] ?? ''));
 $email       = trim($input['email'] ?? '');
 $description = trim($input['description'] ?? '');
+$lang        = ($input['lang'] ?? 'ar') === 'en' ? 'en' : 'ar';
 
 $errors = [];
 if ($name === '' || strlen($name) < 2) {
@@ -93,10 +94,20 @@ if ($errors) {
 }
 
 $stmt = $db->prepare(
-    'INSERT INTO quote_requests (name, phone, email, description) VALUES (?, ?, ?, ?)'
+    'INSERT INTO quote_requests (name, phone, email, description, lang) VALUES (?, ?, ?, ?, ?)'
 );
 
 if (!$stmt) {
+    $stmt = $db->prepare(
+        'INSERT INTO quote_requests (name, phone, email, description) VALUES (?, ?, ?, ?)'
+    );
+    if ($stmt) {
+        $stmt->bind_param('ssss', $name, $phone, $email, $description);
+        if ($stmt->execute()) {
+            $stmt->close();
+            jsonResponse(['success' => true, 'message' => 'submitted']);
+        }
+    }
     jsonResponse([
         'success' => false,
         'message' => 'server_error',
@@ -104,7 +115,7 @@ if (!$stmt) {
     ], 500);
 }
 
-$stmt->bind_param('ssss', $name, $phone, $email, $description);
+$stmt->bind_param('sssss', $name, $phone, $email, $description, $lang);
 
 if (!$stmt->execute()) {
     jsonResponse([

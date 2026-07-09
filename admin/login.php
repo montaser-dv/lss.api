@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="login-box">
         <h1>لوحة إدارة Trakmile</h1>
-        <p>سجّل الدخول لاستعراض طلبات العروض</p>
+        <p>سجّل الدخول لاستعراض طلبات الاستشارة</p>
 
         <?php if ($dbError): ?>
             <div class="error">فشل الاتصال بقاعدة البيانات:<br><?= htmlspecialchars($dbError) ?></div>

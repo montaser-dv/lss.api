@@ -75,7 +75,7 @@ $statusColors = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طلبات العروض | Trakmile Admin</title>
+    <title>طلبات الاستشارة | Trakmile Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -188,6 +188,16 @@ $statusColors = [
         .quote-actions button.danger { color: #DC2626; border-color: #FECACA; }
         .quote-actions button.danger:hover { background: #FEF2F2; }
         .quote-date { font-size: 12px; color: #94A3B8; margin-top: 12px; }
+        .lang-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #EFF6FF;
+            color: #1B84FF;
+            margin-right: 6px;
+        }
         @media (max-width: 600px) {
             .quote-header { flex-direction: column; }
         }
@@ -195,7 +205,7 @@ $statusColors = [
 </head>
 <body>
     <div class="header">
-        <h1>طلبات العروض — Trakmile</h1>
+        <h1>طلبات الاستشارة — Trakmile</h1>
         <div class="header-actions">
             <span><?= htmlspecialchars($_SESSION['admin_user']) ?></span>
             <a href="logout.php">تسجيل الخروج</a>
@@ -219,7 +229,7 @@ $statusColors = [
         </div>
 
         <?php if (empty($quotes)): ?>
-            <div class="empty">لا توجد طلبات عروض حالياً</div>
+            <div class="empty">لا توجد طلبات استشارة حالياً</div>
         <?php else: ?>
             <?php foreach ($quotes as $q): ?>
                 <div class="quote-card">
@@ -227,6 +237,9 @@ $statusColors = [
                         <div>
                             <h3><?= htmlspecialchars($q['name']) ?></h3>
                             <div class="quote-meta">
+                                <?php if (!empty($q['lang'])): ?>
+                                    <span class="lang-badge"><?= $q['lang'] === 'en' ? 'EN' : 'AR' ?></span>
+                                <?php endif; ?>
                                 <a href="tel:<?= htmlspecialchars($q['phone']) ?>"><?= htmlspecialchars($q['phone']) ?></a>
                                 ·
                                 <a href="mailto:<?= htmlspecialchars($q['email']) ?>"><?= htmlspecialchars($q['email']) ?></a>

@@ -207,6 +207,7 @@
             formData.append('phone', document.getElementById('quotePhone').value.trim());
             formData.append('email', document.getElementById('quoteEmail').value.trim());
             formData.append('description', document.getElementById('quoteDescription').value.trim());
+            formData.append('lang', currentLang);
 
             try {
                 const res = await fetch('api/submit_quote.php', {
