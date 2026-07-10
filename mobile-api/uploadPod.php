@@ -124,7 +124,7 @@ if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
 
 @chmod($targetPath, 0644);
 
-$relativePath = $storage['relative_prefix'] . $fileName;
+$relativePath = mobile_pod_db_value_from_storage($storage, $fileName);
 $response['status'] = 1;
 $response['message'] = 'Uploaded';
 $response['path'] = $relativePath;

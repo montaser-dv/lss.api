@@ -187,7 +187,7 @@ window.handleOrderActionSubmit({
   token: "...",
   ccode: "108",
   barcode: "10111",
-  pod_file: "uploads/pod/101/10111_....jpg",
+  pod_file: "10112_20260710071355_6813b14b.jpg",
   comment: 0
 });
 ```

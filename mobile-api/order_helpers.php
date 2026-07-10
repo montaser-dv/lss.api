@@ -442,6 +442,33 @@ if (!function_exists('mobile_payment_requires_pod')) {
     }
 }
 
+if (!function_exists('mobile_normalize_pod_file_db_value')) {
+    function mobile_normalize_pod_file_db_value($podFile) {
+        $podFile = trim((string) $podFile);
+        if ($podFile === '' || $podFile === '0') {
+            return '0';
+        }
+
+        $podFile = str_replace('\\', '/', $podFile);
+        if (preg_match('#(^|/)assets/pod/(.+)$#i', $podFile, $matches)) {
+            return basename($matches[2]);
+        }
+
+        return basename($podFile);
+    }
+}
+
+if (!function_exists('mobile_pod_db_value_from_storage')) {
+    function mobile_pod_db_value_from_storage(array $storage, $fileName) {
+        $prefix = (string) ($storage['relative_prefix'] ?? '');
+        if (strpos($prefix, 'assets/pod/') === 0) {
+            return $fileName;
+        }
+
+        return $prefix . $fileName;
+    }
+}
+
 if (!function_exists('mobile_resolve_pod_storage')) {
     function mobile_resolve_pod_storage(array $domainRow) {
         $subdomain = trim((string) ($domainRow['Sub_Domain'] ?? ''));
@@ -518,7 +545,7 @@ if (!function_exists('mobile_insert_order_status_path')) {
         $awbEsc = $db->real_escape_string((string) $awb);
         $courierEsc = $db->real_escape_string((string) $courierCode);
         $cCodeEsc = $db->real_escape_string((string) $cCode);
-        $podEsc = $db->real_escape_string((string) ($podFile !== '' ? $podFile : '0'));
+        $podEsc = $db->real_escape_string(mobile_normalize_pod_file_db_value($podFile));
         $statusId = (int) $statusId;
         $commentId = (int) $commentId;
 
