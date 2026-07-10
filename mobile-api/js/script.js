@@ -132,6 +132,19 @@ function confirmOrder(awb,domain,token){
 
 
 
+function normalizePodFilePath(podFile) {
+    let value = String(podFile || '').trim();
+    if (!value || value === '0') {
+        return '';
+    }
+    value = value.replace(/\\/g, '/');
+    value = value.replace(/^assets\/pod\//i, '');
+    value = value.replace(/\/assets\/pod\//gi, '/');
+    value = value.replace(/^uploads\/pod\/[^/]+\//i, '');
+    const parts = value.split('/');
+    return parts[parts.length - 1] || '';
+}
+
 function getMobileApiBaseUrl(){
     if (typeof window !== 'undefined' && window.location?.origin) {
         return window.location.origin + '/mobile-api/';
@@ -227,7 +240,7 @@ window.handleOrderActionSubmit = function(data){
     const token = (data && data.token) || cfg.token;
     const ccode = (data && data.ccode) || cfg.ccode;
     const barcode = ((data && data.barcode) || '').toString().trim();
-    const podFile = ((data && data.pod_file) || '').toString().trim();
+    const podFile = normalizePodFilePath((data && data.pod_file) || '');
     const comment = (data && (data.comment != null ? data.comment : data.reason)) || 0;
     const paymentMethod = ((data && data.payment_method) || cfg.payment_method || '').toString();
     const requirePod = paymentMethod.toLowerCase() === 'credit';

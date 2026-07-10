@@ -11,7 +11,7 @@ $mobile_token = $_POST['token'];
 $mobile_comment = $_POST['comment'] ?? 0;
 $mobile_type = $_POST['otype'];
 $mobile_barcode = trim($_POST['barcode'] ?? '');
-$mobile_pod = trim($_POST['pod_file'] ?? '');
+$mobile_pod = mobile_normalize_pod_file_db_value($_POST['pod_file'] ?? '');
 
 //echo $mobile_AWB."-".$mobile_ccode."-".$mobile_domain."-".$mobile_token."-".$mobile_comment."-".$mobile_type;
 

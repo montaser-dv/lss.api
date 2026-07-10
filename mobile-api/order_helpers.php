@@ -450,9 +450,9 @@ if (!function_exists('mobile_normalize_pod_file_db_value')) {
         }
 
         $podFile = str_replace('\\', '/', $podFile);
-        if (preg_match('#(^|/)assets/pod/(.+)$#i', $podFile, $matches)) {
-            return basename($matches[2]);
-        }
+        $podFile = preg_replace('#^assets/pod/#i', '', $podFile);
+        $podFile = preg_replace('#/assets/pod/#i', '/', $podFile);
+        $podFile = preg_replace('#^uploads/pod/[^/]+/#i', '', $podFile);
 
         return basename($podFile);
     }
