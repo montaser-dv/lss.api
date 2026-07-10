@@ -55,20 +55,23 @@ if (strlen($mobile_token) > 10) {
             $db = new mysqli('localhost', $DB_User, $DB_Pass, $DB_Name);
 
 
-            $getOrders = $db->query("SELECT o.*, c.client_access_type_id FROM orders o LEFT JOIN clients c ON c.user_id = o.Brand WHERE o.AWB='$mobile_AWB' ");
+            $clientSelect = mobile_orders_client_select_sql();
+            $clientJoin = mobile_orders_client_join_sql();
+            $getOrders = $db->query("SELECT o.*, o.Brand AS order_brand, $clientSelect FROM orders o LEFT JOIN users u ON o.Brand=u.id $clientJoin WHERE o.AWB='$mobile_AWB' ");
 
 
             if ($getOrders->num_rows > 0) {
 
                 //$ir=0;
 
-                $rc = $getOrders->fetch_array(MYSQLI_BOTH);
+                $rc = $getOrders->fetch_assoc();
 
 
                 $idw = $rc['id'];
                 $payment_method = $rc['payment_method'];
                 $COD = $rc['COD'];
-                $order_type = mobile_get_order_type_from_row($rc);
+                $rc['Brand'] = $rc['order_brand'] ?? $rc['Brand'] ?? null;
+                $order_type = mobile_get_order_type_from_row($rc, $db);
                 $current_status = mobile_get_status_name_from_row($db, $rc);
 
                 if ($mobile_type == 'picked') {

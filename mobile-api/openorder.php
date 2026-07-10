@@ -65,7 +65,9 @@ if (strlen($mobile_token) > 10) {
         $safe_msg = htmlspecialchars(json_encode($new_message, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8');
       }
 
-      $getOrders = $db->query("SELECT o.*,a.Name AS area_name,z.Name AS zone_name,u.name AS client_name,c.client_access_type_id,c.business_name AS client_business_name FROM orders o INNER JOIN zones z ON o.city=z.ID INNER JOIN areas a ON o.area=a.ID INNER JOIN users u ON o.Brand=u.id LEFT JOIN clients c ON c.user_id=u.id WHERE o.courier_code='$mobile_ccode' AND o.AWB='$mobile_AWB' AND o.archive='0' ");
+      $clientSelect = mobile_orders_client_select_sql();
+      $clientJoin = mobile_orders_client_join_sql();
+      $getOrders = $db->query("SELECT o.*,a.Name AS area_name,z.Name AS zone_name,u.name AS client_name,o.Brand AS order_brand,$clientSelect FROM orders o INNER JOIN zones z ON o.city=z.ID INNER JOIN areas a ON o.area=a.ID INNER JOIN users u ON o.Brand=u.id $clientJoin WHERE o.courier_code='$mobile_ccode' AND o.AWB='$mobile_AWB' AND o.archive='0' ");
 
 
       if ($getOrders->num_rows > 0) {
@@ -73,7 +75,7 @@ if (strlen($mobile_token) > 10) {
         $order_arr = array();
         //$ir=0;
 
-        while ($rc = $getOrders->fetch_array(MYSQLI_BOTH)) {
+        while ($rc = $getOrders->fetch_assoc()) {
 
 
           $cur['id'] = $rc['id'];
@@ -95,7 +97,8 @@ if (strlen($mobile_token) > 10) {
           $cur['created_at'] = $rc['created_at'];
           $cur['updated_at'] = $rc['updated_at'];
 
-          $order_type = mobile_get_order_type_from_row($rc);
+          $rc['Brand'] = $rc['order_brand'] ?? $rc['Brand'] ?? null;
+          $order_type = mobile_get_order_type_from_row($rc, $db);
           $status_name = mobile_get_status_name_from_row($db, $rc);
           $show_picked_action = mobile_should_show_picked_action($order_type, $status_name);
 
