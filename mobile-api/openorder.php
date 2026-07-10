@@ -150,6 +150,13 @@ $safe_awb = mobile_h($mobile_AWB);
 $safe_domain = mobile_h($mobile_domain);
 $safe_token = mobile_h($mobile_token);
 $safe_ccode = mobile_h($mobile_ccode);
+$type_label = mobile_order_type_label($order_type, $mobile_lang);
+$status_label = mobile_status_label($status_name, $mobile_lang);
+$type_normalized = mobile_normalize_order_type($order_type);
+$type_desc_key = $type_normalized === 'fulfillment'
+    ? 'order_type_fulfillment_desc'
+    : ($type_normalized === 'last_mile' ? 'order_type_last_mile_desc' : '');
+$type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
 ?>
 
 <div class="order-shell">
@@ -159,21 +166,49 @@ $safe_ccode = mobile_h($mobile_ccode);
             <span class="order-hero-awb"><?php echo mobile_h($cur['AWB']); ?></span>
         </div>
 
-        <div class="order-hero-badges">
-            <span class="order-badge order-badge-type <?php echo mobile_type_badge_class($order_type); ?>">
-                <?php echo mobile_h(mobile_order_type_label($order_type, $mobile_lang)); ?>
-            </span>
-            <span class="order-badge order-badge-status <?php echo mobile_status_badge_class($status_name); ?>">
-                <?php echo mobile_h(mobile_status_label($status_name, $mobile_lang)); ?>
-            </span>
-        </div>
-
         <div class="order-barcode-wrap">
             <img src="<?php echo mobile_h($barcode_url); ?>" alt="<?php echo mobile_h(mobile_t('barcode', $mobile_lang)); ?>" class="order-barcode-img" width="200" height="56">
         </div>
     </header>
 
     <main class="order-content">
+        <section class="order-card order-card--status">
+            <h2 class="order-card-title">
+                <i class="bi bi-info-circle"></i>
+                <?php echo mobile_h(mobile_t('section_status_type', $mobile_lang)); ?>
+            </h2>
+            <div class="order-status-panel">
+                <div class="order-status-item">
+                    <div class="order-status-item-head">
+                        <span class="order-status-icon order-status-icon--type">
+                            <i class="bi <?php echo mobile_h($type_icon); ?>"></i>
+                        </span>
+                        <span class="order-status-item-label"><?php echo mobile_h(mobile_t('order_type', $mobile_lang)); ?></span>
+                    </div>
+                    <span class="order-badge order-badge-type order-badge--panel <?php echo mobile_type_badge_class($order_type); ?>">
+                        <?php echo mobile_h($type_label); ?>
+                    </span>
+                    <?php if ($type_desc_key !== ''): ?>
+                    <p class="order-status-item-desc"><?php echo mobile_h(mobile_t($type_desc_key, $mobile_lang)); ?></p>
+                    <?php endif; ?>
+                </div>
+
+                <div class="order-status-divider" aria-hidden="true"></div>
+
+                <div class="order-status-item">
+                    <div class="order-status-item-head">
+                        <span class="order-status-icon order-status-icon--status">
+                            <i class="bi bi-flag-fill"></i>
+                        </span>
+                        <span class="order-status-item-label"><?php echo mobile_h(mobile_t('order_status', $mobile_lang)); ?></span>
+                    </div>
+                    <span class="order-badge order-badge-status order-badge--panel <?php echo mobile_status_badge_class($status_name); ?>">
+                        <?php echo mobile_h($status_label); ?>
+                    </span>
+                </div>
+            </div>
+        </section>
+
         <section class="order-card">
             <h2 class="order-card-title">
                 <i class="bi bi-person-circle"></i>
