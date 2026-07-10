@@ -146,8 +146,11 @@ $order_type = mobile_normalize_order_type($client_access_type_value);
 if ($order_type !== 'last_mile' && $order_type !== 'fulfillment') {
     $order_type = mobile_get_order_type_from_row($rc, $db);
 }
-$status_name = mobile_get_status_name_from_row($db, $rc);
-$show_picked_action = mobile_should_show_picked_action($order_type, $status_name);
+$status_info = mobile_get_order_status_info($db, $rc);
+$status_name = $status_info['normalized'];
+$status_short_name = $status_info['short_name'];
+$status_id = $status_info['id'];
+$show_picked_action = mobile_should_show_picked_action($order_type, $status_short_name, $status_id);
 $has_location = !empty($cur['lat']) && !empty($cur['lng']) && $cur['lat'] != 0 && $cur['lng'] != 0;
 $barcode_url = 'https://' . $subdomain . '.' . $domain . '/assets/order_barcode/' . $cur['AWB'] . '.png';
 $safe_phone = mobile_h($cur['Reciver_phone']);
@@ -157,7 +160,9 @@ $safe_token = mobile_h($mobile_token);
 $safe_ccode = mobile_h($mobile_ccode);
 $type_display = $client_access_type_value !== '' ? $client_access_type_value : mobile_t('order_type_unknown', $mobile_lang);
 $type_label = mobile_order_type_label($order_type, $mobile_lang);
-$status_label = mobile_status_label($status_name, $mobile_lang);
+$status_label = $status_short_name !== ''
+    ? $status_short_name
+    : mobile_status_label($status_name, $mobile_lang);
 $type_normalized = mobile_normalize_order_type($order_type);
 $type_desc_key = $type_normalized === 'fulfillment'
     ? 'order_type_fulfillment_desc'

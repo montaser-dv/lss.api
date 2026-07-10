@@ -19,10 +19,16 @@ if (!function_exists('mobile_normalize_order_type')) {
 if (!function_exists('mobile_normalize_status_name')) {
     function mobile_normalize_status_name($value) {
         $value = strtolower(trim((string) $value));
+
+        if (strpos($value, ',') !== false) {
+            $value = trim(explode(',', $value, 2)[0]);
+        }
+
         $value = str_replace(['-', ' '], '_', $value);
 
         $aliases = [
             'new' => 'created',
+            'new_order' => 'created',
             'assign' => 'assigned',
             'assigned_to_courier' => 'assigned',
             'courier_assigned' => 'assigned',
@@ -317,6 +323,69 @@ if (!function_exists('mobile_get_order_type_from_row')) {
     }
 }
 
+if (!function_exists('mobile_status_lookup_columns')) {
+    function mobile_status_lookup_columns() {
+        return ['short_name', 'Title', 'name', 'Name', 'status_name', 'title', 'status', 'Status'];
+    }
+}
+
+if (!function_exists('mobile_status_fallback_ids')) {
+    function mobile_status_fallback_ids() {
+        return [
+            'created' => 1,
+            'picked' => 2,
+            'delivered' => 7,
+            'not_delivered' => 13,
+            'cancelled' => 14,
+        ];
+    }
+}
+
+if (!function_exists('mobile_get_order_status_info')) {
+    function mobile_get_order_status_info(mysqli $db, array $row) {
+        $statusId = $row['Status'] ?? $row['status'] ?? null;
+        if ($statusId === null || $statusId === '') {
+            return [
+                'id' => 0,
+                'short_name' => '',
+                'normalized' => '',
+            ];
+        }
+
+        $statusId = trim((string) $statusId);
+        $shortName = '';
+
+        if (ctype_digit($statusId)) {
+            $shortName = mobile_lookup_name_by_id(
+                $db,
+                ['statuses', 'order_status', 'order_statuses', 'status'],
+                ['ID', 'id'],
+                mobile_status_lookup_columns(),
+                $statusId
+            );
+
+            $fallbackNames = [
+                1 => 'Created',
+                2 => 'Picked',
+                7 => 'Delivered',
+                13 => 'Not delivered',
+                14 => 'Cancelled',
+            ];
+            if ($shortName === '' && isset($fallbackNames[(int) $statusId])) {
+                $shortName = $fallbackNames[(int) $statusId];
+            }
+        } else {
+            $shortName = $statusId;
+        }
+
+        return [
+            'id' => ctype_digit($statusId) ? (int) $statusId : 0,
+            'short_name' => $shortName,
+            'normalized' => mobile_normalize_status_name($shortName),
+        ];
+    }
+}
+
 if (!function_exists('mobile_find_status_id')) {
     function mobile_find_status_id(mysqli $db, $statusName) {
         $statusName = mobile_normalize_status_name($statusName);
@@ -324,70 +393,33 @@ if (!function_exists('mobile_find_status_id')) {
             return null;
         }
 
-        $tables = ['statuses', 'order_status', 'order_statuses', 'status'];
         $id = mobile_lookup_id_by_name(
             $db,
-            $tables,
+            ['statuses', 'order_status', 'order_statuses', 'status'],
             ['ID', 'id'],
-            ['name', 'Name', 'status_name', 'title', 'status', 'Status'],
+            mobile_status_lookup_columns(),
             $statusName
         );
         if ($id) {
             return $id;
         }
 
-        $fallback = [
-            'created' => 1,
-            'picked' => 2,
-            'delivered' => 7,
-            'not_delivered' => 13,
-        ];
-
+        $fallback = mobile_status_fallback_ids();
         return $fallback[$statusName] ?? null;
     }
 }
 
 if (!function_exists('mobile_get_status_name_from_row')) {
     function mobile_get_status_name_from_row(mysqli $db, array $row) {
-        foreach (['status_name', 'Status_name', 'status_label'] as $column) {
-            if (!empty($row[$column])) {
-                return mobile_normalize_status_name($row[$column]);
-            }
-        }
+        $info = mobile_get_order_status_info($db, $row);
+        return $info['normalized'];
+    }
+}
 
-        $statusValue = $row['Status'] ?? $row['status'] ?? null;
-        if ($statusValue === null || $statusValue === '') {
-            return '';
-        }
-
-        $statusValue = trim((string) $statusValue);
-        if ($statusValue === '') {
-            return '';
-        }
-
-        if (!ctype_digit($statusValue)) {
-            return mobile_normalize_status_name($statusValue);
-        }
-
-        $lookupName = mobile_lookup_name_by_id(
-            $db,
-            ['statuses', 'order_status', 'order_statuses', 'status'],
-            ['ID', 'id'],
-            ['name', 'Name', 'status_name', 'title', 'status', 'Status'],
-            $statusValue
-        );
-        if ($lookupName !== '') {
-            return mobile_normalize_status_name($lookupName);
-        }
-
-        $fallback = [
-            1 => 'created',
-            2 => 'picked',
-            7 => 'delivered',
-            13 => 'not_delivered',
-        ];
-
-        return $fallback[(int) $statusValue] ?? mobile_normalize_status_name($statusValue);
+if (!function_exists('mobile_get_status_short_name_from_row')) {
+    function mobile_get_status_short_name_from_row(mysqli $db, array $row) {
+        $info = mobile_get_order_status_info($db, $row);
+        return $info['short_name'];
     }
 }
 
@@ -444,14 +476,32 @@ if (!function_exists('mobile_is_pre_pickup_status')) {
 }
 
 if (!function_exists('mobile_is_created_status')) {
-    function mobile_is_created_status($statusName) {
-        return mobile_normalize_status_name($statusName) === 'created';
+    function mobile_is_created_status($statusName, $statusId = 0) {
+        if ((int) $statusId === 1) {
+            return true;
+        }
+
+        $status = mobile_normalize_status_name($statusName);
+        if ($status === 'created') {
+            return true;
+        }
+
+        if (is_numeric($statusName) && (int) $statusName === 1) {
+            return true;
+        }
+
+        $raw = strtolower(trim((string) $statusName));
+        if (preg_match('/\bcreated\b/', $raw) || preg_match('/\bnew[\s_-]?order\b/', $raw)) {
+            return true;
+        }
+
+        return false;
     }
 }
 
 if (!function_exists('mobile_should_show_picked_action')) {
-    function mobile_should_show_picked_action($orderType, $statusName) {
+    function mobile_should_show_picked_action($orderType, $statusName, $statusId = 0) {
         return mobile_normalize_order_type($orderType) === 'last_mile'
-            && mobile_is_created_status($statusName);
+            && mobile_is_created_status($statusName, $statusId);
     }
 }

@@ -77,10 +77,13 @@ if (strlen($mobile_token) > 10) {
                 if ($order_type !== 'last_mile' && $order_type !== 'fulfillment') {
                     $order_type = mobile_get_order_type_from_row($rc, $db);
                 }
-                $current_status = mobile_get_status_name_from_row($db, $rc);
+                $status_info = mobile_get_order_status_info($db, $rc);
+                $current_status = $status_info['normalized'];
+                $current_status_short = $status_info['short_name'];
+                $current_status_id = $status_info['id'];
 
                 if ($mobile_type == 'picked') {
-                    if (!mobile_should_show_picked_action($order_type, $current_status)) {
+                    if (!mobile_should_show_picked_action($order_type, $current_status_short, $current_status_id)) {
                         echo 8;
                         exit;
                     }
