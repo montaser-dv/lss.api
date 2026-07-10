@@ -46,7 +46,39 @@ if (!function_exists('mobile_orders_client_join_sql')) {
 
 if (!function_exists('mobile_orders_client_select_sql')) {
     function mobile_orders_client_select_sql() {
-        return 'c.client_access_type_id AS client_order_type, c.business_name AS client_business_name';
+        return 'c.client_access_type_id AS client_access_type_id, c.client_access_type_id AS client_order_type, c.business_name AS client_business_name';
+    }
+}
+
+if (!function_exists('mobile_get_client_access_type_raw')) {
+    function mobile_get_client_access_type_raw(mysqli $db, array $row) {
+        foreach (['client_access_type_id', 'client_order_type'] as $column) {
+            if (!empty($row[$column])) {
+                return trim((string) $row[$column]);
+            }
+        }
+
+        $userId = (int) ($row['order_brand'] ?? $row['Brand'] ?? 0);
+        if ($userId <= 0) {
+            return '';
+        }
+
+        $stmt = mobile_safe_prepare($db, 'SELECT client_access_type_id FROM clients WHERE user_id = ? LIMIT 1');
+        if (!$stmt) {
+            return '';
+        }
+
+        $stmt->bind_param('i', $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result && $result->num_rows > 0) {
+            $value = trim((string) ($result->fetch_assoc()['client_access_type_id'] ?? ''));
+            $stmt->close();
+            return $value;
+        }
+
+        $stmt->close();
+        return '';
     }
 }
 

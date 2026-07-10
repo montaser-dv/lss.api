@@ -141,7 +141,11 @@ $cur = [
 ];
 
 $rc['Brand'] = $rc['order_brand'] ?? $rc['Brand'] ?? null;
-$order_type = mobile_get_order_type_from_row($rc, $db);
+$client_access_type_value = mobile_get_client_access_type_raw($db, $rc);
+$order_type = mobile_normalize_order_type($client_access_type_value);
+if ($order_type !== 'last_mile' && $order_type !== 'fulfillment') {
+    $order_type = mobile_get_order_type_from_row($rc, $db);
+}
 $status_name = mobile_get_status_name_from_row($db, $rc);
 $show_picked_action = mobile_should_show_picked_action($order_type, $status_name);
 $has_location = !empty($cur['lat']) && !empty($cur['lng']) && $cur['lat'] != 0 && $cur['lng'] != 0;
@@ -151,6 +155,7 @@ $safe_awb = mobile_h($mobile_AWB);
 $safe_domain = mobile_h($mobile_domain);
 $safe_token = mobile_h($mobile_token);
 $safe_ccode = mobile_h($mobile_ccode);
+$type_display = $client_access_type_value !== '' ? $client_access_type_value : mobile_t('order_type_unknown', $mobile_lang);
 $type_label = mobile_order_type_label($order_type, $mobile_lang);
 $status_label = mobile_status_label($status_name, $mobile_lang);
 $type_normalized = mobile_normalize_order_type($order_type);
@@ -169,7 +174,7 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
 
         <div class="order-hero-type <?php echo mobile_h(mobile_type_badge_class($order_type)); ?>">
             <i class="bi <?php echo mobile_h($type_icon); ?>"></i>
-            <span><?php echo mobile_h($type_label); ?></span>
+            <span><?php echo mobile_h($type_display); ?></span>
         </div>
 
         <div class="order-barcode-wrap">
@@ -192,9 +197,11 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
                         <span class="order-status-item-label"><?php echo mobile_h(mobile_t('client_type', $mobile_lang)); ?></span>
                     </div>
                     <span class="order-badge order-badge-type order-badge--panel <?php echo mobile_type_badge_class($order_type); ?>">
-                        <?php echo mobile_h($type_label); ?>
+                        <?php echo mobile_h($type_display); ?>
                     </span>
-                    <?php if ($type_desc_key !== ''): ?>
+                    <?php if ($type_label !== $type_display && $client_access_type_value !== ''): ?>
+                    <p class="order-status-item-desc"><?php echo mobile_h($type_label); ?></p>
+                    <?php elseif ($type_desc_key !== ''): ?>
                     <p class="order-status-item-desc"><?php echo mobile_h(mobile_t($type_desc_key, $mobile_lang)); ?></p>
                     <?php endif; ?>
                 </div>
@@ -264,7 +271,8 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
             <div class="order-card-body">
                 <?php
                 echo mobile_order_field(mobile_t('client_name', $mobile_lang), $cur['Brand'], ['highlight' => true]);
-                echo mobile_order_field(mobile_t('client_type', $mobile_lang), $type_label, ['highlight' => true]);
+                echo mobile_order_field(mobile_t('client_access_type_id', $mobile_lang), $type_display, ['highlight' => true]);
+                echo mobile_order_field(mobile_t('client_type', $mobile_lang), $type_label, ['allow_empty' => true]);
                 echo mobile_order_field(mobile_t('description', $mobile_lang), $cur['description'], ['full' => true, 'allow_empty' => true]);
                 echo mobile_order_field(mobile_t('notes', $mobile_lang), $cur['notes'], ['full' => true, 'allow_empty' => true]);
                 ?>
