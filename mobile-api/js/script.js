@@ -46,9 +46,9 @@ function t(key){
             confirmText: 'هل استلمت هذا الطلب بالفعل:',
             cancel: 'لا',
             confirm: 'نعم، أكد الطلب!',
-            pickedTitle: 'تأكيد الاستلام',
-            pickedText: 'هل تريد تحديد هذا الطلب كمستلم؟',
-            pickedConfirm: 'نعم، تم الاستلام',
+            pickedTitle: 'تأكيد الالتقاط',
+            pickedText: 'هل تريد تأكيد التقاط هذا الطلب؟',
+            pickedConfirm: 'نعم، التقطت',
             deliverTitle: 'هل أنت متأكد',
             deliverText: 'هل تم تسليم الطلب؟',
             deliverConfirm: 'نعم، تم التسليم.',
@@ -166,6 +166,9 @@ function delivaredDone(otype,awb,domain,token,ccode,comment){
        data:"awb="+awb+"&domain="+domain+"&token="+token+"&ccode="+ccode+"&otype="+otype+"&comment="+comment,
        success:function(data){
        if(data==1){
+            if(otype === 'picked'){
+                location.reload();
+            } else {
              const dataObj = {
              type: 'back',
              mobile: 0,
@@ -174,6 +177,7 @@ function delivaredDone(otype,awb,domain,token,ccode,comment){
 
     // تحويله لنص JSON وإرساله
               window.ReactNativeWebView.postMessage(JSON.stringify(dataObj));
+            }
          }
          else if(data==8){
             Swal.fire({

@@ -72,7 +72,11 @@ if (strlen($mobile_token) > 10) {
                 $payment_method = $rc['payment_method'];
                 $COD = $rc['COD'];
                 $rc['Brand'] = $rc['order_brand'] ?? $rc['Brand'] ?? null;
-                $order_type = mobile_get_order_type_from_row($rc, $db);
+                $client_access_type_value = mobile_get_client_access_type_raw($db, $rc);
+                $order_type = mobile_normalize_order_type($client_access_type_value);
+                if ($order_type !== 'last_mile' && $order_type !== 'fulfillment') {
+                    $order_type = mobile_get_order_type_from_row($rc, $db);
+                }
                 $current_status = mobile_get_status_name_from_row($db, $rc);
 
                 if ($mobile_type == 'picked') {

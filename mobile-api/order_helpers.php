@@ -443,9 +443,15 @@ if (!function_exists('mobile_is_pre_pickup_status')) {
     }
 }
 
+if (!function_exists('mobile_is_created_status')) {
+    function mobile_is_created_status($statusName) {
+        return mobile_normalize_status_name($statusName) === 'created';
+    }
+}
+
 if (!function_exists('mobile_should_show_picked_action')) {
     function mobile_should_show_picked_action($orderType, $statusName) {
         return mobile_normalize_order_type($orderType) === 'last_mile'
-            && mobile_is_pre_pickup_status($statusName);
+            && mobile_is_created_status($statusName);
     }
 }

@@ -283,11 +283,11 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
     <div class="order-toolbar">
         <div class="order-contact-row">
             <button type="button" class="order-contact-btn order-contact-btn--call" onclick='shareNo("c", "<?php echo $safe_phone; ?>", "null")' aria-label="<?php echo mobile_h(mobile_t('call', $mobile_lang)); ?>">
-                <img src="imgs/call.png" alt="" width="22" height="22">
+                <i class="bi bi-telephone-fill order-contact-icon" aria-hidden="true"></i>
                 <span><?php echo mobile_h(mobile_t('call', $mobile_lang)); ?></span>
             </button>
             <button type="button" class="order-contact-btn order-contact-btn--whatsapp" onclick='shareNo("w", "<?php echo $safe_phone; ?>", <?php echo $safe_msg; ?>)' aria-label="<?php echo mobile_h(mobile_t('whatsapp', $mobile_lang)); ?>">
-                <img src="imgs/whatsapp.png" alt="" width="22" height="22">
+                <i class="bi bi-whatsapp order-contact-icon" aria-hidden="true"></i>
                 <span><?php echo mobile_h(mobile_t('whatsapp', $mobile_lang)); ?></span>
             </button>
         </div>
@@ -299,23 +299,23 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
         </button>
         <?php endif; ?>
 
-        <div class="order-delivery-row">
         <?php if ($show_picked_action): ?>
-            <button type="button" class="order-action-btn order-action-btn--picked" onclick="pickedOrder('<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
-                <i class="bi bi-box-seam"></i>
-                <?php echo mobile_h(mobile_t('picked', $mobile_lang)); ?>
-            </button>
+        <button type="button" class="order-action-btn order-action-btn--picked" onclick="pickedOrder('<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
+            <i class="bi bi-box-seam"></i>
+            <?php echo mobile_h(mobile_t('picked', $mobile_lang)); ?>
+        </button>
         <?php else: ?>
+        <div class="order-delivery-row">
             <button type="button" class="order-action-btn order-action-btn--delivered" onclick="delivared('delvery','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
                 <i class="bi bi-bag-check"></i>
                 <?php echo mobile_h(mobile_t('delivered', $mobile_lang)); ?>
             </button>
-        <?php endif; ?>
             <button type="button" class="order-action-btn order-action-btn--failed" onclick="not_delivared('not','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
                 <i class="bi bi-bag-x"></i>
                 <?php echo mobile_h(mobile_t('not_delivered', $mobile_lang)); ?>
             </button>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 
