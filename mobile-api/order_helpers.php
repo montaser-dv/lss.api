@@ -32,9 +32,15 @@ if (!function_exists('mobile_normalize_status_name')) {
     }
 }
 
+if (!function_exists('mobile_orders_users_join_sql')) {
+    function mobile_orders_users_join_sql() {
+        return 'INNER JOIN users u ON o.Brand = u.id';
+    }
+}
+
 if (!function_exists('mobile_orders_client_join_sql')) {
     function mobile_orders_client_join_sql() {
-        return 'LEFT JOIN clients c ON c.ID = o.Brand';
+        return 'LEFT JOIN clients c ON c.user_id = u.id';
     }
 }
 
@@ -222,7 +228,7 @@ if (!function_exists('mobile_lookup_client_order_type_by_brand')) {
             return '';
         }
 
-        $stmt = $db->prepare('SELECT client_access_type_id FROM clients WHERE ID = ? LIMIT 1');
+        $stmt = $db->prepare('SELECT client_access_type_id FROM clients WHERE user_id = ? LIMIT 1');
         if (!$stmt) {
             return '';
         }

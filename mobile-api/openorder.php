@@ -104,14 +104,15 @@ if ($get_message && $get_message->num_rows > 0) {
 }
 
 $clientSelect = mobile_orders_client_select_sql();
+$usersJoin = mobile_orders_users_join_sql();
 $clientJoin = mobile_orders_client_join_sql();
 $getOrders = $db->query(
     "SELECT o.*, a.Name AS area_name, z.Name AS zone_name, u.name AS client_user_name, o.Brand AS order_brand, $clientSelect
      FROM orders o
      INNER JOIN zones z ON o.city = z.ID
      INNER JOIN areas a ON o.area = a.ID
+     $usersJoin
      $clientJoin
-     LEFT JOIN users u ON c.user_id = u.id
      WHERE o.courier_code = '$mobile_ccode' AND o.AWB = '$mobile_AWB' AND o.archive = '0'"
 );
 
