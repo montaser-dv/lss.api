@@ -133,9 +133,12 @@ function confirmOrder(awb,domain,token){
 
 
 function getMobileApiBaseUrl(){
+    if (typeof window !== 'undefined' && window.location?.origin) {
+        return window.location.origin + '/mobile-api/';
+    }
     const scripts = document.querySelectorAll('script[src*="script.js"]');
     if (!scripts.length) {
-        return '';
+        return 'https://trakmile.com/mobile-api/';
     }
     const src = scripts[scripts.length - 1].src;
     return src.substring(0, src.lastIndexOf('/') + 1).replace('/js/', '/');
