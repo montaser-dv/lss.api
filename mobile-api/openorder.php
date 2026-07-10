@@ -167,6 +167,11 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
             <span class="order-hero-awb"><?php echo mobile_h($cur['AWB']); ?></span>
         </div>
 
+        <div class="order-hero-type <?php echo mobile_h(mobile_type_badge_class($order_type)); ?>">
+            <i class="bi <?php echo mobile_h($type_icon); ?>"></i>
+            <span><?php echo mobile_h($type_label); ?></span>
+        </div>
+
         <div class="order-barcode-wrap">
             <img src="<?php echo mobile_h($barcode_url); ?>" alt="<?php echo mobile_h(mobile_t('barcode', $mobile_lang)); ?>" class="order-barcode-img" width="200" height="56">
         </div>
@@ -184,7 +189,7 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
                         <span class="order-status-icon order-status-icon--type">
                             <i class="bi <?php echo mobile_h($type_icon); ?>"></i>
                         </span>
-                        <span class="order-status-item-label"><?php echo mobile_h(mobile_t('order_type', $mobile_lang)); ?></span>
+                        <span class="order-status-item-label"><?php echo mobile_h(mobile_t('client_type', $mobile_lang)); ?></span>
                     </div>
                     <span class="order-badge order-badge-type order-badge--panel <?php echo mobile_type_badge_class($order_type); ?>">
                         <?php echo mobile_h($type_label); ?>
@@ -259,6 +264,7 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
             <div class="order-card-body">
                 <?php
                 echo mobile_order_field(mobile_t('client_name', $mobile_lang), $cur['Brand'], ['highlight' => true]);
+                echo mobile_order_field(mobile_t('client_type', $mobile_lang), $type_label, ['highlight' => true]);
                 echo mobile_order_field(mobile_t('description', $mobile_lang), $cur['description'], ['full' => true, 'allow_empty' => true]);
                 echo mobile_order_field(mobile_t('notes', $mobile_lang), $cur['notes'], ['full' => true, 'allow_empty' => true]);
                 ?>
@@ -285,23 +291,23 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
         </button>
         <?php endif; ?>
 
-        <?php if ($show_picked_action): ?>
-        <button type="button" class="order-action-btn order-action-btn--picked" onclick="pickedOrder('<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
-            <i class="bi bi-box-seam"></i>
-            <?php echo mobile_h(mobile_t('picked', $mobile_lang)); ?>
-        </button>
-        <?php else: ?>
         <div class="order-delivery-row">
+        <?php if ($show_picked_action): ?>
+            <button type="button" class="order-action-btn order-action-btn--picked" onclick="pickedOrder('<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
+                <i class="bi bi-box-seam"></i>
+                <?php echo mobile_h(mobile_t('picked', $mobile_lang)); ?>
+            </button>
+        <?php else: ?>
             <button type="button" class="order-action-btn order-action-btn--delivered" onclick="delivared('delvery','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
                 <i class="bi bi-bag-check"></i>
                 <?php echo mobile_h(mobile_t('delivered', $mobile_lang)); ?>
             </button>
+        <?php endif; ?>
             <button type="button" class="order-action-btn order-action-btn--failed" onclick="not_delivared('not','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
                 <i class="bi bi-bag-x"></i>
                 <?php echo mobile_h(mobile_t('not_delivered', $mobile_lang)); ?>
             </button>
         </div>
-        <?php endif; ?>
     </div>
 </div>
 
