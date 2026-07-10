@@ -58,7 +58,7 @@ if (strlen($mobile_token) > 10) {
             $clientSelect = mobile_orders_client_select_sql();
             $usersJoin = mobile_orders_users_join_sql();
             $clientJoin = mobile_orders_client_join_sql();
-            $getOrders = $db->query("SELECT o.*, o.Brand AS order_brand, $clientSelect FROM orders o $usersJoin $clientJoin WHERE o.AWB='$mobile_AWB' ");
+            $getOrders = $db->query("SELECT o.*, o.Status AS order_status_id, o.Brand AS order_brand, $clientSelect FROM orders o $usersJoin $clientJoin WHERE o.courier_code='$mobile_ccode' AND o.AWB='$mobile_AWB' ");
 
 
             if ($getOrders->num_rows > 0) {
@@ -72,30 +72,19 @@ if (strlen($mobile_token) > 10) {
                 $payment_method = $rc['payment_method'];
                 $COD = $rc['COD'];
                 $rc['Brand'] = $rc['order_brand'] ?? $rc['Brand'] ?? null;
-                $client_access_type_value = mobile_get_client_access_type_raw($db, $rc);
-                $order_type = mobile_normalize_order_type($client_access_type_value);
-                if ($order_type !== 'last_mile' && $order_type !== 'fulfillment') {
-                    $order_type = mobile_get_order_type_from_row($rc, $db);
-                }
-                $status_info = mobile_get_order_status_info($db, $rc);
-                $current_status = $status_info['normalized'];
-                $current_status_short = $status_info['short_name'];
-                $current_status_id = $status_info['id'];
+                $action_context = mobile_resolve_order_action_context($db, $rc);
+                $order_type = $action_context['order_type'];
 
                 if ($mobile_type == 'picked') {
-                    if (!mobile_should_show_picked_action($order_type, $current_status_short, $current_status_id)) {
+                    if (!$action_context['show_picked']) {
                         echo 8;
                         exit;
                     }
 
-                    $status_id = mobile_find_status_id($db, 'picked');
-                    if (!$status_id) {
-                        echo 6;
-                        exit;
-                    }
+                    $status_id = mobile_find_status_id($db, 'picked') ?: 2;
 
-                    $upp = $db->query("UPDATE orders SET Status='$status_id',archive='0' WHERE AWB='$mobile_AWB' ");
-                    $insert = $db->query("INSERT INTO order_paths value('0','$mobile_AWB','status','$status_id','$mobile_ccode','0','$mobile_comment','$today','$today','$c_code')");
+                    $upp = $db->query("UPDATE orders SET Status='$status_id', archive='0' WHERE AWB='$mobile_AWB' ");
+                    $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code);
 
                     echo ($upp && $insert) ? 1 : 2;
                     exit;
@@ -119,7 +108,7 @@ if (strlen($mobile_token) > 10) {
                 //$courier_id = substr($mobile_ccode, 2, 20);
 
 
-                $insert = $db->query("INSERT INTO order_paths value('0','$mobile_AWB','status','$status_id','$mobile_ccode','0','$mobile_comment','$today','$today','$c_code')");
+                $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code);
 
                 if ($mobile_type == 'delvery' && $status_id == 7 && $payment_method == 'Cash') {
                     $current_b = $db->query("SELECT Balance FROM couriers WHERE courier_code='$mobile_ccode'");

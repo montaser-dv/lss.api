@@ -83,7 +83,7 @@ $clientSelect = mobile_orders_client_select_sql();
 $usersJoin = mobile_orders_users_join_sql();
 $clientJoin = mobile_orders_client_join_sql();
 $getOrders = $db->query(
-    "SELECT o.*, a.Name AS area_name, z.Name AS zone_name, u.name AS client_user_name, o.Brand AS order_brand, $clientSelect
+    "SELECT o.*, a.Name AS area_name, z.Name AS zone_name, u.name AS client_user_name, o.Status AS order_status_id, o.Brand AS order_brand, $clientSelect
      FROM orders o
      INNER JOIN zones z ON o.city = z.ID
      INNER JOIN areas a ON o.area = a.ID
@@ -117,15 +117,12 @@ $cur = [
 ];
 
 $rc['Brand'] = $rc['order_brand'] ?? $rc['Brand'] ?? null;
-$client_access_type_value = mobile_get_client_access_type_raw($db, $rc);
-$order_type = mobile_normalize_order_type($client_access_type_value);
-if ($order_type !== 'last_mile' && $order_type !== 'fulfillment') {
-    $order_type = mobile_get_order_type_from_row($rc, $db);
-}
-$status_info = mobile_get_order_status_info($db, $rc);
+$action_context = mobile_resolve_order_action_context($db, $rc);
+$order_type = $action_context['order_type'];
+$status_info = $action_context['status'];
 $status_short_name = $status_info['short_name'];
 $status_id = $status_info['id'];
-$show_picked_action = mobile_should_show_picked_action($order_type, $status_short_name, $status_id);
+$show_picked_action = $action_context['show_picked'];
 $has_location = !empty($cur['lat']) && !empty($cur['lng']) && $cur['lat'] != 0 && $cur['lng'] != 0;
 $barcode_url = 'https://' . $subdomain . '.' . $domain . '/assets/order_barcode/' . $cur['AWB'] . '.png';
 $safe_phone = mobile_h($cur['Reciver_phone']);

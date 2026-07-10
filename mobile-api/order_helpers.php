@@ -343,7 +343,7 @@ if (!function_exists('mobile_status_fallback_ids')) {
 
 if (!function_exists('mobile_get_order_status_info')) {
     function mobile_get_order_status_info(mysqli $db, array $row) {
-        $statusId = $row['Status'] ?? $row['status'] ?? null;
+        $statusId = $row['order_status_id'] ?? $row['Status'] ?? $row['status'] ?? null;
         if ($statusId === null || $statusId === '') {
             return [
                 'id' => 0,
@@ -406,6 +406,81 @@ if (!function_exists('mobile_find_status_id')) {
 
         $fallback = mobile_status_fallback_ids();
         return $fallback[$statusName] ?? null;
+    }
+}
+
+if (!function_exists('mobile_resolve_order_action_context')) {
+    function mobile_resolve_order_action_context(mysqli $db, array $row) {
+        $row['Brand'] = $row['order_brand'] ?? $row['Brand'] ?? null;
+        $clientTypeRaw = mobile_get_client_access_type_raw($db, $row);
+        $orderType = mobile_normalize_order_type($clientTypeRaw);
+        if ($orderType !== 'last_mile' && $orderType !== 'fulfillment') {
+            $resolvedType = mobile_get_order_type_from_row($row, $db);
+            if ($resolvedType !== '') {
+                $orderType = $resolvedType;
+            }
+        }
+
+        $statusInfo = mobile_get_order_status_info($db, $row);
+
+        return [
+            'order_type' => $orderType,
+            'client_type_raw' => $clientTypeRaw,
+            'status' => $statusInfo,
+            'show_picked' => mobile_should_show_picked_action(
+                $orderType,
+                $statusInfo['short_name'],
+                $statusInfo['id']
+            ),
+        ];
+    }
+}
+
+if (!function_exists('mobile_insert_order_status_path')) {
+    function mobile_insert_order_status_path(mysqli $db, $awb, $statusId, $courierCode, $commentId, $cCode) {
+        if (!mobile_table_exists($db, 'order_paths')) {
+            return false;
+        }
+
+        $columns = mobile_get_table_columns($db, 'order_paths');
+        $today = date('Y-m-d H:i:s');
+        $data = [
+            'AWB' => (string) $awb,
+            'Action_type' => 'status',
+            'status' => (int) $statusId,
+            'courier_code' => (string) $courierCode,
+            'user_id' => 1,
+            'comment_id' => (int) $commentId,
+            'pod_file' => null,
+            'created_at' => $today,
+            'updated_at' => $today,
+            'c_code' => (string) $cCode,
+        ];
+
+        $insertCols = [];
+        $insertVals = [];
+        foreach ($data as $column => $value) {
+            $actualCol = mobile_pick_existing_column($columns, [$column]);
+            if (!$actualCol) {
+                continue;
+            }
+
+            $insertCols[] = '`' . $actualCol . '`';
+            if ($value === null) {
+                $insertVals[] = 'NULL';
+            } elseif (is_int($value)) {
+                $insertVals[] = (string) $value;
+            } else {
+                $insertVals[] = "'" . $db->real_escape_string($value) . "'";
+            }
+        }
+
+        if (empty($insertCols)) {
+            return false;
+        }
+
+        $sql = 'INSERT INTO order_paths (' . implode(', ', $insertCols) . ') VALUES (' . implode(', ', $insertVals) . ')';
+        return $db->query($sql);
     }
 }
 
