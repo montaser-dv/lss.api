@@ -132,7 +132,7 @@ Multi-tenant: resolves `domain` → client database via `domains` table in `trak
 | `confirmOrder.php` | POST | `awb`, `domain`, `token` | `1` or error code |
 | `confirmOrderApi.php` | GET | `barcode`, `domain`, `token` | WebView postMessage |
 | `orderAction.php` | POST | `awb`, `otype`, `comment`, `barcode`, `pod_file` | Picked / deliver / fail delivery |
-| `uploadPod.php` | POST | `domain`, `token`, `awb`, `pod_file` (multipart) | JSON `{ status, path }` |
+| `updateLocation.php` | GET/POST | `ccode`, `domain`, `token`, `lat`, `lng` | JSON `{ status, message }` |
 | `update_password.php` | GET | `code`, `pass`, `mobile_domain` | JSON via WebView |
 
 ### Mobile login error codes
