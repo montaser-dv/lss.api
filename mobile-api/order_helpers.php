@@ -442,6 +442,72 @@ if (!function_exists('mobile_payment_requires_pod')) {
     }
 }
 
+if (!function_exists('mobile_resolve_pod_storage')) {
+    function mobile_resolve_pod_storage(array $domainRow) {
+        $subdomain = trim((string) ($domainRow['Sub_Domain'] ?? ''));
+        $domain = trim((string) ($domainRow['Domain'] ?? 'trakmile.com'));
+        $cCode = preg_replace('/\D+/', '', (string) ($domainRow['c_code'] ?? '0'));
+        if ($cCode === '') {
+            $cCode = '0';
+        }
+
+        $candidates = [];
+        if ($subdomain !== '') {
+            $candidates[] = [
+                'dir' => "/home/{$subdomain}.{$domain}/public_html/public/assets/pod",
+                'relative_prefix' => 'assets/pod/',
+            ];
+            $candidates[] = [
+                'dir' => "/home/{$subdomain}.trakmile.com/public_html/public/assets/pod",
+                'relative_prefix' => 'assets/pod/',
+            ];
+            $candidates[] = [
+                'dir' => "/home/{$subdomain}.{$domain}/public_html/assets/pod",
+                'relative_prefix' => 'assets/pod/',
+            ];
+        }
+
+        $candidates[] = [
+            'dir' => __DIR__ . '/uploads/pod/' . $cCode,
+            'relative_prefix' => 'uploads/pod/' . $cCode . '/',
+        ];
+
+        foreach ($candidates as $candidate) {
+            $dir = $candidate['dir'];
+            if (!is_dir($dir) && !@mkdir($dir, 0755, true)) {
+                continue;
+            }
+            if (!is_dir($dir) || !is_writable($dir)) {
+                @chmod($dir, 0755);
+            }
+            if (!is_dir($dir) || !is_writable($dir)) {
+                continue;
+            }
+
+            return [
+                'dir' => $dir,
+                'relative_prefix' => $candidate['relative_prefix'],
+                'subdomain' => $subdomain,
+                'domain' => $domain,
+            ];
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('mobile_build_pod_public_url')) {
+    function mobile_build_pod_public_url(array $storage, $fileName) {
+        $subdomain = trim((string) ($storage['subdomain'] ?? ''));
+        $domain = trim((string) ($storage['domain'] ?? 'trakmile.com'));
+        if ($subdomain === '') {
+            return '';
+        }
+
+        return 'https://' . $subdomain . '.' . $domain . '/assets/pod/' . rawurlencode($fileName);
+    }
+}
+
 if (!function_exists('mobile_insert_order_status_path')) {
     function mobile_insert_order_status_path(mysqli $db, $awb, $statusId, $courierCode, $commentId, $cCode, $podFile = '0') {
         if (!mobile_table_exists($db, 'order_paths')) {

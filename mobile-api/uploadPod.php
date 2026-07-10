@@ -10,7 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-$response = ['status' => 0, 'message' => 'Invalid request', 'path' => ''];
+include('order_helpers.php');
+
+$response = ['status' => 0, 'message' => 'Invalid request', 'path' => '', 'url' => ''];
 
 $mobile_domain = trim($_POST['domain'] ?? '');
 $mobile_token = trim($_POST['token'] ?? '');
@@ -74,12 +76,6 @@ if ($mime === 'image/jpg') {
 }
 
 $extension = strtolower(pathinfo((string) ($file['name'] ?? ''), PATHINFO_EXTENSION));
-if (!isset($allowed[$mime]) && isset($allowed['image/' . $extension])) {
-    $mime = 'image/' . ($extension === 'jpg' ? 'jpeg' : $extension);
-}
-if (!isset($allowed[$mime]) && $extension === 'jpeg') {
-    $mime = 'image/jpeg';
-}
 if (!isset($allowed[$mime]) && in_array($extension, ['jpg', 'jpeg', 'png', 'webp', 'pdf'], true)) {
     $mimeMap = [
         'jpg' => 'image/jpeg',
@@ -109,21 +105,16 @@ if (!$getData || $getData->num_rows === 0) {
 }
 
 $row = $getData->fetch_array(MYSQLI_ASSOC);
-$cCode = preg_replace('/\D+/', '', (string) ($row['c_code'] ?? '0'));
-if ($cCode === '') {
-    $cCode = '0';
-}
-
-$uploadDir = __DIR__ . '/uploads/pod/' . $cCode;
-if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
-    $response['message'] = 'Unable to create upload directory';
+$storage = mobile_resolve_pod_storage($row);
+if (!$storage) {
+    $response['message'] = 'Unable to prepare POD directory';
     echo json_encode($response);
     exit;
 }
 
 $safeAwb = preg_replace('/[^A-Za-z0-9_-]/', '', $mobile_awb);
 $fileName = $safeAwb . '_' . date('YmdHis') . '_' . bin2hex(random_bytes(4)) . '.' . $allowed[$mime];
-$targetPath = $uploadDir . '/' . $fileName;
+$targetPath = rtrim($storage['dir'], '/\\') . DIRECTORY_SEPARATOR . $fileName;
 
 if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
     $response['message'] = 'Unable to save file';
@@ -131,9 +122,12 @@ if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
     exit;
 }
 
-$relativePath = 'uploads/pod/' . $cCode . '/' . $fileName;
+@chmod($targetPath, 0644);
+
+$relativePath = $storage['relative_prefix'] . $fileName;
 $response['status'] = 1;
 $response['message'] = 'Uploaded';
 $response['path'] = $relativePath;
+$response['url'] = mobile_build_pod_public_url($storage, $fileName);
 
 echo json_encode($response);
