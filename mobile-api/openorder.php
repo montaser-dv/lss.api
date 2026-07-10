@@ -106,12 +106,12 @@ if ($get_message && $get_message->num_rows > 0) {
 $clientSelect = mobile_orders_client_select_sql();
 $clientJoin = mobile_orders_client_join_sql();
 $getOrders = $db->query(
-    "SELECT o.*, a.Name AS area_name, z.Name AS zone_name, u.name AS client_name, o.Brand AS order_brand, $clientSelect
+    "SELECT o.*, a.Name AS area_name, z.Name AS zone_name, u.name AS client_user_name, o.Brand AS order_brand, $clientSelect
      FROM orders o
      INNER JOIN zones z ON o.city = z.ID
      INNER JOIN areas a ON o.area = a.ID
-     INNER JOIN users u ON o.Brand = u.id
      $clientJoin
+     LEFT JOIN users u ON c.user_id = u.id
      WHERE o.courier_code = '$mobile_ccode' AND o.AWB = '$mobile_AWB' AND o.archive = '0'"
 );
 
@@ -124,7 +124,7 @@ $rc = $getOrders->fetch_assoc();
 
 $cur = [
     'AWB' => $rc['AWB'],
-    'Brand' => !empty($rc['client_business_name']) ? $rc['client_business_name'] : $rc['client_name'],
+    'Brand' => !empty($rc['client_business_name']) ? $rc['client_business_name'] : ($rc['client_user_name'] ?? ''),
     'Reciver_name' => $rc['Reciver_name'],
     'Reciver_phone' => $rc['Reciver_phone'],
     'COD' => $rc['COD'],
@@ -290,14 +290,16 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
             <?php echo mobile_h(mobile_t('picked', $mobile_lang)); ?>
         </button>
         <?php else: ?>
-        <button type="button" class="order-action-btn order-action-btn--delivered" onclick="delivared('delvery','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
-            <i class="bi bi-bag-check"></i>
-            <?php echo mobile_h(mobile_t('delivered', $mobile_lang)); ?>
-        </button>
-        <button type="button" class="order-action-btn order-action-btn--failed" onclick="not_delivared('not','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
-            <i class="bi bi-bag-x"></i>
-            <?php echo mobile_h(mobile_t('not_delivered', $mobile_lang)); ?>
-        </button>
+        <div class="order-delivery-row">
+            <button type="button" class="order-action-btn order-action-btn--delivered" onclick="delivared('delvery','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
+                <i class="bi bi-bag-check"></i>
+                <?php echo mobile_h(mobile_t('delivered', $mobile_lang)); ?>
+            </button>
+            <button type="button" class="order-action-btn order-action-btn--failed" onclick="not_delivared('not','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
+                <i class="bi bi-bag-x"></i>
+                <?php echo mobile_h(mobile_t('not_delivered', $mobile_lang)); ?>
+            </button>
+        </div>
         <?php endif; ?>
     </div>
 </div>

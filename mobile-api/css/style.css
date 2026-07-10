@@ -143,7 +143,7 @@ html[dir="rtl"] .order-page {
 .order-shell {
     max-width: 480px;
     margin: 0 auto;
-    padding: 12px 12px 180px;
+    padding: 12px 12px calc(200px + env(safe-area-inset-bottom, 0));
 }
 
 .order-hero {
@@ -491,6 +491,19 @@ html[dir="rtl"] .order-page {
 
 .order-action-btn--delivered {
     background: #2563eb;
+}
+
+.order-delivery-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.order-delivery-row .order-action-btn {
+    width: 100%;
+    min-height: 50px;
+    font-size: 13px;
+    padding: 0 8px;
 }
 
 .order-action-btn--failed {

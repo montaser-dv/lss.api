@@ -57,7 +57,7 @@ if (strlen($mobile_token) > 10) {
 
             $clientSelect = mobile_orders_client_select_sql();
             $clientJoin = mobile_orders_client_join_sql();
-            $getOrders = $db->query("SELECT o.*, o.Brand AS order_brand, $clientSelect FROM orders o LEFT JOIN users u ON o.Brand=u.id $clientJoin WHERE o.AWB='$mobile_AWB' ");
+            $getOrders = $db->query("SELECT o.*, o.Brand AS order_brand, $clientSelect FROM orders o $clientJoin WHERE o.AWB='$mobile_AWB' ");
 
 
             if ($getOrders->num_rows > 0) {
