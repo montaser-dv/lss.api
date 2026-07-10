@@ -130,6 +130,14 @@ $safe_awb = mobile_h($mobile_AWB);
 $safe_domain = mobile_h($mobile_domain);
 $safe_token = mobile_h($mobile_token);
 $safe_ccode = mobile_h($mobile_ccode);
+$order_action_config = json_encode([
+    'awb' => (string) $mobile_AWB,
+    'domain' => (string) $mobile_domain,
+    'token' => (string) $mobile_token,
+    'ccode' => (string) $mobile_ccode,
+    'payment_method' => (string) $cur['payment_method'],
+    'lang' => $mobile_lang,
+], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 ?>
 
 <div class="order-shell">
@@ -221,17 +229,17 @@ $safe_ccode = mobile_h($mobile_ccode);
         <?php endif; ?>
 
         <?php if ($show_picked_action): ?>
-        <button type="button" class="order-action-btn order-action-btn--picked" onclick="pickedOrder('<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
+        <button type="button" class="order-action-btn order-action-btn--picked" onclick="openOrderActionModal('picked')">
             <i class="bi bi-box-seam"></i>
             <?php echo mobile_h(mobile_t('picked', $mobile_lang)); ?>
         </button>
         <?php else: ?>
         <div class="order-delivery-row">
-            <button type="button" class="order-action-btn order-action-btn--delivered" onclick="delivared('delvery','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
+            <button type="button" class="order-action-btn order-action-btn--delivered" onclick="openOrderActionModal('delvery')">
                 <i class="bi bi-bag-check"></i>
                 <?php echo mobile_h(mobile_t('delivered', $mobile_lang)); ?>
             </button>
-            <button type="button" class="order-action-btn order-action-btn--failed" onclick="not_delivared('not','<?php echo $safe_awb; ?>','<?php echo $safe_domain; ?>','<?php echo $safe_token; ?>','<?php echo $safe_ccode; ?>')">
+            <button type="button" class="order-action-btn order-action-btn--failed" onclick="openOrderActionModal('not')">
                 <i class="bi bi-bag-x"></i>
                 <?php echo mobile_h(mobile_t('not_delivered', $mobile_lang)); ?>
             </button>
@@ -239,6 +247,10 @@ $safe_ccode = mobile_h($mobile_ccode);
         <?php endif; ?>
     </div>
 </div>
+
+<script>
+window.orderActionConfig = <?php echo $order_action_config; ?>;
+</script>
 
 </body>
 </html>

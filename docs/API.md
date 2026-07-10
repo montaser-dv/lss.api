@@ -131,7 +131,8 @@ Multi-tenant: resolves `domain` → client database via `domains` table in `trak
 | `openorder.php` | GET | `awb`, `ccode`, `domain`, `token` | Order detail + map |
 | `confirmOrder.php` | POST | `awb`, `domain`, `token` | `1` or error code |
 | `confirmOrderApi.php` | GET | `barcode`, `domain`, `token` | WebView postMessage |
-| `orderAction.php` | POST | `awb`, `otype`, `comment` | Deliver / fail delivery |
+| `orderAction.php` | POST | `awb`, `otype`, `comment`, `barcode`, `pod_file` | Picked / deliver / fail delivery |
+| `uploadPod.php` | POST | `domain`, `token`, `awb`, `pod_file` (multipart) | JSON `{ status, path }` |
 | `update_password.php` | GET | `code`, `pass`, `mobile_domain` | JSON via WebView |
 
 ### Mobile login error codes
@@ -141,6 +142,57 @@ Multi-tenant: resolves `domain` → client database via `domains` table in `trak
 | `4` | Invalid credentials |
 | `9` | Account inactive |
 | `500` | Server error |
+
+### Order action modal (WebView → React Native)
+
+When the courier taps **Picked**, **Delivered**, or **Not delivered** on `openorder.php`, the WebView sends:
+
+```json
+{
+  "type": "order_action_modal",
+  "action": "picked|delvery|not",
+  "awb": "10111",
+  "domain": "demo",
+  "token": "...",
+  "ccode": "108",
+  "payment_method": "Credit",
+  "require_pod": true,
+  "require_barcode": true,
+  "lang": "ar",
+  "upload_pod_url": "https://.../mobile-api/uploadPod.php",
+  "submit_via": "webview_callback",
+  "labels": { "title": "...", "awb": "...", "barcode": "...", "pod": "...", "confirm": "..." },
+  "show_reason": true,
+  "reasons": { "0": "--Select--", "1": "..." }
+}
+```
+
+React Native should show a **native modal** (not SweetAlert) with:
+
+1. Order number (`awb`) at the top
+2. Barcode field — required; manual entry or camera scan
+3. POD file — required only when `require_pod` is `true` (`payment_method === "credit"`)
+4. Reason dropdown — when `action === "not"` and `show_reason === true`
+5. Confirm button
+
+**POD upload:** `POST uploadPod.php` with `domain`, `token`, `awb`, and file field `pod_file`. Response `path` is sent back to the WebView.
+
+**Submit:** after validation, call the WebView bridge:
+
+```javascript
+window.handleOrderActionSubmit({
+  action: "picked",
+  awb: "10111",
+  domain: "demo",
+  token: "...",
+  ccode: "108",
+  barcode: "10111",
+  pod_file: "uploads/pod/101/10111_....jpg",
+  comment: 0
+});
+```
+
+`orderAction.php` error codes: `10` missing barcode, `11` missing POD (credit), `12` barcode mismatch, `14` missing not-delivered reason.
 
 ---
 

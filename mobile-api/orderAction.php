@@ -10,6 +10,8 @@ $mobile_token = $_POST['token'];
 
 $mobile_comment = $_POST['comment'] ?? 0;
 $mobile_type = $_POST['otype'];
+$mobile_barcode = trim($_POST['barcode'] ?? '');
+$mobile_pod = trim($_POST['pod_file'] ?? '');
 
 //echo $mobile_AWB."-".$mobile_ccode."-".$mobile_domain."-".$mobile_token."-".$mobile_comment."-".$mobile_type;
 
@@ -71,6 +73,22 @@ if (strlen($mobile_token) > 10) {
                 $idw = $rc['id'];
                 $payment_method = $rc['payment_method'];
                 $COD = $rc['COD'];
+
+                if ($mobile_barcode === '') {
+                    echo 10;
+                    exit;
+                }
+
+                if (mobile_payment_requires_pod($payment_method) && $mobile_pod === '') {
+                    echo 11;
+                    exit;
+                }
+
+                if ($mobile_barcode !== (string) $mobile_AWB) {
+                    echo 12;
+                    exit;
+                }
+
                 $rc['Brand'] = $rc['order_brand'] ?? $rc['Brand'] ?? null;
                 $action_context = mobile_resolve_order_action_context($db, $rc);
                 $order_type = $action_context['order_type'];
@@ -85,7 +103,7 @@ if (strlen($mobile_token) > 10) {
 
                     $db->begin_transaction();
                     $upp = $db->query("UPDATE orders SET Status='$status_id', archive='0' WHERE AWB='$mobile_AWB' ");
-                    $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code);
+                    $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code, $mobile_pod);
 
                     if ($upp && $insert) {
                         $db->commit();
@@ -106,16 +124,16 @@ if (strlen($mobile_token) > 10) {
                 }
 
 
+                if ($mobile_type == 'not' && (int) $mobile_comment <= 0) {
+                    echo 14;
+                    exit;
+                }
+
                 global $upp;
 
-
+                $db->begin_transaction();
                 $upp = $db->query("UPDATE orders SET Status='$status_id',archive='1' WHERE AWB='$mobile_AWB' ");
-
-
-                //$courier_id = substr($mobile_ccode, 2, 20);
-
-
-                $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code);
+                $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code, $mobile_pod);
 
                 if ($mobile_type == 'delvery' && $status_id == 7 && $payment_method == 'Cash') {
                     $current_b = $db->query("SELECT Balance FROM couriers WHERE courier_code='$mobile_ccode'");
@@ -124,9 +142,11 @@ if (strlen($mobile_token) > 10) {
                     $update = $db->query("UPDATE couriers SET Balance='$new_balance' WHERE courier_code='$mobile_ccode'");
                 }
 
-                if ($upp) {
+                if ($upp && $insert) {
+                    $db->commit();
                     echo 1;
                 } else {
+                    $db->rollback();
                     echo 2;
                 }
 

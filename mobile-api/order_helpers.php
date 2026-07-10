@@ -436,8 +436,14 @@ if (!function_exists('mobile_resolve_order_action_context')) {
     }
 }
 
+if (!function_exists('mobile_payment_requires_pod')) {
+    function mobile_payment_requires_pod($paymentMethod) {
+        return strtolower(trim((string) $paymentMethod)) === 'credit';
+    }
+}
+
 if (!function_exists('mobile_insert_order_status_path')) {
-    function mobile_insert_order_status_path(mysqli $db, $awb, $statusId, $courierCode, $commentId, $cCode) {
+    function mobile_insert_order_status_path(mysqli $db, $awb, $statusId, $courierCode, $commentId, $cCode, $podFile = '0') {
         if (!mobile_table_exists($db, 'order_paths')) {
             return false;
         }
@@ -446,11 +452,12 @@ if (!function_exists('mobile_insert_order_status_path')) {
         $awbEsc = $db->real_escape_string((string) $awb);
         $courierEsc = $db->real_escape_string((string) $courierCode);
         $cCodeEsc = $db->real_escape_string((string) $cCode);
+        $podEsc = $db->real_escape_string((string) ($podFile !== '' ? $podFile : '0'));
         $statusId = (int) $statusId;
         $commentId = (int) $commentId;
 
         $sql = "INSERT INTO order_paths (AWB, Action_type, status, courier_code, user_id, comment_id, pod_file, created_at, updated_at, c_code) "
-            . "VALUES ('$awbEsc', 'status', $statusId, '$courierEsc', 1, $commentId, '0', '$today', '$today', '$cCodeEsc')";
+            . "VALUES ('$awbEsc', 'status', $statusId, '$courierEsc', 1, $commentId, '$podEsc', '$today', '$today', '$cCodeEsc')";
 
         return $db->query($sql);
     }

@@ -25,6 +25,18 @@ function t(key){
             errorTitle: 'Error!',
             errorText: 'Not all transactions were saved!',
             errorOk: 'Cool',
+            errorBarcodeRequired: 'Shipment barcode is required.',
+            errorPodRequired: 'Proof of delivery is required for credit orders.',
+            errorBarcodeMismatch: 'Barcode does not match this order.',
+            modalAwb: 'Order number',
+            modalBarcode: 'Shipment barcode',
+            modalBarcodeHint: 'Enter or scan the shipment barcode',
+            modalPod: 'Proof of delivery (POD)',
+            modalPodHint: 'Take a photo or choose a file',
+            modalConfirm: 'Confirm',
+            modalTitlePicked: 'Confirm pickup',
+            modalTitleDelivered: 'Confirm delivery',
+            modalTitleNotDelivered: 'Not delivered',
             reason0: '--Select--',
             reason1: 'Customer does not answer',
             reason2: 'The customer cancelled the order',
@@ -59,6 +71,18 @@ function t(key){
             errorTitle: 'خطأ!',
             errorText: 'لم يتم حفظ جميع العمليات!',
             errorOk: 'حسناً',
+            errorBarcodeRequired: 'رقم الشحنة / الباركود مطلوب.',
+            errorPodRequired: 'ملف إثبات التسليم مطلوب لطلبات الدفع الآجل (Credit).',
+            errorBarcodeMismatch: 'الباركود لا يطابق رقم هذا الطلب.',
+            modalAwb: 'رقم الطلب',
+            modalBarcode: 'رقم الشحنة / الباركود',
+            modalBarcodeHint: 'أدخل الرقم أو امسح الباركود',
+            modalPod: 'ملف إثبات التسليم (POD)',
+            modalPodHint: 'التقط صورة أو اختر ملفاً',
+            modalConfirm: 'تأكيد',
+            modalTitlePicked: 'تأكيد الالتقاط',
+            modalTitleDelivered: 'تأكيد التسليم',
+            modalTitleNotDelivered: 'لم يتم التسليم',
             reason0: '--اختر--',
             reason1: 'العميل لا يجيب',
             reason2: 'العميل ألغى الطلب',
@@ -108,62 +132,157 @@ function confirmOrder(awb,domain,token){
 
 
 
+function getMobileApiBaseUrl(){
+    const scripts = document.querySelectorAll('script[src*="script.js"]');
+    if (!scripts.length) {
+        return '';
+    }
+    const src = scripts[scripts.length - 1].src;
+    return src.substring(0, src.lastIndexOf('/') + 1).replace('/js/', '/');
+}
+
+function getNotDeliveredReasons(){
+    const reasons = {};
+    for (let i = 0; i <= 14; i++) {
+        reasons[i] = t('reason' + i);
+    }
+    return reasons;
+}
+
+function getOrderActionTitle(action){
+    if (action === 'picked') {
+        return t('modalTitlePicked');
+    }
+    if (action === 'delvery') {
+        return t('modalTitleDelivered');
+    }
+    return t('modalTitleNotDelivered');
+}
+
+function postToReactNative(payload){
+    if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify(payload));
+        return true;
+    }
+    return false;
+}
+
+function showOrderActionError(message){
+    Swal.fire({
+        title: t('errorTitle'),
+        text: message,
+        icon: 'warning',
+        confirmButtonText: t('errorOk')
+    });
+}
+
+function openOrderActionModal(action){
+    const cfg = window.orderActionConfig || {};
+    const paymentMethod = (cfg.payment_method || '').toString();
+    const payload = {
+        type: 'order_action_modal',
+        action: action,
+        awb: cfg.awb || '',
+        domain: cfg.domain || '',
+        token: cfg.token || '',
+        ccode: cfg.ccode || '',
+        payment_method: paymentMethod,
+        require_pod: paymentMethod.toLowerCase() === 'credit',
+        require_barcode: true,
+        lang: cfg.lang || getCurrentLang(),
+        upload_pod_url: getMobileApiBaseUrl() + 'uploadPod.php',
+        submit_via: 'webview_callback',
+        labels: {
+            title: getOrderActionTitle(action),
+            awb: t('modalAwb'),
+            barcode: t('modalBarcode'),
+            barcode_hint: t('modalBarcodeHint'),
+            pod: t('modalPod'),
+            pod_hint: t('modalPodHint'),
+            confirm: t('modalConfirm'),
+            reason: t('reasonTitle')
+        }
+    };
+
+    if (action === 'not') {
+        payload.show_reason = true;
+        payload.reasons = getNotDeliveredReasons();
+    }
+
+    if (postToReactNative(payload)) {
+        return;
+    }
+
+    showOrderActionError('React Native WebView is required for this action.');
+}
+
+window.handleOrderActionSubmit = function(data){
+    const cfg = window.orderActionConfig || {};
+    const otype = data && (data.action || data.otype);
+    const awb = (data && data.awb) || cfg.awb;
+    const domain = (data && data.domain) || cfg.domain;
+    const token = (data && data.token) || cfg.token;
+    const ccode = (data && data.ccode) || cfg.ccode;
+    const barcode = ((data && data.barcode) || '').toString().trim();
+    const podFile = ((data && data.pod_file) || '').toString().trim();
+    const comment = (data && (data.comment != null ? data.comment : data.reason)) || 0;
+    const paymentMethod = ((data && data.payment_method) || cfg.payment_method || '').toString();
+    const requirePod = paymentMethod.toLowerCase() === 'credit';
+
+    if (!barcode) {
+        showOrderActionError(t('errorBarcodeRequired'));
+        return;
+    }
+
+    if (requirePod && !podFile) {
+        showOrderActionError(t('errorPodRequired'));
+        return;
+    }
+
+    if (otype === 'not' && (!comment || comment == 0)) {
+        showOrderActionError(t('reasonError'));
+        return;
+    }
+
+    delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFile);
+};
+
 function pickedOrder(awb, domain, token, ccode){
-    Swal.fire({
-        title: t('pickedTitle'),
-        text: t('pickedText'),
-        icon: "question",
-        customClass: {
-            icon: 'custom-swal-icon-size'
-        },
-        width: 300,
-        showCancelButton: true,
-        cancelButtonText: t('cancel'),
-        confirmButtonColor: "#0ea5e9",
-        cancelButtonColor: "#d33",
-        confirmButtonText: t('pickedConfirm')
-    }).then((result) => {
-        if (result.isConfirmed) {
-            delivaredDone('picked', awb, domain, token, ccode, 0);
-        }
+    window.orderActionConfig = Object.assign({}, window.orderActionConfig || {}, {
+        awb: awb,
+        domain: domain,
+        token: token,
+        ccode: ccode
     });
+    openOrderActionModal('picked');
 }
 
 
-function delivared(otype,awb,domain,token,ccode){
-  var comment=0;
-    Swal.fire({
-        title: t('deliverTitle'),
-        text: t('deliverText'),
-        icon: "question",
-        customClass: {
-            icon: 'custom-swal-icon-size'
-        },
-        width: 300,
-        showCancelButton: true,
-        cancelButtonText: t('cancel'),
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: t('deliverConfirm')
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-            delivaredDone(otype,awb,domain,token,ccode,comment);
-            /*Swal.fire({
-                title: "Confirmed!",
-                text: "Order confirmed.",
-                icon: "success"
-            });*/
-        }
+function delivared(otype, awb, domain, token, ccode){
+    window.orderActionConfig = Object.assign({}, window.orderActionConfig || {}, {
+        awb: awb,
+        domain: domain,
+        token: token,
+        ccode: ccode
     });
+    openOrderActionModal('delvery');
 }
 
 
-function delivaredDone(otype,awb,domain,token,ccode,comment){
+function delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFile){
    $.ajax({
        url:"orderAction.php",
        type:"POST",
-       data:"awb="+awb+"&domain="+domain+"&token="+token+"&ccode="+ccode+"&otype="+otype+"&comment="+comment,
+       data:{
+           awb: awb,
+           domain: domain,
+           token: token,
+           ccode: ccode,
+           otype: otype,
+           comment: comment,
+           barcode: barcode || '',
+           pod_file: podFile || ''
+       },
        success:function(data){
        if(data==1){
             if(otype === 'picked'){
@@ -175,25 +294,26 @@ function delivaredDone(otype,awb,domain,token,ccode,comment){
              message: 'null'
              };
 
-    // تحويله لنص JSON وإرساله
               window.ReactNativeWebView.postMessage(JSON.stringify(dataObj));
             }
          }
          else if(data==8){
-            Swal.fire({
-                    title: t('errorTitle'),
-                    text: 'Invalid order state for picked action',
-                    icon: 'warning',
-                    confirmButtonText: t('errorOk')
-                })
+            showOrderActionError('Invalid order state for picked action');
+         }
+         else if(data==10){
+            showOrderActionError(t('errorBarcodeRequired'));
+         }
+         else if(data==11){
+            showOrderActionError(t('errorPodRequired'));
+         }
+         else if(data==12){
+            showOrderActionError(t('errorBarcodeMismatch'));
+         }
+         else if(data==14){
+            showOrderActionError(t('reasonError'));
          }
          else{
-            Swal.fire({
-                    title: t('errorTitle'),
-                    text: t('errorText'),
-                    icon: 'warning',
-                    confirmButtonText: t('errorOk')
-                })
+            showOrderActionError(t('errorText'));
          }
        }
    })
@@ -201,56 +321,14 @@ function delivaredDone(otype,awb,domain,token,ccode,comment){
 
 
 
-function not_delivared(otype,awb,domain,token,ccode){
-    Swal.fire({
-        title: t('reasonTitle'),
-        input: "select",
-        inputOptions: {
-            0: t('reason0'),
-            1: t('reason1'),
-            2: t('reason2'),
-            3: t('reason3'),
-            4: t('reason4'),
-            5: t('reason5'),
-            6: t('reason6'),
-            7: t('reason7'),
-            8: t('reason8'),
-            9: t('reason9'),
-            10: t('reason10'),
-            11: t('reason11'),
-            12: t('reason12'),
-            13: t('reason13'),
-            14: t('reason14')
-        },
-        icon: "info",
-        customClass: {
-            icon: 'custom-swal-icon-size'
-        },
-        width: 400,
-        showCancelButton: true,
-        cancelButtonText: t('reasonCancel'),
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: t('reasonSubmit')
-    }).then((result) => {
-
-        if (result.isConfirmed) {
-
-            if(result.value==0){
-                Swal.fire({
-                    title: t('errorTitle'),
-                    text: t('reasonError'),
-                    icon: 'warning',
-                    confirmButtonText: t('errorOk')
-                })
-            }else{
-                delivaredDone(otype,awb,domain,token,ccode,result.value);
-            }
-            //
-            //confirmOrderDone(awb,domain,token);
-
-        }
+function not_delivared(otype, awb, domain, token, ccode){
+    window.orderActionConfig = Object.assign({}, window.orderActionConfig || {}, {
+        awb: awb,
+        domain: domain,
+        token: token,
+        ccode: ccode
     });
+    openOrderActionModal('not');
 }
 
 
