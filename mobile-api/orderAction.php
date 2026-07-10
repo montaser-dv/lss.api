@@ -8,7 +8,7 @@ $mobile_domain = $_POST['domain'];
 $mobile_token = $_POST['token'];
 
 
-$mobile_comment = $_POST['comment'];
+$mobile_comment = $_POST['comment'] ?? 0;
 $mobile_type = $_POST['otype'];
 
 //echo $mobile_AWB."-".$mobile_ccode."-".$mobile_domain."-".$mobile_token."-".$mobile_comment."-".$mobile_type;
@@ -83,10 +83,17 @@ if (strlen($mobile_token) > 10) {
 
                     $status_id = mobile_find_status_id($db, 'picked') ?: 2;
 
+                    $db->begin_transaction();
                     $upp = $db->query("UPDATE orders SET Status='$status_id', archive='0' WHERE AWB='$mobile_AWB' ");
                     $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code);
 
-                    echo ($upp && $insert) ? 1 : 2;
+                    if ($upp && $insert) {
+                        $db->commit();
+                        echo 1;
+                    } else {
+                        $db->rollback();
+                        echo 2;
+                    }
                     exit;
                 }
 

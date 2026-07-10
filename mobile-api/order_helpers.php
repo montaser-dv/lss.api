@@ -442,44 +442,16 @@ if (!function_exists('mobile_insert_order_status_path')) {
             return false;
         }
 
-        $columns = mobile_get_table_columns($db, 'order_paths');
         $today = date('Y-m-d H:i:s');
-        $data = [
-            'AWB' => (string) $awb,
-            'Action_type' => 'status',
-            'status' => (int) $statusId,
-            'courier_code' => (string) $courierCode,
-            'user_id' => 1,
-            'comment_id' => (int) $commentId,
-            'pod_file' => null,
-            'created_at' => $today,
-            'updated_at' => $today,
-            'c_code' => (string) $cCode,
-        ];
+        $awbEsc = $db->real_escape_string((string) $awb);
+        $courierEsc = $db->real_escape_string((string) $courierCode);
+        $cCodeEsc = $db->real_escape_string((string) $cCode);
+        $statusId = (int) $statusId;
+        $commentId = (int) $commentId;
 
-        $insertCols = [];
-        $insertVals = [];
-        foreach ($data as $column => $value) {
-            $actualCol = mobile_pick_existing_column($columns, [$column]);
-            if (!$actualCol) {
-                continue;
-            }
+        $sql = "INSERT INTO order_paths (AWB, Action_type, status, courier_code, user_id, comment_id, pod_file, created_at, updated_at, c_code) "
+            . "VALUES ('$awbEsc', 'status', $statusId, '$courierEsc', 1, $commentId, '0', '$today', '$today', '$cCodeEsc')";
 
-            $insertCols[] = '`' . $actualCol . '`';
-            if ($value === null) {
-                $insertVals[] = 'NULL';
-            } elseif (is_int($value)) {
-                $insertVals[] = (string) $value;
-            } else {
-                $insertVals[] = "'" . $db->real_escape_string($value) . "'";
-            }
-        }
-
-        if (empty($insertCols)) {
-            return false;
-        }
-
-        $sql = 'INSERT INTO order_paths (' . implode(', ', $insertCols) . ') VALUES (' . implode(', ', $insertVals) . ')';
         return $db->query($sql);
     }
 }
