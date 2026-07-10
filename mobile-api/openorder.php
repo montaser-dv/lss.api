@@ -30,30 +30,6 @@ function mobile_order_field($label, $value, $options = [])
             <span class="order-field-value' . $valueClass . '">' . mobile_h($value) . '</span>
         </div>';
 }
-
-function mobile_status_badge_class($statusName)
-{
-    $status = mobile_normalize_status_name($statusName);
-
-    if (in_array($status, ['delivered', 'completed', 'closed'], true)) {
-        return 'order-badge-status--success';
-    }
-    if (in_array($status, ['not_delivered', 'cancelled', 'canceled', 'returned'], true)) {
-        return 'order-badge-status--danger';
-    }
-    if ($status === 'picked') {
-        return 'order-badge-status--info';
-    }
-
-    return 'order-badge-status--warning';
-}
-
-function mobile_type_badge_class($orderType)
-{
-    return mobile_normalize_order_type($orderType) === 'fulfillment'
-        ? 'order-badge-type--fulfillment'
-        : 'order-badge-type--lastmile';
-}
 ?>
 <html lang="<?php echo mobile_h($mobile_lang); ?>" dir="<?php echo mobile_h($mobile_dir); ?>">
 <head>
@@ -147,7 +123,6 @@ if ($order_type !== 'last_mile' && $order_type !== 'fulfillment') {
     $order_type = mobile_get_order_type_from_row($rc, $db);
 }
 $status_info = mobile_get_order_status_info($db, $rc);
-$status_name = $status_info['normalized'];
 $status_short_name = $status_info['short_name'];
 $status_id = $status_info['id'];
 $show_picked_action = mobile_should_show_picked_action($order_type, $status_short_name, $status_id);
@@ -158,16 +133,6 @@ $safe_awb = mobile_h($mobile_AWB);
 $safe_domain = mobile_h($mobile_domain);
 $safe_token = mobile_h($mobile_token);
 $safe_ccode = mobile_h($mobile_ccode);
-$type_display = $client_access_type_value !== '' ? $client_access_type_value : mobile_t('order_type_unknown', $mobile_lang);
-$type_label = mobile_order_type_label($order_type, $mobile_lang);
-$status_label = $status_short_name !== ''
-    ? $status_short_name
-    : mobile_status_label($status_name, $mobile_lang);
-$type_normalized = mobile_normalize_order_type($order_type);
-$type_desc_key = $type_normalized === 'fulfillment'
-    ? 'order_type_fulfillment_desc'
-    : ($type_normalized === 'last_mile' ? 'order_type_last_mile_desc' : '');
-$type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
 ?>
 
 <div class="order-shell">
@@ -177,56 +142,12 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
             <span class="order-hero-awb"><?php echo mobile_h($cur['AWB']); ?></span>
         </div>
 
-        <div class="order-hero-type <?php echo mobile_h(mobile_type_badge_class($order_type)); ?>">
-            <i class="bi <?php echo mobile_h($type_icon); ?>"></i>
-            <span><?php echo mobile_h($type_display); ?></span>
-        </div>
-
         <div class="order-barcode-wrap">
             <img src="<?php echo mobile_h($barcode_url); ?>" alt="<?php echo mobile_h(mobile_t('barcode', $mobile_lang)); ?>" class="order-barcode-img" width="200" height="56">
         </div>
     </header>
 
     <main class="order-content">
-        <section class="order-card order-card--status">
-            <h2 class="order-card-title">
-                <i class="bi bi-info-circle"></i>
-                <?php echo mobile_h(mobile_t('section_status_type', $mobile_lang)); ?>
-            </h2>
-            <div class="order-status-panel">
-                <div class="order-status-item">
-                    <div class="order-status-item-head">
-                        <span class="order-status-icon order-status-icon--type">
-                            <i class="bi <?php echo mobile_h($type_icon); ?>"></i>
-                        </span>
-                        <span class="order-status-item-label"><?php echo mobile_h(mobile_t('client_type', $mobile_lang)); ?></span>
-                    </div>
-                    <span class="order-badge order-badge-type order-badge--panel <?php echo mobile_type_badge_class($order_type); ?>">
-                        <?php echo mobile_h($type_display); ?>
-                    </span>
-                    <?php if ($type_label !== $type_display && $client_access_type_value !== ''): ?>
-                    <p class="order-status-item-desc"><?php echo mobile_h($type_label); ?></p>
-                    <?php elseif ($type_desc_key !== ''): ?>
-                    <p class="order-status-item-desc"><?php echo mobile_h(mobile_t($type_desc_key, $mobile_lang)); ?></p>
-                    <?php endif; ?>
-                </div>
-
-                <div class="order-status-divider" aria-hidden="true"></div>
-
-                <div class="order-status-item">
-                    <div class="order-status-item-head">
-                        <span class="order-status-icon order-status-icon--status">
-                            <i class="bi bi-flag-fill"></i>
-                        </span>
-                        <span class="order-status-item-label"><?php echo mobile_h(mobile_t('order_status', $mobile_lang)); ?></span>
-                    </div>
-                    <span class="order-badge order-badge-status order-badge--panel <?php echo mobile_status_badge_class($status_name); ?>">
-                        <?php echo mobile_h($status_label); ?>
-                    </span>
-                </div>
-            </div>
-        </section>
-
         <section class="order-card">
             <h2 class="order-card-title">
                 <i class="bi bi-person-circle"></i>
@@ -276,8 +197,6 @@ $type_icon = $type_normalized === 'fulfillment' ? 'bi-building' : 'bi-truck';
             <div class="order-card-body">
                 <?php
                 echo mobile_order_field(mobile_t('client_name', $mobile_lang), $cur['Brand'], ['highlight' => true]);
-                echo mobile_order_field(mobile_t('client_access_type_id', $mobile_lang), $type_display, ['highlight' => true]);
-                echo mobile_order_field(mobile_t('client_type', $mobile_lang), $type_label, ['allow_empty' => true]);
                 echo mobile_order_field(mobile_t('description', $mobile_lang), $cur['description'], ['full' => true, 'allow_empty' => true]);
                 echo mobile_order_field(mobile_t('notes', $mobile_lang), $cur['notes'], ['full' => true, 'allow_empty' => true]);
                 ?>
