@@ -123,6 +123,9 @@ $status_info = $action_context['status'];
 $status_short_name = $status_info['short_name'];
 $status_id = $status_info['id'];
 $show_picked_action = $action_context['show_picked'];
+$is_picked_status = mobile_is_picked_status($status_short_name, $status_id);
+$can_courier_act = mobile_can_courier_act_on_order($status_short_name, $status_id);
+$show_delivery_actions = $can_courier_act && !$show_picked_action;
 $has_location = !empty($cur['lat']) && !empty($cur['lng']) && $cur['lat'] != 0 && $cur['lng'] != 0;
 $barcode_url = 'https://' . $subdomain . '.' . $domain . '/assets/order_barcode/' . $cur['AWB'] . '.png';
 $safe_phone = mobile_h($cur['Reciver_phone']);
@@ -221,19 +224,24 @@ $order_action_config = json_encode([
             </button>
         </div>
 
-        <?php if ($has_location): ?>
+        <?php if ($has_location && $can_courier_act): ?>
         <button type="button" class="order-action-btn order-action-btn--map" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
             <i class="bi bi-pin-map-fill"></i>
             <?php echo mobile_h(mobile_t('open_location', $mobile_lang)); ?>
         </button>
         <?php endif; ?>
 
-        <?php if ($show_picked_action): ?>
+        <?php if ($is_picked_status): ?>
+        <div class="order-picked-notice">
+            <i class="bi bi-check2-circle"></i>
+            <span><?php echo mobile_h(mobile_t('picked_waiting_warehouse', $mobile_lang)); ?></span>
+        </div>
+        <?php elseif ($show_picked_action): ?>
         <button type="button" class="order-action-btn order-action-btn--picked" onclick="openOrderActionModal('picked')">
             <i class="bi bi-box-seam"></i>
             <?php echo mobile_h(mobile_t('picked', $mobile_lang)); ?>
         </button>
-        <?php else: ?>
+        <?php elseif ($show_delivery_actions): ?>
         <div class="order-delivery-row">
             <button type="button" class="order-action-btn order-action-btn--delivered" onclick="openOrderActionModal('delvery')">
                 <i class="bi bi-bag-check"></i>

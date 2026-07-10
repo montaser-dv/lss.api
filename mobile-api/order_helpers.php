@@ -32,6 +32,9 @@ if (!function_exists('mobile_normalize_status_name')) {
             'assign' => 'assigned',
             'assigned_to_courier' => 'assigned',
             'courier_assigned' => 'assigned',
+            'recived_at_warehouse' => 'received_at_warehouse',
+            'received_warehouse' => 'received_at_warehouse',
+            'warehouse_received' => 'received_at_warehouse',
         ];
 
         return $aliases[$value] ?? $value;
@@ -334,6 +337,7 @@ if (!function_exists('mobile_status_fallback_ids')) {
         return [
             'created' => 1,
             'picked' => 2,
+            'received_at_warehouse' => 3,
             'delivered' => 7,
             'not_delivered' => 13,
             'cancelled' => 14,
@@ -367,6 +371,7 @@ if (!function_exists('mobile_get_order_status_info')) {
             $fallbackNames = [
                 1 => 'Created',
                 2 => 'Picked',
+                3 => 'Received at Warehouse',
                 7 => 'Delivered',
                 13 => 'Not delivered',
                 14 => 'Cancelled',
@@ -646,9 +651,48 @@ if (!function_exists('mobile_is_created_status')) {
     }
 }
 
+if (!function_exists('mobile_is_picked_status')) {
+    function mobile_is_picked_status($statusName, $statusId = 0) {
+        if ((int) $statusId === 2) {
+            return true;
+        }
+
+        return mobile_normalize_status_name($statusName) === 'picked';
+    }
+}
+
+if (!function_exists('mobile_is_warehouse_received_status')) {
+    function mobile_is_warehouse_received_status($statusName, $statusId = 0) {
+        if ((int) $statusId === 3) {
+            return true;
+        }
+
+        $status = mobile_normalize_status_name($statusName);
+        return in_array($status, [
+            'received_at_warehouse',
+            'recived_at_warehouse',
+            'warehouse_received',
+            'received_warehouse',
+        ], true);
+    }
+}
+
 if (!function_exists('mobile_should_show_picked_action')) {
     function mobile_should_show_picked_action($orderType, $statusName, $statusId = 0) {
         return mobile_normalize_order_type($orderType) === 'last_mile'
             && mobile_is_created_status($statusName, $statusId);
+    }
+}
+
+if (!function_exists('mobile_can_courier_act_on_order')) {
+    function mobile_can_courier_act_on_order($statusName, $statusId = 0) {
+        if (mobile_is_picked_status($statusName, $statusId)) {
+            return false;
+        }
+        if (mobile_is_warehouse_received_status($statusName, $statusId)) {
+            return false;
+        }
+
+        return true;
     }
 }

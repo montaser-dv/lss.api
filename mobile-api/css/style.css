@@ -59,6 +59,47 @@
     padding: 10px;
 }
 
+.tbl-item-picked{
+    border: 1px solid #99f6e4;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    font-family: "Ancizar", sans-serif;
+    background: linear-gradient(135deg, #ecfdf5 0%, #ccfbf1 100%);
+    opacity: 0.95;
+}
+
+.tbl-item-picked td{
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+    color: #0f766e;
+}
+
+.order-picked-badge{
+    display: inline-block;
+    background: #0d9488;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 999px;
+}
+
+.order-picked-notice{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 8px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #ecfdf5;
+    border: 1px solid #99f6e4;
+    color: #0f766e;
+    font-weight: 600;
+}
+
 #awb{
     font-size: 20px;
     font-family: "Nobile", sans-serif;

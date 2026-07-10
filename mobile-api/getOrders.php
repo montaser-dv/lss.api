@@ -1,116 +1,110 @@
 <?php
 include("lang.php");
+include("order_helpers.php");
 $mobile_lang = mobile_get_lang();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-//header('Content-Type: application/json');
 
-// Retrieve the HTTP request method
-    //$rawData = file_get_contents("php://input");
-    //$data = json_decode($rawData, true);
+$mobile_ccode = $_POST['ccode'] ?? '';
+$mobile_domain = $_POST['domain'] ?? '';
+$mobile_token = $_POST['token'] ?? '';
 
-   //$mobile_AWB =$data['AWB'];
-   $mobile_ccode =$_POST['ccode'];
-   $mobile_domain=$_POST['domain'];
-   $mobile_token =$_POST['token'];
-   //$arr=array();
+if (strlen($mobile_token) > 10) {
 
-   //array_push($arr,$mobile_domain);
+    if (isset($mobile_ccode) && isset($mobile_domain) && isset($mobile_token)) {
 
-   //echo json_encode($arr);
+        include("config.php");
+        $getData = $mainDB->query("SELECT * FROM domains where Sub_Domain='$mobile_domain' and Token='$mobile_token' ");
 
-   if(strlen($mobile_token) > 10){
+        if ($getData->num_rows > 0) {
 
-   if(isset($mobile_ccode) && isset($mobile_domain) && isset($mobile_token)){
+            $row = $getData->fetch_array(MYSQLI_ASSOC);
+            $DB_Name = $row['DB_Name'];
+            $DB_User = $row['DB_User'];
+            $DB_Pass = $row['DB_Pass'];
 
-    include("config.php");
-    //$mainDB = new mysqli('localhost', 'lss4c_main', 'z!wde@rHjHvKHo#@', 'lss4c_lss');
-    $getData=$mainDB->query("SELECT * FROM domains where Sub_Domain='$mobile_domain' and Token='$mobile_token' ");
+            $db = new mysqli('localhost', $DB_User, $DB_Pass, $DB_Name);
 
-    if($getData->num_rows > 0){
+            global $tbl;
 
-        $row=$getData->fetch_array(MYSQLI_ASSOC);
-        $domain = $row['Domain'];
-        $subdomain = $row['Sub_Domain'];
-        $data['Token'] = $row['Token'];
-        $expire_date = $row['expire_date'];
-        $DB_Name = $row['DB_Name'];
-        $DB_User = $row['DB_User'];
-        $DB_Pass = $row['DB_Pass'];
+            $tbl .= "<table class='min-tbl-item'>";
 
+            $getOrders = $db->query(
+                "SELECT o.*, o.Status AS order_status_id, a.Name AS area_name, z.Name AS zone_name, u.name AS client_name
+                 FROM orders o
+                 INNER JOIN zones z ON o.city = z.ID
+                 INNER JOIN areas a ON o.area = a.ID
+                 INNER JOIN users u ON o.Brand = u.id
+                 WHERE o.courier_code = '$mobile_ccode'
+                   AND o.archive = '0'
+                   AND o.Status <> '3'
+                 ORDER BY id DESC"
+            );
 
-        $db = new mysqli('localhost', $DB_User, $DB_Pass, $DB_Name);
+            if ($getOrders && $getOrders->num_rows > 0) {
 
-          global $tbl;
+                while ($rc = $getOrders->fetch_array(MYSQLI_BOTH)) {
 
-        $tbl.="<table class='min-tbl-item'>";
+                    $statusInfo = mobile_get_order_status_info($db, $rc);
+                    $statusId = (int) $statusInfo['id'];
+                    $statusShort = $statusInfo['short_name'];
 
+                    if (mobile_is_warehouse_received_status($statusShort, $statusId)) {
+                        continue;
+                    }
 
-        $getOrders=$db->query("SELECT o.*,a.Name AS area_name,z.Name AS zone_name,u.name AS client_name FROM orders o INNER JOIN 
-        zones z,areas a,users u where o.city=z.ID and o.area=a.ID and o.courier_code='$mobile_ccode'and o.Brand=u.id and o.archive='0' order by id desc ");
+                    $cur = [
+                        'id' => $rc['id'],
+                        'AWB' => $rc['AWB'],
+                        'Brand' => $rc['client_name'],
+                        'Reciver_name' => $rc['Reciver_name'],
+                        'Reciver_phone' => $rc['Reciver_phone'],
+                        'COD' => $rc['COD'],
+                        'city' => $rc['zone_name'],
+                        'area' => $rc['area_name'],
+                        'payment_method' => $rc['payment_method'],
+                        'Pieces' => $rc['Pieces'],
+                        'Address' => $rc['Address'],
+                        'courier_confirm' => $rc['courier_confirm'],
+                    ];
 
+                    $confirm_align = $mobile_lang === 'ar' ? 'left' : 'right';
+                    $isPicked = mobile_is_picked_status($statusShort, $statusId);
+                    $canOpen = ((int) $cur['courier_confirm'] === 1) && !$isPicked;
 
-         if($getOrders->num_rows > 0){
+                    if ($isPicked) {
+                        $box_class = 'tbl-item-picked';
+                        $btn_content = "<span class='order-picked-badge'>" . mobile_t('status_picked', $mobile_lang) . "</span>";
+                        $color = 'color:#0f766e';
+                    } elseif ((int) $cur['courier_confirm'] === 0) {
+                        $box_class = 'tbl-item';
+                        $btn_content = "<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=confirmOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "')>";
+                        $color = 'color:#ff533b';
+                    } else {
+                        $box_class = 'tbl-item-confirm';
+                        $btn_content = "<img src='imgs/check.png' width='20px'>";
+                        $color = 'color:#1b84ff';
+                    }
 
-             $order_arr=array();
-             //$ir=0;
+                    $tbl .= "<tr><td>";
 
-            while($rc=$getOrders->fetch_array(MYSQLI_BOTH)){
+                    if ($canOpen) {
+                        $tbl .= " <a style='text-decoration: none;' href=javascript:openOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "')>";
+                    } else {
+                        $tbl .= "<a style='text-decoration: none; pointer-events: none;' href='#'>";
+                    }
 
-
-            $cur['id'] = $rc['id'];
-            $cur['AWB'] = $rc['AWB'];
-            $cur['Brand'] = $rc['client_name'];
-            $cur['Reciver_name'] = $rc['Reciver_name'];
-            $cur['Reciver_phone'] = $rc['Reciver_phone'];
-            $cur['COD'] = $rc['COD'];
-            $cur['city'] = $rc['zone_name'];
-            $cur['area'] = $rc['area_name'];
-            $cur['payment_method'] = $rc['payment_method'];
-            $cur['Pieces'] = $rc['Pieces'];
-            $cur['Address'] = $rc['Address'];
-            $cur['courier_confirm'] = $rc['courier_confirm'];
-            $cur['lat'] = $rc['lat'];
-            $cur['lng'] = $rc['lng'];
-            $cur['notes'] = $rc['notes'];
-            $cur['description'] = $rc['description'];
-            $cur['created_at'] = $rc['created_at'];
-            $cur['updated_at'] = $rc['updated_at'];
-
-            $confirm_align = $mobile_lang === 'ar' ? 'left' : 'right';
-
-            if($cur['courier_confirm'] == 0){
-                $box_class = "tbl-item";
-                $btn_content="<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=confirmOrder('".$rc['AWB']."','".$mobile_domain."','".$mobile_token."')>";
-                $color="color:#ff533b";
-            }else{
-                $box_class = "tbl-item-confirm";
-                $btn_content="<img src='imgs/check.png' width='20px'>";
-                $color="color:#1b84ff";
-            }
-
-
-
-            $tbl.="<tr><td>";
-
-             if($cur['courier_confirm'] == 1){
-                $tbl.=" <a style='text-decoration: none;' href=javascript:openOrder('".$rc['AWB']."','".$mobile_domain."','".$mobile_token."')>";
-             }else{
-                $tbl.="<a style='text-decoration: none;' href='#'>";
-             }
-
-
-            $tbl.="<table class='".$box_class."' border='0'>
+                    $tbl .= "<table class='" . $box_class . "' border='0'>
                      <tr>
-            <td id='awb' style='".$color."'>".$cur['AWB']."</td>
-            <td>".$cur['city']."</td>
-            <td style='text-align: center;'>".$cur['area']."</td>
+            <td id='awb' style='" . $color . "'>" . $cur['AWB'] . "</td>
+            <td>" . $cur['city'] . "</td>
+            <td style='text-align: center;'>" . $cur['area'] . "</td>
                    </tr>
 
                   <tr>
-            <td>".$cur['Reciver_phone']."</td>
+            <td>" . $cur['Reciver_phone'] . "</td>
 
-            <td>".$cur['payment_method']."</td>
+            <td>" . $cur['payment_method'] . "</td>
             <td style='text-align: " . $confirm_align . ";'>
                  $btn_content
             </td>
@@ -120,34 +114,20 @@ ini_set('display_errors', 1);
                 </td>
             </tr>
             ";
+                }
 
-
-
+                $tbl .= "</table>";
+            } else {
+                $tbl .= "<tr><td align='center'> <br> " . mobile_t('empty_orders', $mobile_lang) . " <br><br> </td></tr>";
             }
 
-
-        $tbl.="</table>";
-
-
-
-          
-   }else{
-       $tbl.="<tr><td align='center'> <br> " . mobile_t('empty_orders', $mobile_lang) . " <br><br> </td></tr>";
-       
-   }
-   
-   echo $tbl;
-
-
-   }
-   else{
-    echo 9;
-   }
-
-}
-else{
-    echo 4;
-}
+            echo $tbl;
+        } else {
+            echo 9;
+        }
+    } else {
+        echo 4;
+    }
 }
 
 ?>

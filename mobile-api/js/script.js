@@ -301,17 +301,13 @@ function delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFi
        },
        success:function(data){
        if(data==1){
-            if(otype === 'picked'){
-                location.reload();
-            } else {
-             const dataObj = {
+            const dataObj = {
              type: 'back',
              mobile: 0,
              message: 'null'
              };
 
               window.ReactNativeWebView.postMessage(JSON.stringify(dataObj));
-            }
          }
          else if(data==8){
             showOrderActionError('Invalid order state for picked action');
