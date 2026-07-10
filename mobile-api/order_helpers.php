@@ -44,6 +44,144 @@ if (!function_exists('mobile_orders_client_select_sql')) {
     }
 }
 
+if (!function_exists('mobile_get_table_columns')) {
+    function mobile_get_table_columns(mysqli $db, $table) {
+        static $cache = [];
+
+        if (isset($cache[$table])) {
+            return $cache[$table];
+        }
+
+        $columns = [];
+        $result = $db->query('SHOW COLUMNS FROM `' . $db->real_escape_string($table) . '`');
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $columns[] = $row['Field'];
+            }
+        }
+
+        $cache[$table] = $columns;
+
+        return $columns;
+    }
+}
+
+if (!function_exists('mobile_table_exists')) {
+    function mobile_table_exists(mysqli $db, $table) {
+        $check = $db->query("SHOW TABLES LIKE '" . $db->real_escape_string($table) . "'");
+        return $check && $check->num_rows > 0;
+    }
+}
+
+if (!function_exists('mobile_pick_existing_column')) {
+    function mobile_pick_existing_column(array $columns, array $candidates) {
+        foreach ($candidates as $candidate) {
+            foreach ($columns as $column) {
+                if (strcasecmp($column, $candidate) === 0) {
+                    return $column;
+                }
+            }
+        }
+
+        return null;
+    }
+}
+
+if (!function_exists('mobile_safe_prepare')) {
+    function mobile_safe_prepare(mysqli $db, $sql) {
+        try {
+            $stmt = $db->prepare($sql);
+            return $stmt ?: null;
+        } catch (mysqli_sql_exception $e) {
+            return null;
+        }
+    }
+}
+
+if (!function_exists('mobile_lookup_name_by_id')) {
+    function mobile_lookup_name_by_id(mysqli $db, array $tables, array $idCandidates, array $nameCandidates, $idValue) {
+        $idValue = trim((string) $idValue);
+        if ($idValue === '') {
+            return '';
+        }
+
+        foreach ($tables as $table) {
+            if (!mobile_table_exists($db, $table)) {
+                continue;
+            }
+
+            $columns = mobile_get_table_columns($db, $table);
+            $idCol = mobile_pick_existing_column($columns, $idCandidates);
+            $nameCol = mobile_pick_existing_column($columns, $nameCandidates);
+            if (!$idCol || !$nameCol) {
+                continue;
+            }
+
+            $sql = "SELECT `$nameCol` AS lookup_name FROM `$table` WHERE `$idCol` = ? LIMIT 1";
+            $stmt = mobile_safe_prepare($db, $sql);
+            if (!$stmt) {
+                continue;
+            }
+
+            $stmt->bind_param('s', $idValue);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows > 0) {
+                $name = trim((string) $result->fetch_assoc()['lookup_name']);
+                $stmt->close();
+                if ($name !== '') {
+                    return $name;
+                }
+            }
+            $stmt->close();
+        }
+
+        return '';
+    }
+}
+
+if (!function_exists('mobile_lookup_id_by_name')) {
+    function mobile_lookup_id_by_name(mysqli $db, array $tables, array $idCandidates, array $nameCandidates, $nameValue) {
+        $nameValue = mobile_normalize_status_name($nameValue);
+        if ($nameValue === '') {
+            return null;
+        }
+
+        foreach ($tables as $table) {
+            if (!mobile_table_exists($db, $table)) {
+                continue;
+            }
+
+            $columns = mobile_get_table_columns($db, $table);
+            $idCol = mobile_pick_existing_column($columns, $idCandidates);
+            $nameCol = mobile_pick_existing_column($columns, $nameCandidates);
+            if (!$idCol || !$nameCol) {
+                continue;
+            }
+
+            $sql = "SELECT `$idCol` AS lookup_id FROM `$table` WHERE LOWER(REPLACE(REPLACE(`$nameCol`, '-', '_'), ' ', '_')) = ? LIMIT 1";
+            $stmt = mobile_safe_prepare($db, $sql);
+            if (!$stmt) {
+                continue;
+            }
+
+            $stmt->bind_param('s', $nameValue);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result && $result->num_rows > 0) {
+                $id = (int) $result->fetch_assoc()['lookup_id'];
+                $stmt->close();
+                if ($id > 0) {
+                    return $id;
+                }
+            }
+            $stmt->close();
+        }
+
+        return null;
+    }
+}
+
 if (!function_exists('mobile_parse_access_type_value')) {
     function mobile_parse_access_type_value(mysqli $db, $raw) {
         $raw = trim((string) $raw);
@@ -59,34 +197,17 @@ if (!function_exists('mobile_parse_access_type_value')) {
         }
 
         $tables = ['client_access_types', 'client_access_type', 'access_types', 'access_type'];
-        $idColumns = ['ID', 'id'];
-        $nameColumns = ['name', 'Name', 'title', 'type_name'];
-
-        foreach ($tables as $table) {
-            $check = $db->query("SHOW TABLES LIKE '" . $db->real_escape_string($table) . "'");
-            if (!$check || $check->num_rows === 0) {
-                continue;
-            }
-
-            foreach ($idColumns as $idCol) {
-                foreach ($nameColumns as $nameCol) {
-                    $sql = "SELECT `$nameCol` AS type_name FROM `$table` WHERE `$idCol` = ? LIMIT 1";
-                    $stmt = $db->prepare($sql);
-                    if (!$stmt) {
-                        continue;
-                    }
-                    $stmt->bind_param('s', $raw);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    if ($result && $result->num_rows > 0) {
-                        $name = mobile_normalize_order_type($result->fetch_assoc()['type_name']);
-                        $stmt->close();
-                        if ($name === 'last_mile' || $name === 'fulfillment') {
-                            return $name;
-                        }
-                    }
-                    $stmt->close();
-                }
+        $lookupName = mobile_lookup_name_by_id(
+            $db,
+            $tables,
+            ['ID', 'id'],
+            ['name', 'Name', 'title', 'type_name', 'access_type', 'status_name'],
+            $raw
+        );
+        if ($lookupName !== '') {
+            $name = mobile_normalize_order_type($lookupName);
+            if ($name === 'last_mile' || $name === 'fulfillment') {
+                return $name;
             }
         }
 
@@ -166,33 +287,15 @@ if (!function_exists('mobile_find_status_id')) {
         }
 
         $tables = ['statuses', 'order_status', 'order_statuses', 'status'];
-        $idColumns = ['ID', 'id'];
-        $nameColumns = ['name', 'Name', 'status_name', 'title'];
-
-        foreach ($tables as $table) {
-            $check = $db->query("SHOW TABLES LIKE '" . $db->real_escape_string($table) . "'");
-            if (!$check || $check->num_rows === 0) {
-                continue;
-            }
-
-            foreach ($idColumns as $idCol) {
-                foreach ($nameColumns as $nameCol) {
-                    $sql = "SELECT `$idCol` AS sid FROM `$table` WHERE LOWER(REPLACE(REPLACE(`$nameCol`, '-', '_'), ' ', '_')) = ? LIMIT 1";
-                    $stmt = $db->prepare($sql);
-                    if (!$stmt) {
-                        continue;
-                    }
-                    $stmt->bind_param('s', $statusName);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    if ($result && $result->num_rows > 0) {
-                        $id = (int) $result->fetch_assoc()['sid'];
-                        $stmt->close();
-                        return $id > 0 ? $id : null;
-                    }
-                    $stmt->close();
-                }
-            }
+        $id = mobile_lookup_id_by_name(
+            $db,
+            $tables,
+            ['ID', 'id'],
+            ['name', 'Name', 'status_name', 'title', 'status', 'Status'],
+            $statusName
+        );
+        if ($id) {
+            return $id;
         }
 
         $fallback = [
@@ -228,34 +331,15 @@ if (!function_exists('mobile_get_status_name_from_row')) {
             return mobile_normalize_status_name($statusValue);
         }
 
-        $tables = ['statuses', 'order_status', 'order_statuses', 'status'];
-        $idColumns = ['ID', 'id'];
-        $nameColumns = ['name', 'Name', 'status_name', 'title'];
-
-        foreach ($tables as $table) {
-            $check = $db->query("SHOW TABLES LIKE '" . $db->real_escape_string($table) . "'");
-            if (!$check || $check->num_rows === 0) {
-                continue;
-            }
-
-            foreach ($idColumns as $idCol) {
-                foreach ($nameColumns as $nameCol) {
-                    $sql = "SELECT `$nameCol` AS sname FROM `$table` WHERE `$idCol` = ? LIMIT 1";
-                    $stmt = $db->prepare($sql);
-                    if (!$stmt) {
-                        continue;
-                    }
-                    $stmt->bind_param('s', $statusValue);
-                    $stmt->execute();
-                    $result = $stmt->get_result();
-                    if ($result && $result->num_rows > 0) {
-                        $name = mobile_normalize_status_name($result->fetch_assoc()['sname']);
-                        $stmt->close();
-                        return $name;
-                    }
-                    $stmt->close();
-                }
-            }
+        $lookupName = mobile_lookup_name_by_id(
+            $db,
+            ['statuses', 'order_status', 'order_statuses', 'status'],
+            ['ID', 'id'],
+            ['name', 'Name', 'status_name', 'title', 'status', 'Status'],
+            $statusValue
+        );
+        if ($lookupName !== '') {
+            return mobile_normalize_status_name($lookupName);
         }
 
         $fallback = [
