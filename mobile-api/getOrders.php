@@ -29,12 +29,17 @@ if (strlen($mobile_token) > 10) {
 
             $tbl .= "<table class='min-tbl-item'>";
 
+            $clientSelect = mobile_orders_client_select_sql();
+            $usersJoin = mobile_orders_users_join_sql();
+            $clientJoin = mobile_orders_client_join_sql();
+
             $getOrders = $db->query(
-                "SELECT o.*, o.Status AS order_status_id, a.Name AS area_name, z.Name AS zone_name, u.name AS client_name
+                "SELECT o.*, o.Status AS order_status_id, o.Brand AS order_brand, a.Name AS area_name, z.Name AS zone_name, u.name AS client_name, $clientSelect
                  FROM orders o
                  INNER JOIN zones z ON o.city = z.ID
                  INNER JOIN areas a ON o.area = a.ID
-                 INNER JOIN users u ON o.Brand = u.id
+                 $usersJoin
+                 $clientJoin
                  WHERE o.courier_code = '$mobile_ccode'
                    AND o.archive = '0'
                    AND o.Status <> '3'
@@ -52,6 +57,9 @@ if (strlen($mobile_token) > 10) {
                     if (mobile_is_warehouse_received_status($statusShort, $statusId)) {
                         continue;
                     }
+
+                    $orderType = mobile_get_order_type_from_row($rc, $db);
+                    $isPickup = mobile_normalize_order_type($orderType) === 'last_mile';
 
                     $cur = [
                         'id' => $rc['id'],
@@ -75,6 +83,14 @@ if (strlen($mobile_token) > 10) {
                     if ($isPicked) {
                         $box_class = 'tbl-item-picked';
                         $btn_content = "<span class='order-picked-badge'>" . mobile_t('status_picked', $mobile_lang) . "</span>";
+                        $color = 'color:#e56808';
+                    } elseif ($isPickup && (int) $cur['courier_confirm'] === 0) {
+                        $box_class = 'tbl-item-pickup';
+                        $btn_content = "<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr confirmOr--pickup' onclick=\"event.stopPropagation();confirmOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "');\">";
+                        $color = 'color:#e56808';
+                    } elseif ($isPickup) {
+                        $box_class = 'tbl-item-picked';
+                        $btn_content = "<i class='bi bi-check2-circle order-pickup-check' aria-hidden='true'></i>";
                         $color = 'color:#e56808';
                     } elseif ((int) $cur['courier_confirm'] === 0) {
                         $box_class = 'tbl-item';

@@ -50,6 +50,37 @@
     color: #0075ff;
 }
 
+.confirmOr--pickup{
+    background-color: #e56808;
+}
+
+.tbl-item-pickup{
+    border: 1px solid #ffdabf;
+    padding: 10px;
+    margin: 0;
+    width: 100%;
+    font-family: "Ancizar", sans-serif;
+    background: #fff2e8;
+    opacity: 0.95;
+}
+
+.tbl-item-pickup td{
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+    color: #000000;
+}
+
+.tbl-item-pickup #awb{
+    color: #e56808;
+}
+
+.order-pickup-check{
+    color: #e56808;
+    font-size: 22px;
+    line-height: 1;
+}
+
 .tbl-item-confirm{
     border: 1px solid #ccc;
     padding: 10px;
