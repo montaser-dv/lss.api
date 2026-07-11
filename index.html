@@ -2224,6 +2224,78 @@
 
         .mobile-feature.highlight i { color: #FB923C; }
 
+        .mobile-download-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 0 0 16px;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 210px;
+            padding: 12px 18px;
+            border-radius: 14px;
+            text-align: start;
+            border: 1px solid transparent;
+            line-height: 1.2;
+        }
+
+        .btn-download i,
+        .btn-download svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .btn-download span {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .btn-download small {
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.85;
+        }
+
+        .btn-download strong {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .btn-download-android {
+            background: #16A34A;
+            color: #fff;
+        }
+
+        .btn-download-android:hover {
+            background: #15803D;
+            color: #fff;
+        }
+
+        .btn-download-ios {
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.55);
+            border-color: rgba(255,255,255,0.18);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .btn-download-ios:disabled {
+            pointer-events: none;
+        }
+
+        @media (max-width: 640px) {
+            .btn-download {
+                width: 100%;
+                justify-content: flex-start;
+            }
+        }
+
         .phone-scanner-view {
             background: #0F172A;
             min-height: 480px;
@@ -3325,6 +3397,23 @@
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f2">ملاحة GPS وتحسين المسارات</span></div>
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f3">إثبات تسليم رقمي بالصورة والتوقيع</span></div>
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f4">تحصيل COD ومزامنة فورية</span></div>
+                    </div>
+
+                    <div class="mobile-download-actions">
+                        <a href="downloads/apk/app-release.apk" class="btn btn-download btn-download-android btn-lg" download>
+                            <i data-lucide="smartphone"></i>
+                            <span>
+                                <small data-i18n="mobile.download.androidLabel">تطبيق المناديب</small>
+                                <strong data-i18n="mobile.download.android">تحميل Android APK</strong>
+                            </span>
+                        </a>
+                        <button type="button" class="btn btn-download btn-download-ios btn-lg" disabled aria-disabled="true" data-i18n-title="mobile.download.iosTitle" title="تطبيق iOS غير متاح حالياً">
+                            <i data-lucide="apple"></i>
+                            <span>
+                                <small data-i18n="mobile.download.iosLabel">قريباً</small>
+                                <strong data-i18n="mobile.download.ios">تحميل iOS</strong>
+                            </span>
+                        </button>
                     </div>
 
                     <a href="https://demo.trakmile.com" class="btn btn-secondary btn-lg">

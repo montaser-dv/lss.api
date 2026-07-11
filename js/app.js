@@ -140,6 +140,11 @@
             if (key) el.setAttribute('alt', t(key));
         });
 
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            const key = el.getAttribute('data-i18n-title');
+            if (key) el.setAttribute('title', t(key));
+        });
+
         const langBtn = document.getElementById('langToggle');
         if (langBtn) {
             langBtn.textContent = lang === 'ar' ? 'EN' : 'عربي';
