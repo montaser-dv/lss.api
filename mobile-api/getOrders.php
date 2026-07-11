@@ -78,7 +78,7 @@ if (strlen($mobile_token) > 10) {
                         $color = 'color:#0f766e';
                     } elseif ((int) $cur['courier_confirm'] === 0) {
                         $box_class = 'tbl-item';
-                        $btn_content = "<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=confirmOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "')>";
+                        $btn_content = "<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=\"event.stopPropagation();confirmOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "');\">";
                         $color = 'color:#ff533b';
                     } else {
                         $box_class = 'tbl-item-confirm';
@@ -89,9 +89,9 @@ if (strlen($mobile_token) > 10) {
                     $tbl .= "<tr><td>";
 
                     if ($canOpen) {
-                        $tbl .= " <a style='text-decoration: none;' href=javascript:openOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "')>";
+                        $tbl .= "<a style='text-decoration: none;' href=\"javascript:openOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "')\">";
                     } else {
-                        $tbl .= "<a style='text-decoration: none; pointer-events: none;' href='#'>";
+                        $tbl .= "<div>";
                     }
 
                     $tbl .= "<table class='" . $box_class . "' border='0'>
@@ -110,7 +110,7 @@ if (strlen($mobile_token) > 10) {
             </td>
                  </tr>
              </table>
-               </a>
+               " . ($canOpen ? "</a>" : "</div>") . "
                 </td>
             </tr>
             ";
