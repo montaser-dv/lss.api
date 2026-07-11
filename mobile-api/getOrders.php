@@ -75,7 +75,7 @@ if (strlen($mobile_token) > 10) {
                     if ($isPicked) {
                         $box_class = 'tbl-item-picked';
                         $btn_content = "<span class='order-picked-badge'>" . mobile_t('status_picked', $mobile_lang) . "</span>";
-                        $color = 'color:#0f766e';
+                        $color = 'color:#e56808';
                     } elseif ((int) $cur['courier_confirm'] === 0) {
                         $box_class = 'tbl-item';
                         $btn_content = "<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=\"event.stopPropagation();confirmOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "');\">";
