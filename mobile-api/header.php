@@ -5,7 +5,7 @@
            <link rel="stylesheet" href="css/style.css?v=2.6">
            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-           <script src="js/script.js?v=5.5"></script>
+           <script src="js/script.js?v=5.6"></script>
 
 <?php
 
