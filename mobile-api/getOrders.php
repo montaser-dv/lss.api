@@ -89,8 +89,8 @@ if (strlen($mobile_token) > 10) {
                         $btn_content = "<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr confirmOr--pickup' onclick=\"event.stopPropagation();confirmOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "');\">";
                         $color = 'color:#e56808';
                     } elseif ($isPickup) {
-                        $box_class = 'tbl-item-picked';
-                        $btn_content = "<i class='bi bi-check2-circle order-pickup-check' aria-hidden='true'></i>";
+                        $box_class = 'tbl-item-pickup';
+                        $btn_content = "<i class='bi bi-check2-circle order-confirm-check order-confirm-check--pickup' aria-hidden='true'></i>";
                         $color = 'color:#e56808';
                     } elseif ((int) $cur['courier_confirm'] === 0) {
                         $box_class = 'tbl-item';
@@ -98,7 +98,7 @@ if (strlen($mobile_token) > 10) {
                         $color = 'color:#0075ff';
                     } else {
                         $box_class = 'tbl-item-confirm';
-                        $btn_content = "<img src='imgs/check.png' width='20px'>";
+                        $btn_content = "<i class='bi bi-check2-circle order-confirm-check order-confirm-check--delivery' aria-hidden='true'></i>";
                         $color = 'color:#0075ff';
                     }
 

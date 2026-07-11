@@ -30,12 +30,12 @@
 }
 
 .tbl-item{
-    border: 1px solid #b3d4ff;
+    border: 1px solid #9ec9ff;
     padding: 10px;
     margin: 0;
     width: 100%;
     font-family: "Ancizar", sans-serif;
-    background: #e8f2ff;
+    background: #c7e1ff;
     opacity: 0.95;
 }
 
@@ -55,12 +55,12 @@
 }
 
 .tbl-item-pickup{
-    border: 1px solid #ffdabf;
+    border: 1px solid #9ec9ff;
     padding: 10px;
     margin: 0;
     width: 100%;
     font-family: "Ancizar", sans-serif;
-    background: #fff2e8;
+    background: #c7e1ff;
     opacity: 0.95;
 }
 
@@ -75,19 +75,27 @@
     color: #e56808;
 }
 
-.order-pickup-check{
-    color: #e56808;
+.order-confirm-check{
     font-size: 22px;
     line-height: 1;
 }
 
+.order-confirm-check--pickup{
+    color: #e56808;
+}
+
+.order-confirm-check--delivery{
+    color: #0075ff;
+}
+
 .tbl-item-confirm{
-    border: 1px solid #ccc;
+    border: 1px solid #9ec9ff;
     padding: 10px;
     margin: 0;
     width: 100%;
     font-family: "Ancizar", sans-serif;
-    background-color: #f9f9f9;
+    background: #c7e1ff;
+    opacity: 0.95;
 }
 
 
@@ -95,6 +103,11 @@
     font-size: 14px;
     font-weight: bold;
     padding: 10px;
+    color: #000000;
+}
+
+.tbl-item-confirm #awb{
+    color: #0075ff;
 }
 
 .tbl-item-picked{
