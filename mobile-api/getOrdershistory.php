@@ -1,147 +1,172 @@
 <?php
-include("lang.php");
+include('lang.php');
+
 $mobile_lang = mobile_get_lang();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-//header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
-// Retrieve the HTTP request method
-    //$rawData = file_get_contents("php://input");
-    //$data = json_decode($rawData, true);
-
-   //$mobile_AWB =$data['AWB'];
-   $mobile_ccode =$_POST['ccode'];
-   $mobile_domain=$_POST['domain'];
-   $mobile_token =$_POST['token'];
-   //$arr=array();
-
-   //array_push($arr,$mobile_domain);
-
-   //echo json_encode($arr);
-
-   if(strlen($mobile_token) > 10){
-
-   if(isset($mobile_ccode) && isset($mobile_domain) && isset($mobile_token)){
-
-    include("config.php");
-    //$mainDB = new mysqli('localhost', 'lss4c_main', 'z!wde@rHjHvKHo#@', 'lss4c_lss');
-    $getData=$mainDB->query("SELECT * FROM domains where Sub_Domain='$mobile_domain' and Token='$mobile_token' ");
-
-    if($getData->num_rows > 0){
-
-        $row=$getData->fetch_array(MYSQLI_ASSOC);
-        $domain = $row['Domain'];
-        $subdomain = $row['Sub_Domain'];
-        $data['Token'] = $row['Token'];
-        $expire_date = $row['expire_date'];
-        $DB_Name = $row['DB_Name'];
-        $DB_User = $row['DB_User'];
-        $DB_Pass = $row['DB_Pass'];
-
-
-        $db = new mysqli('localhost', $DB_User, $DB_Pass, $DB_Name);
-
-          global $tbl;
-
-        $tbl.="<table class='min-tbl-item' style='color:#828282'>";
-
-
-        $getOrders=$db->query("SELECT o.*,a.Name AS area_name,z.Name AS zone_name,u.name AS client_name FROM orders o INNER JOIN zones 
-        z,areas a,users u where o.city=z.ID and o.area=a.ID and o.courier_code='$mobile_ccode'and o.Brand=u.id and o.archive='1' order by id desc");
-
-
-         if($getOrders->num_rows > 0){
-
-             $order_arr=array();
-             //$ir=0;
-
-            while($rc=$getOrders->fetch_array(MYSQLI_BOTH)){
-
-
-            $cur['id'] = $rc['id'];
-            $cur['AWB'] = $rc['AWB'];
-            $cur['Brand'] = $rc['client_name'];
-            $cur['Reciver_name'] = $rc['Reciver_name'];
-            $cur['Reciver_phone'] = $rc['Reciver_phone'];
-            $cur['COD'] = $rc['COD'];
-            $cur['city'] = $rc['zone_name'];
-            $cur['area'] = $rc['area_name'];
-            $cur['payment_method'] = $rc['payment_method'];
-            $cur['Pieces'] = $rc['Pieces'];
-            $cur['Address'] = $rc['Address'];
-            $cur['courier_confirm'] = $rc['courier_confirm'];
-            $cur['lat'] = $rc['lat'];
-            $cur['lng'] = $rc['lng'];
-            $cur['notes'] = $rc['notes'];
-            $cur['description'] = $rc['description'];
-            $cur['created_at'] = $rc['created_at'];
-            $cur['updated_at'] = $rc['updated_at'];
-
-
-                $box_class = "tbl-item-confirm";
-                $btn_content="<img src='imgs/archive.png' width='20px'>";
-                $color="color:#828282";
-            
-
-
-
-            $tbl.="<tr><td>";
-
-             if($cur['courier_confirm'] == 1){
-                $tbl.=" <a style='text-decoration: none;' href='javascript:void(0)'>";
-             }else{
-                $tbl.="<a style='text-decoration: none;' href='#'>";
-             }
-
-
-            $tbl.="<table class='".$box_class."' style='background:#F5F5F5' border='0'>
-                     <tr>
-            <td id='awb' style='".$color."'>".$cur['AWB']."</td>
-            <td>".$cur['city']."</td>
-            <td style='text-align: center;'>".$cur['area']."</td>
-                   </tr>
-
-                  <tr>
-            <td>".$cur['Reciver_phone']."</td>
-
-            <td>".$cur['created_at']."&nbsp <font color='#313131'>".$cur['payment_method']."</font> </td>
-            <td style='text-align: right;'>
-                 $btn_content
-            </td>
-                 </tr>
-             </table>
-               </a>
-                </td>
-            </tr>
-            ";
-
-
-
-            }
-
-
-        $tbl.="</table>";
-
-
-
-          
-   }else{
-       $tbl.="<tr><td align='center'> <br> " . mobile_t('empty_orders', $mobile_lang) . " <br><br> </td></tr>";
-       
-   }
-   
-   echo $tbl;
-
-
-   }
-   else{
-    echo 9;
-   }
-
-}
-else{
-    echo 4;
-}
+$mobile_ccode = trim((string) ($_POST['ccode'] ?? ''));
+$mobile_domain = trim((string) ($_POST['domain'] ?? ''));
+$mobile_token = trim((string) ($_POST['token'] ?? ''));
+$page = max(1, (int) ($_POST['page'] ?? 1));
+$limit = (int) ($_POST['limit'] ?? 20);
+$limit = max(5, min(40, $limit));
+$month = trim((string) ($_POST['month'] ?? ''));
+if (!preg_match('/^\d{4}-\d{2}$/', $month)) {
+    $month = '';
 }
 
-?>
+function history_json($payload, $code = 200)
+{
+    http_response_code($code);
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+function history_h($value)
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+}
+
+function history_month_label($ym, $lang)
+{
+    $ts = strtotime($ym . '-01');
+    if ($ts === false) {
+        return $ym;
+    }
+
+    if ($lang === 'ar') {
+        $months = [
+            1 => 'يناير', 2 => 'فبراير', 3 => 'مارس', 4 => 'أبريل',
+            5 => 'مايو', 6 => 'يونيو', 7 => 'يوليو', 8 => 'أغسطس',
+            9 => 'سبتمبر', 10 => 'أكتوبر', 11 => 'نوفمبر', 12 => 'ديسمبر',
+        ];
+        $m = (int) date('n', $ts);
+        return ($months[$m] ?? date('m', $ts)) . ' ' . date('Y', $ts);
+    }
+
+    return date('F Y', $ts);
+}
+
+if (strlen($mobile_token) <= 10) {
+    history_json(['ok' => false, 'error' => 4], 400);
+}
+
+if ($mobile_ccode === '' || $mobile_domain === '' || $mobile_token === '') {
+    history_json(['ok' => false, 'error' => 4], 400);
+}
+
+include('config.php');
+
+$safeDomain = $mainDB->real_escape_string($mobile_domain);
+$safeToken = $mainDB->real_escape_string($mobile_token);
+$getData = $mainDB->query("SELECT * FROM domains WHERE Sub_Domain='$safeDomain' AND Token='$safeToken' LIMIT 1");
+
+if (!$getData || $getData->num_rows === 0) {
+    history_json(['ok' => false, 'error' => 9], 403);
+}
+
+$row = $getData->fetch_array(MYSQLI_ASSOC);
+$db = new mysqli('localhost', $row['DB_User'], $row['DB_Pass'], $row['DB_Name']);
+if ($db->connect_error) {
+    history_json(['ok' => false, 'error' => 9], 500);
+}
+$db->set_charset('utf8mb4');
+
+$safeCcode = $db->real_escape_string($mobile_ccode);
+$dateExpr = "COALESCE(NULLIF(o.updated_at, '0000-00-00 00:00:00'), o.created_at)";
+$baseWhere = "o.courier_code = '$safeCcode' AND o.archive = '1'";
+$monthWhere = '';
+if ($month !== '') {
+    $safeMonth = $db->real_escape_string($month);
+    $monthWhere = " AND DATE_FORMAT($dateExpr, '%Y-%m') = '$safeMonth'";
+}
+
+$months = [];
+$monthsSql = "SELECT DATE_FORMAT($dateExpr, '%Y-%m') AS ym, COUNT(*) AS cnt
+    FROM orders o
+    WHERE $baseWhere
+    GROUP BY ym
+    ORDER BY ym DESC
+    LIMIT 18";
+$monthsRes = $db->query($monthsSql);
+if ($monthsRes) {
+    while ($m = $monthsRes->fetch_assoc()) {
+        if (empty($m['ym'])) {
+            continue;
+        }
+        $months[] = [
+            'key' => $m['ym'],
+            'label' => history_month_label($m['ym'], $mobile_lang),
+            'count' => (int) $m['cnt'],
+        ];
+    }
+}
+
+$countRes = $db->query("SELECT COUNT(*) AS total FROM orders o WHERE $baseWhere $monthWhere");
+$total = 0;
+if ($countRes) {
+    $total = (int) ($countRes->fetch_assoc()['total'] ?? 0);
+}
+
+$offset = ($page - 1) * $limit;
+$getOrders = $db->query(
+    "SELECT o.AWB, o.Reciver_phone, o.payment_method, o.created_at, o.updated_at,
+            a.Name AS area_name, z.Name AS zone_name
+     FROM orders o
+     INNER JOIN zones z ON o.city = z.ID
+     INNER JOIN areas a ON o.area = a.ID
+     WHERE $baseWhere $monthWhere
+     ORDER BY o.id DESC
+     LIMIT $limit OFFSET $offset"
+);
+
+$html = '';
+$rows = 0;
+
+if ($getOrders && $getOrders->num_rows > 0) {
+    while ($rc = $getOrders->fetch_assoc()) {
+        $rows++;
+        $awb = history_h($rc['AWB']);
+        $city = history_h($rc['zone_name']);
+        $area = history_h($rc['area_name']);
+        $phone = history_h($rc['Reciver_phone']);
+        $payment = history_h($rc['payment_method']);
+        $whenRaw = $rc['updated_at'] && $rc['updated_at'] !== '0000-00-00 00:00:00'
+            ? $rc['updated_at']
+            : $rc['created_at'];
+        $when = history_h($whenRaw);
+
+        $html .= "
+        <article class='history-card'>
+            <div class='history-card-top'>
+                <span class='history-awb'>{$awb}</span>
+                <span class='history-city'>{$city}</span>
+                <span class='history-area'>{$area}</span>
+            </div>
+            <div class='history-card-bottom'>
+                <span class='history-phone'>{$phone}</span>
+                <span class='history-meta'>
+                    <span class='history-date'>{$when}</span>
+                    <span class='history-payment'>{$payment}</span>
+                </span>
+                <span class='history-badge' aria-hidden='true'><i class='bi bi-archive'></i></span>
+            </div>
+        </article>";
+    }
+}
+
+$hasMore = ($offset + $rows) < $total;
+
+history_json([
+    'ok' => true,
+    'html' => $html,
+    'page' => $page,
+    'limit' => $limit,
+    'total' => $total,
+    'loaded' => $offset + $rows,
+    'has_more' => $hasMore,
+    'month' => $month,
+    'months' => $months,
+    'empty' => $total === 0,
+    'empty_message' => mobile_t('empty_orders', $mobile_lang),
+]);
