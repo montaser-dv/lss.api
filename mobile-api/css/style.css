@@ -567,6 +567,11 @@ html[dir="rtl"] .order-page {
     background: #f59e0b;
 }
 
+.order-action-btn--client-map {
+    background: #059669;
+    order: -1;
+}
+
 .order-action-btn--picked {
     background: #0ea5e9;
 }

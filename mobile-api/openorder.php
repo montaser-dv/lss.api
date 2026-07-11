@@ -127,6 +127,11 @@ $is_picked_status = mobile_is_picked_status($status_short_name, $status_id);
 $can_courier_act = mobile_can_courier_act_on_order($status_short_name, $status_id);
 $show_delivery_actions = $can_courier_act && !$show_picked_action;
 $has_location = !empty($cur['lat']) && !empty($cur['lng']) && $cur['lat'] != 0 && $cur['lng'] != 0;
+$client_lat = $rc['client_lat'] ?? null;
+$client_lng = $rc['client_lng'] ?? null;
+$has_client_location = $client_lat !== null && $client_lng !== null
+    && $client_lat !== '' && $client_lng !== ''
+    && (float) $client_lat != 0.0 && (float) $client_lng != 0.0;
 $barcode_url = 'https://' . $subdomain . '.' . $domain . '/assets/order_barcode/' . $cur['AWB'] . '.png';
 $safe_phone = mobile_h($cur['Reciver_phone']);
 $safe_awb = mobile_h($mobile_AWB);
@@ -214,6 +219,13 @@ $order_action_config = json_encode([
     </main>
 
     <div class="order-toolbar">
+        <?php if ($show_picked_action && $has_client_location): ?>
+        <button type="button" class="order-action-btn order-action-btn--client-map" onclick="openLocation(<?php echo (float) $client_lat; ?>,<?php echo (float) $client_lng; ?>)">
+            <i class="bi bi-geo-alt-fill"></i>
+            <?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?>
+        </button>
+        <?php endif; ?>
+
         <div class="order-contact-row">
             <button type="button" class="order-contact-btn order-contact-btn--call" onclick='shareNo("c", "<?php echo $safe_phone; ?>", "null")' aria-label="<?php echo mobile_h(mobile_t('call', $mobile_lang)); ?>">
                 <i class="bi bi-telephone-fill order-contact-icon" aria-hidden="true"></i>
@@ -225,7 +237,7 @@ $order_action_config = json_encode([
             </button>
         </div>
 
-        <?php if ($has_location && $can_courier_act): ?>
+        <?php if ($has_location && $can_courier_act && !$show_picked_action): ?>
         <button type="button" class="order-action-btn order-action-btn--map" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
             <i class="bi bi-pin-map-fill"></i>
             <?php echo mobile_h(mobile_t('open_location', $mobile_lang)); ?>

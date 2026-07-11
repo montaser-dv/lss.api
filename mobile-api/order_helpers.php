@@ -55,7 +55,7 @@ if (!function_exists('mobile_orders_client_join_sql')) {
 
 if (!function_exists('mobile_orders_client_select_sql')) {
     function mobile_orders_client_select_sql() {
-        return 'c.client_access_type_id AS client_access_type_id, c.client_access_type_id AS client_order_type, c.business_name AS client_business_name';
+        return 'c.client_access_type_id AS client_access_type_id, c.client_access_type_id AS client_order_type, c.business_name AS client_business_name, c.lat AS client_lat, c.lng AS client_lng';
     }
 }
 
