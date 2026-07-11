@@ -60,12 +60,12 @@
 }
 
 .tbl-item-picked{
-    border: 1px solid #99f6e4;
+    border: 1px solid #ffdabf;
     padding: 10px;
     margin: 0;
     width: 100%;
     font-family: "Ancizar", sans-serif;
-    background: linear-gradient(135deg, #ecfdf5 0%, #ccfbf1 100%);
+    background: linear-gradient(135deg, #fff7f0 0%, #ffdabf 100%);
     opacity: 0.95;
 }
 
@@ -73,13 +73,13 @@
     font-size: 14px;
     font-weight: bold;
     padding: 10px;
-    color: #0f766e;
+    color: #ff6d00;
 }
 
 .order-picked-badge{
     display: inline-block;
-    background: #0d9488;
-    color: #fff;
+    background: #ffdabf;
+    color: #ff6d00;
     font-size: 12px;
     font-weight: 700;
     padding: 6px 10px;
@@ -94,9 +94,9 @@
     margin-top: 8px;
     padding: 14px 16px;
     border-radius: 14px;
-    background: #ecfdf5;
-    border: 1px solid #99f6e4;
-    color: #0f766e;
+    background: #ffdabf;
+    border: 1px solid #ffc9a0;
+    color: #ff6d00;
     font-weight: 600;
 }
 
