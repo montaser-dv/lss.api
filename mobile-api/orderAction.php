@@ -12,6 +12,7 @@ $mobile_comment = $_POST['comment'] ?? 0;
 $mobile_type = $_POST['otype'];
 $mobile_barcode = trim($_POST['barcode'] ?? '');
 $mobile_pod = mobile_normalize_pod_file_db_value($_POST['pod_file'] ?? '');
+$mobile_otp = trim($_POST['otp'] ?? '');
 
 //echo $mobile_AWB."-".$mobile_ccode."-".$mobile_domain."-".$mobile_token."-".$mobile_comment."-".$mobile_type;
 
@@ -129,10 +130,26 @@ if (strlen($mobile_token) > 10) {
                     exit;
                 }
 
+                $otpRequired = mobile_otp_is_required($rc['otp_required'] ?? '');
+                if ($otpRequired) {
+                    if ($mobile_otp === '') {
+                        echo 15;
+                        exit;
+                    }
+                    if (!mobile_otp_matches($rc['otp_code'] ?? '', $mobile_otp)) {
+                        echo 16;
+                        exit;
+                    }
+                }
+
                 global $upp;
 
                 $db->begin_transaction();
-                $upp = $db->query("UPDATE orders SET Status='$status_id',archive='1' WHERE AWB='$mobile_AWB' ");
+                if ($otpRequired) {
+                    $upp = $db->query("UPDATE orders SET Status='$status_id', archive='1', otp_confirm='Yes' WHERE AWB='$mobile_AWB' ");
+                } else {
+                    $upp = $db->query("UPDATE orders SET Status='$status_id', archive='1' WHERE AWB='$mobile_AWB' ");
+                }
                 $insert = mobile_insert_order_status_path($db, $mobile_AWB, $status_id, $mobile_ccode, $mobile_comment, $c_code, $mobile_pod);
 
                 if ($mobile_type == 'delvery' && $status_id == 7 && $payment_method == 'Cash') {

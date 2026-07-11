@@ -447,6 +447,25 @@ if (!function_exists('mobile_payment_requires_pod')) {
     }
 }
 
+if (!function_exists('mobile_otp_is_required')) {
+    function mobile_otp_is_required($value) {
+        $value = strtolower(trim((string) $value));
+        return in_array($value, ['yes', 'y', '1', 'true'], true);
+    }
+}
+
+if (!function_exists('mobile_otp_matches')) {
+    function mobile_otp_matches($expected, $provided) {
+        $expected = trim((string) $expected);
+        $provided = trim((string) $provided);
+        if ($expected === '' || $provided === '') {
+            return false;
+        }
+
+        return hash_equals($expected, $provided);
+    }
+}
+
 if (!function_exists('mobile_normalize_pod_file_db_value')) {
     function mobile_normalize_pod_file_db_value($podFile) {
         $podFile = trim((string) $podFile);

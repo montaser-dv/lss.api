@@ -139,6 +139,7 @@ $order_action_config = json_encode([
     'token' => (string) $mobile_token,
     'ccode' => (string) $mobile_ccode,
     'payment_method' => (string) $cur['payment_method'],
+    'otp_required' => mobile_otp_is_required($rc['otp_required'] ?? '') ? 'yes' : 'no',
     'lang' => $mobile_lang,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 ?>

@@ -28,11 +28,15 @@ function t(key){
             errorBarcodeRequired: 'Shipment barcode is required.',
             errorPodRequired: 'Proof of delivery is required for credit orders.',
             errorBarcodeMismatch: 'Barcode does not match this order.',
+            errorOtpRequired: 'OTP code is required.',
+            errorOtpInvalid: 'Invalid OTP code.',
             modalAwb: 'Order number',
             modalBarcode: 'Shipment barcode',
             modalBarcodeHint: 'Enter or scan the shipment barcode',
             modalPod: 'Proof of delivery (POD)',
             modalPodHint: 'Take a photo or choose a file',
+            modalOtp: 'OTP code',
+            modalOtpHint: 'Enter the OTP received by the customer',
             modalConfirm: 'Confirm',
             modalTitlePicked: 'Confirm pickup',
             modalTitleDelivered: 'Confirm delivery',
@@ -74,11 +78,15 @@ function t(key){
             errorBarcodeRequired: 'رقم الشحنة / الباركود مطلوب.',
             errorPodRequired: 'ملف إثبات التسليم مطلوب لطلبات الدفع الآجل (Credit).',
             errorBarcodeMismatch: 'الباركود لا يطابق رقم هذا الطلب.',
+            errorOtpRequired: 'رمز OTP مطلوب.',
+            errorOtpInvalid: 'رمز OTP غير صحيح.',
             modalAwb: 'رقم الطلب',
             modalBarcode: 'رقم الشحنة / الباركود',
             modalBarcodeHint: 'أدخل الرقم أو امسح الباركود',
             modalPod: 'ملف إثبات التسليم (POD)',
             modalPodHint: 'التقط صورة أو اختر ملفاً',
+            modalOtp: 'رمز OTP',
+            modalOtpHint: 'أدخل رمز OTP الذي استلمه العميل',
             modalConfirm: 'تأكيد',
             modalTitlePicked: 'تأكيد الالتقاط',
             modalTitleDelivered: 'تأكيد التسليم',
@@ -195,6 +203,8 @@ function showOrderActionError(message){
 function openOrderActionModal(action){
     const cfg = window.orderActionConfig || {};
     const paymentMethod = (cfg.payment_method || '').toString();
+    const otpRequired = String(cfg.otp_required || '').toLowerCase() === 'yes'
+        && (action === 'delvery' || action === 'not');
     const payload = {
         type: 'order_action_modal',
         action: action,
@@ -204,6 +214,7 @@ function openOrderActionModal(action){
         ccode: cfg.ccode || '',
         payment_method: paymentMethod,
         require_pod: paymentMethod.toLowerCase() === 'credit',
+        require_otp: otpRequired,
         require_barcode: true,
         lang: cfg.lang || getCurrentLang(),
         upload_pod_url: getMobileApiBaseUrl() + 'uploadPod.php',
@@ -215,6 +226,8 @@ function openOrderActionModal(action){
             barcode_hint: t('modalBarcodeHint'),
             pod: t('modalPod'),
             pod_hint: t('modalPodHint'),
+            otp: t('modalOtp'),
+            otp_hint: t('modalOtpHint'),
             confirm: t('modalConfirm'),
             reason: t('reasonTitle')
         }
@@ -241,9 +254,12 @@ window.handleOrderActionSubmit = function(data){
     const ccode = (data && data.ccode) || cfg.ccode;
     const barcode = ((data && data.barcode) || '').toString().trim();
     const podFile = normalizePodFilePath((data && data.pod_file) || '');
+    const otp = ((data && data.otp) || '').toString().trim();
     const comment = (data && (data.comment != null ? data.comment : data.reason)) || 0;
     const paymentMethod = ((data && data.payment_method) || cfg.payment_method || '').toString();
     const requirePod = paymentMethod.toLowerCase() === 'credit';
+    const requireOtp = String(cfg.otp_required || '').toLowerCase() === 'yes'
+        && (otype === 'delvery' || otype === 'not');
 
     if (!barcode) {
         showOrderActionError(t('errorBarcodeRequired'));
@@ -255,12 +271,17 @@ window.handleOrderActionSubmit = function(data){
         return;
     }
 
+    if (requireOtp && !otp) {
+        showOrderActionError(t('errorOtpRequired'));
+        return;
+    }
+
     if (otype === 'not' && (!comment || comment == 0)) {
         showOrderActionError(t('reasonError'));
         return;
     }
 
-    delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFile);
+    delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFile, otp);
 };
 
 function pickedOrder(awb, domain, token, ccode){
@@ -285,7 +306,7 @@ function delivared(otype, awb, domain, token, ccode){
 }
 
 
-function delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFile){
+function delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFile, otp){
    $.ajax({
        url:"orderAction.php",
        type:"POST",
@@ -297,7 +318,8 @@ function delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFi
            otype: otype,
            comment: comment,
            barcode: barcode || '',
-           pod_file: podFile || ''
+           pod_file: podFile || '',
+           otp: otp || ''
        },
        success:function(data){
        if(data==1){
@@ -323,6 +345,12 @@ function delivaredDone(otype, awb, domain, token, ccode, comment, barcode, podFi
          }
          else if(data==14){
             showOrderActionError(t('reasonError'));
+         }
+         else if(data==15){
+            showOrderActionError(t('errorOtpRequired'));
+         }
+         else if(data==16){
+            showOrderActionError(t('errorOtpInvalid'));
          }
          else{
             showOrderActionError(t('errorText'));
