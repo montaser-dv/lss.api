@@ -79,11 +79,11 @@ if (strlen($mobile_token) > 10) {
                     } elseif ((int) $cur['courier_confirm'] === 0) {
                         $box_class = 'tbl-item';
                         $btn_content = "<input type='button' value='" . mobile_t('confirm', $mobile_lang) . "' class='confirmOr' onclick=\"event.stopPropagation();confirmOrder('" . $rc['AWB'] . "','" . $mobile_domain . "','" . $mobile_token . "');\">";
-                        $color = 'color:#1b84ff';
+                        $color = 'color:#0075ff';
                     } else {
                         $box_class = 'tbl-item-confirm';
                         $btn_content = "<img src='imgs/check.png' width='20px'>";
-                        $color = 'color:#1b84ff';
+                        $color = 'color:#0075ff';
                     }
 
                     $tbl .= "<tr><td>";

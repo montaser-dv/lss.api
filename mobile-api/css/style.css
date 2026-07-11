@@ -23,7 +23,7 @@
     padding: 6px 10px;
     width: auto;
     min-width: 90px;
-    background-color: #1b84ff;
+    background-color: #0075ff;
     color: #ffffff;
     border-radius: 999px;
     border: none;
@@ -47,7 +47,7 @@
 }
 
 .tbl-item #awb{
-    color: #1b84ff;
+    color: #0075ff;
 }
 
 .tbl-item-confirm{
