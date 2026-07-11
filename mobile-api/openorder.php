@@ -147,9 +147,10 @@ $order_action_config = json_encode([
     'otp_required' => mobile_otp_is_required($rc['otp_required'] ?? '') ? 'yes' : 'no',
     'lang' => $mobile_lang,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+$picked_theme = $show_picked_action || $is_picked_status;
 ?>
 
-<div class="order-shell">
+<div class="order-shell<?php echo $picked_theme ? ' order-shell--picked' : ''; ?>">
     <header class="order-hero">
         <div class="order-hero-top">
             <span class="order-hero-label"><?php echo mobile_h(mobile_t('awb', $mobile_lang)); ?></span>

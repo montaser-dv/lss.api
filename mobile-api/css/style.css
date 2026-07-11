@@ -582,7 +582,79 @@ html[dir="rtl"] .order-page {
 }
 
 .order-action-btn--picked {
-    background: #0ea5e9;
+    background: #e56808;
+    color: #ffffff;
+}
+
+.order-action-btn--picked i {
+    color: #ffffff;
+}
+
+/* Picked flow theme (Last Mile pickup) */
+.order-page:has(.order-shell--picked) {
+    background: #fff2e8;
+    color: #000000;
+}
+
+.order-shell--picked .order-hero {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #ffdabf;
+    box-shadow: 0 8px 24px rgba(229, 104, 8, 0.12);
+}
+
+.order-shell--picked .order-hero-label {
+    color: #000000;
+    opacity: 0.7;
+}
+
+.order-shell--picked .order-hero-awb {
+    color: #e56808;
+}
+
+.order-shell--picked .order-barcode-wrap {
+    border: 1px solid #ffdabf;
+}
+
+.order-shell--picked .order-card {
+    background: #ffffff;
+    border-color: #ffdabf;
+    box-shadow: 0 2px 8px rgba(229, 104, 8, 0.06);
+}
+
+.order-shell--picked .order-card-title {
+    color: #000000;
+    border-bottom-color: #fff2e8;
+}
+
+.order-shell--picked .order-card-title i {
+    color: #e56808;
+}
+
+.order-shell--picked .order-field-label {
+    color: #64748b;
+}
+
+.order-shell--picked .order-field-value {
+    color: #000000;
+}
+
+.order-shell--picked .order-field-value--highlight {
+    color: #e56808;
+}
+
+.order-shell--picked .order-toolbar {
+    background: #fff2e8;
+    border-top-color: #ffdabf;
+}
+
+.order-shell--picked .order-action-btn--client-map {
+    background: #ffdabf;
+    color: #e56808;
+}
+
+.order-shell--picked .order-action-btn--client-map i {
+    color: #e56808;
 }
 
 .order-action-btn--delivered {
