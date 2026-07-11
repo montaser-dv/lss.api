@@ -1574,22 +1574,64 @@
             display: flex;
             justify-content: center;
             position: relative;
+            padding-bottom: 28px;
         }
 
         .phone-frame {
-            width: 260px;
-            background: #1E293B;
-            border-radius: 36px;
-            padding: 12px;
-            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.1);
+            width: 280px;
+            background: #0B1220;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.12), 0 30px 60px rgba(0,0,0,0.35);
             position: relative;
+        }
+
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 88px;
+            height: 10px;
+            border-radius: 999px;
+            background: #020617;
+            z-index: 2;
         }
 
         .phone-screen {
             background: var(--light);
-            border-radius: 28px;
+            border-radius: 32px;
             overflow: hidden;
-            min-height: 480px;
+            min-height: 520px;
+        }
+
+        .phone-screen--shot {
+            min-height: 0;
+            background: #F8FAFC;
+        }
+
+        .phone-app-shot {
+            display: block;
+            width: 100%;
+            height: auto;
+            vertical-align: top;
+        }
+
+        .phone-shot-caption {
+            position: absolute;
+            left: 50%;
+            bottom: -18px;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.92);
+            border: 1px solid rgba(96, 165, 250, 0.35);
+            color: #E2E8F0;
+            border-radius: 999px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.25);
         }
 
         .phone-header {
@@ -3264,7 +3306,7 @@
                 <div class="reveal">
                     <span class="section-label" data-i18n="mobile.label">تطبيق الجوال</span>
                     <h2 class="section-title" data-i18n="mobile.title">مكّن سائقيك أثناء التنقل</h2>
-                    <p class="section-desc" data-i18n="mobile.desc">تطبيق جوال للمندوبين وفرق الميدان — إدارة الطلبات، مسح باركود، ملاحة، وإثبات التسليم.</p>
+                    <p class="section-desc" data-i18n="mobile.desc">تطبيق جوال للمندوبين وفرق الميدان — لوحة تحكم يومية، إدارة الطلبات، مسح باركود، ملاحة، وإثبات التسليم.</p>
 
                     <div class="barcode-spotlight">
                         <div class="barcode-spotlight-icon">
@@ -3277,6 +3319,7 @@
                     </div>
 
                     <div class="mobile-features">
+                        <div class="mobile-feature highlight"><i data-lucide="layout-dashboard"></i> <span data-i18n="mobile.f0">لوحة تحكم يومية: COD، التسليم، والمرتجعات</span></div>
                         <div class="mobile-feature highlight"><i data-lucide="scan-line"></i> <span data-i18n="mobile.f5">مسح باركود الشحنة وتأكيد الاستلام</span></div>
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f1">تكليف وتحديث الطلبات لحظياً</span></div>
                         <div class="mobile-feature"><i data-lucide="check-circle"></i> <span data-i18n="mobile.f2">ملاحة GPS وتحسين المسارات</span></div>
@@ -3291,23 +3334,20 @@
 
                 <div class="phone-mockup reveal">
                     <div class="phone-frame">
-                        <div class="phone-screen phone-scanner-view">
-                            <div class="phone-scanner-header">
-                                <h4 data-i18n="mobile.scanner.title">مسح باركود الشحنة</h4>
-                                <p data-i18n="mobile.scanner.sub">امسح باركود الشحنة للتأكيد</p>
-                            </div>
-                            <div class="phone-scanner-frame">
-                                <div class="scanner-bars">
-                                    <span></span><span></span><span></span><span></span><span></span>
-                                    <span></span><span></span><span></span><span></span><span></span>
-                                </div>
-                                <div class="scanner-success">
-                                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                    <span data-i18n="mobile.scanner.success">#TM-4821 — تم تأكيد الاستلام</span>
-                                </div>
-                            </div>
+                        <div class="phone-screen phone-screen--shot">
+                            <img
+                                class="phone-app-shot"
+                                src="imgs/courier-dashboard.png"
+                                alt=""
+                                data-i18n-alt="mobile.dashboard.alt"
+                                width="390"
+                                height="844"
+                                loading="lazy"
+                                decoding="async"
+                            >
                         </div>
                     </div>
+                    <div class="phone-shot-caption" data-i18n="mobile.dashboard.caption">لوحة تحكم المندوب</div>
                 </div>
             </div>
         </div>

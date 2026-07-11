@@ -135,6 +135,11 @@
             if (key) el.placeholder = t(key);
         });
 
+        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+            const key = el.getAttribute('data-i18n-alt');
+            if (key) el.setAttribute('alt', t(key));
+        });
+
         const langBtn = document.getElementById('langToggle');
         if (langBtn) {
             langBtn.textContent = lang === 'ar' ? 'EN' : 'عربي';
