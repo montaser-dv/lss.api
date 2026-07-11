@@ -18,29 +18,36 @@
 }
 
 .confirmOr{
-    font-size: 14px;
-    font-weight: bold;
-    padding: 8px;
-    width: 90px;
-    background-color: #ff533b;
-    color: #fff;
-    border-radius: 10px;
-    border: 2px solid #ff533b;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 10px;
+    width: auto;
+    min-width: 90px;
+    background-color: #1b84ff;
+    color: #ffffff;
+    border-radius: 999px;
+    border: none;
 }
 
 .tbl-item{
-    border: 1px solid #ccc;
+    border: 1px solid #b3d4ff;
     padding: 10px;
     margin: 0;
     width: 100%;
     font-family: "Ancizar", sans-serif;
-    background-color: #fdf6e6;
+    background: #e8f2ff;
+    opacity: 0.95;
 }
 
 .tbl-item td{
     font-size: 14px;
     font-weight: bold;
-    padding: 8px;
+    padding: 10px;
+    color: #000000;
+}
+
+.tbl-item #awb{
+    color: #1b84ff;
 }
 
 .tbl-item-confirm{
