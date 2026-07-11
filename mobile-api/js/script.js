@@ -379,8 +379,12 @@ function openOrder(awb,domain,token){
 
 function openLocation(lat,lng){
     const locationUrl = "https://www.google.com/maps?q="+lat+","+lng;
-    //alert(locationUrl);
-    window.ReactNativeWebView.postMessage(locationUrl);
+    window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: 'location',
+        url: locationUrl,
+        lat: lat,
+        lng: lng
+    }));
 }
 
 

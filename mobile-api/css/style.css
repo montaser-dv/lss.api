@@ -568,8 +568,13 @@ html[dir="rtl"] .order-page {
 }
 
 .order-action-btn--client-map {
-    background: #ef6701;
+    background: #ffdabf;
+    color: #ff6d00;
     order: -1;
+}
+
+.order-action-btn--client-map i {
+    color: #ff6d00;
 }
 
 .order-action-btn--picked {
