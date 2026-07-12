@@ -93,6 +93,7 @@ echo json_encode([
         ],
         'admin' => [
             ['path' => '/admin/', 'description' => 'Admin login & consultation requests'],
+            ['path' => '/admin/tickets.php', 'description' => 'Platform technical support tickets'],
         ],
     ],
     'seo' => [

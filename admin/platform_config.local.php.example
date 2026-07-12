@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Local overrides (not committed). Copy values from SaaS .env:
+ * PLATFORM_SUPPORT_API_KEY=...
+ */
+return [
+    'api_base' => 'https://demo.trakmile.com',
+    'api_key' => 'CHANGE_ME',
+];

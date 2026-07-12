@@ -91,6 +91,14 @@ $statusColors = [
             gap: 12px;
         }
         .header h1 { font-size: 18px; font-weight: 700; }
+        .header-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+        .header-nav a {
+            color: #94A3B8; text-decoration: none; font-size: 14px; font-weight: 600;
+            padding: 8px 14px; border-radius: 8px; border: 1px solid transparent;
+        }
+        .header-nav a.active, .header-nav a:hover {
+            color: #fff; background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.15);
+        }
         .header-actions { display: flex; gap: 10px; align-items: center; }
         .header-actions span { font-size: 14px; color: #94A3B8; }
         .header-actions a {
@@ -205,7 +213,13 @@ $statusColors = [
 </head>
 <body>
     <div class="header">
-        <h1>طلبات الاستشارة — Trakmile</h1>
+        <div>
+            <h1>طلبات الاستشارة — Trakmile</h1>
+            <div class="header-nav">
+                <a href="index.php" class="active">طلبات الاستشارة</a>
+                <a href="tickets.php">تذاكر الدعم</a>
+            </div>
+        </div>
         <div class="header-actions">
             <span><?= htmlspecialchars($_SESSION['admin_user']) ?></span>
             <a href="logout.php">تسجيل الخروج</a>
