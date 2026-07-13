@@ -5,6 +5,7 @@ require_once __DIR__ . '/platform_api.php';
 requireAdmin();
 
 $id = (int) ($_GET['id'] ?? 0);
+$companyKey = isset($_GET['company']) ? trim((string) $_GET['company']) : '';
 if ($id <= 0) {
     header('Location: tickets.php');
     exit;
@@ -29,7 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $result = platformRequest('POST', 'tickets/' . $id . '/reply', $payload);
         if ($result['ok']) {
-            header('Location: ticket.php?id=' . $id . '&ok=1');
+            $redirect = 'ticket.php?id=' . $id . '&ok=1';
+            if ($companyKey !== '') {
+                $redirect .= '&company=' . urlencode($companyKey);
+            }
+            header('Location: ' . $redirect);
             exit;
         }
         $error = $result['error'] ?: ('فشل إرسال الرد' . ($result['status'] ? ' (' . $result['status'] . ')' : ''));
@@ -47,6 +52,10 @@ $statusLabels = [
     'resolved' => 'تم الحل',
     'closed' => 'مغلق',
 ];
+
+$backHref = $companyKey !== ''
+    ? 'tickets.php?company=' . urlencode($companyKey)
+    : 'tickets.php';
 ?>
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -75,7 +84,7 @@ $statusLabels = [
             color: #fff; text-decoration: none; font-size: 14px; padding: 8px 16px;
             border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 24px; }
+        .container { max-width: 960px; margin: 0 auto; padding: 24px; }
         .card {
             background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 16px;
         }
@@ -95,6 +104,11 @@ $statusLabels = [
         }
         button:hover { background: #156BCB; }
         .back { display: inline-block; margin-bottom: 16px; color: #1B84FF; text-decoration: none; font-weight: 600; }
+        .status-pill {
+            display: inline-block; padding: 4px 10px; border-radius: 999px;
+            background: #EFF6FF; color: #1D4ED8; font-size: 12px; font-weight: 700;
+        }
+        <?= platformCompanyBannerCss() ?>
     </style>
 </head>
 <body>
@@ -113,7 +127,7 @@ $statusLabels = [
     </div>
 
     <div class="container">
-        <a class="back" href="tickets.php">← رجوع للتذاكر</a>
+        <a class="back" href="<?= platformH($backHref) ?>">← رجوع لتذاكر الشركة</a>
 
         <?php if (isset($_GET['ok'])): ?>
             <div class="ok">تم إرسال الرد بنجاح.</div>
@@ -124,19 +138,15 @@ $statusLabels = [
         <?php if (!$ticket): ?>
             <div class="err">تعذر تحميل التذكرة<?= $response['status'] ? ' (' . (int) $response['status'] . ')' : '' ?>: <?= platformH($response['error'] ?? '') ?></div>
         <?php else: ?>
+            <?php platformRenderCompanyBanner(platformCompanyBannerData($ticket)); ?>
+
             <div class="card">
-                <h2><?= platformH($ticket['subject'] ?? '') ?></h2>
+                <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start;">
+                    <h2><?= platformH($ticket['subject'] ?? '') ?></h2>
+                    <span class="status-pill"><?= platformH($statusLabels[$ticket['status'] ?? ''] ?? ($ticket['status'] ?? '')) ?></span>
+                </div>
                 <div class="meta">
-                    <span><?= platformH($statusLabels[$ticket['status'] ?? ''] ?? ($ticket['status'] ?? '')) ?></span>
-                    <?php if (!empty($ticket['origin_label']) || !empty($ticket['origin_subdomain'])): ?>
-                        <span><?= platformH($ticket['origin_label'] ?? $ticket['origin_subdomain']) ?></span>
-                    <?php endif; ?>
-                    <?php if (!empty($ticket['origin_url'])): ?>
-                        <a href="<?= platformH($ticket['origin_url']) ?>" target="_blank" rel="noopener"><?= platformH($ticket['origin_url']) ?></a>
-                    <?php elseif (!empty($ticket['origin_host'])): ?>
-                        <span><?= platformH($ticket['origin_host']) ?></span>
-                    <?php endif; ?>
-                    <?php if (!empty($ticket['c_code'])): ?><span><?= platformH($ticket['c_code']) ?></span><?php endif; ?>
+                    <span><?= platformH($ticket['ticket_no'] ?? '') ?></span>
                     <span><?= platformH($ticket['creator']['name'] ?? '') ?></span>
                     <span><?= platformH($ticket['creator']['email'] ?? '') ?></span>
                 </div>
