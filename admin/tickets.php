@@ -162,12 +162,26 @@ $statusColors = [
                     <div>
                         <h3>
                             <?= platformH($ticket['creator']['name'] ?? '—') ?>
-                            <?php if (!empty($ticket['c_code'])): ?>
+                            <?php
+                            $originLabel = $ticket['origin_label'] ?? ($ticket['origin_subdomain'] ?? '');
+                            $originUrl = $ticket['origin_url'] ?? '';
+                            ?>
+                            <?php if ($originLabel !== ''): ?>
+                                <span class="code-badge"><?= platformH($originLabel) ?></span>
+                            <?php elseif (!empty($ticket['c_code'])): ?>
                                 <span class="code-badge"><?= platformH($ticket['c_code']) ?></span>
                             <?php endif; ?>
                         </h3>
                         <div class="quote-meta">
                             <?= platformH($ticket['ticket_no'] ?? '') ?>
+                            <?php if ($originUrl !== ''): ?>
+                                · <a href="<?= platformH($originUrl) ?>" target="_blank" rel="noopener"><?= platformH($originUrl) ?></a>
+                            <?php elseif (!empty($ticket['origin_host'])): ?>
+                                · <?= platformH($ticket['origin_host']) ?>
+                            <?php endif; ?>
+                            <?php if (!empty($ticket['c_code'])): ?>
+                                · <?= platformH($ticket['c_code']) ?>
+                            <?php endif; ?>
                             <?php if (!empty($ticket['creator']['email'])): ?>
                                 · <a href="mailto:<?= platformH($ticket['creator']['email']) ?>"><?= platformH($ticket['creator']['email']) ?></a>
                             <?php endif; ?>

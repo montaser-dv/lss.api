@@ -128,6 +128,14 @@ $statusLabels = [
                 <h2><?= platformH($ticket['subject'] ?? '') ?></h2>
                 <div class="meta">
                     <span><?= platformH($statusLabels[$ticket['status'] ?? ''] ?? ($ticket['status'] ?? '')) ?></span>
+                    <?php if (!empty($ticket['origin_label']) || !empty($ticket['origin_subdomain'])): ?>
+                        <span><?= platformH($ticket['origin_label'] ?? $ticket['origin_subdomain']) ?></span>
+                    <?php endif; ?>
+                    <?php if (!empty($ticket['origin_url'])): ?>
+                        <a href="<?= platformH($ticket['origin_url']) ?>" target="_blank" rel="noopener"><?= platformH($ticket['origin_url']) ?></a>
+                    <?php elseif (!empty($ticket['origin_host'])): ?>
+                        <span><?= platformH($ticket['origin_host']) ?></span>
+                    <?php endif; ?>
                     <?php if (!empty($ticket['c_code'])): ?><span><?= platformH($ticket['c_code']) ?></span><?php endif; ?>
                     <span><?= platformH($ticket['creator']['name'] ?? '') ?></span>
                     <span><?= platformH($ticket['creator']['email'] ?? '') ?></span>
