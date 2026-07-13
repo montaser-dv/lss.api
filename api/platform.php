@@ -95,6 +95,9 @@ echo json_encode([
             ['path' => '/admin/', 'description' => 'Admin login & consultation requests'],
             ['path' => '/admin/tickets.php', 'description' => 'Platform technical support tickets'],
         ],
+        'domains' => [
+            ['path' => '/api/increment_orders.php', 'method' => 'POST', 'description' => 'Increment domains.current_total_orders for a tenant'],
+        ],
     ],
     'seo' => [
         'robots' => 'https://trakmile.com/robots.txt',
