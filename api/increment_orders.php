@@ -1,13 +1,16 @@
 <?php
 
 /**
- * Increment domains.current_total_orders by company c_code.
+ * Sync domains.current_total_orders to the company's real order total.
  *
  * POST /api/increment_orders.php
  * JSON/body:
  *   c_code (required)  matches domains.c_code / companies.CCode
  *   token  (required)  domains.Token for that company row
- *   by     (optional)  default 1
+ *   total  (required)  absolute total orders count for the company
+ *
+ * Legacy:
+ *   by (optional)  if `total` missing, increments by this amount (not preferred)
  */
 
 ini_set('display_errors', '0');
@@ -61,18 +64,37 @@ $token = trim((string) (
     $input['token']
     ?? ($_SERVER['HTTP_X_DOMAIN_TOKEN'] ?? '')
 ));
-$by = (int) ($input['by'] ?? $input['count'] ?? 1);
-if ($by < 1) {
-    $by = 1;
-}
-if ($by > 10000) {
-    $by = 10000;
+
+$hasTotal = array_key_exists('total', $input) || array_key_exists('current_total_orders', $input);
+$total = null;
+$by = null;
+
+if ($hasTotal) {
+    $total = (int) ($input['total'] ?? $input['current_total_orders']);
+    if ($total < 0) {
+        $total = 0;
+    }
+} else {
+    $by = (int) ($input['by'] ?? $input['count'] ?? 1);
+    if ($by < 1) {
+        $by = 1;
+    }
+    if ($by > 10000) {
+        $by = 10000;
+    }
 }
 
 if ($cCode === '' || $token === '') {
     jsonResponse([
         'success' => false,
         'message' => 'c_code and token are required',
+    ], 422);
+}
+
+if (!$hasTotal && $by === null) {
+    jsonResponse([
+        'success' => false,
+        'message' => 'total is required (absolute company order count)',
     ], 422);
 }
 
@@ -84,7 +106,6 @@ if (!$check || $check->num_rows === 0) {
     ], 500);
 }
 
-// Auth + locate company domain row by c_code (same code as companies.CCode)
 $sql = 'SELECT ID, Sub_Domain, c_code, current_total_orders, Status
         FROM domains
         WHERE c_code = ? AND Token = ?
@@ -108,17 +129,26 @@ if (isset($row['Status']) && strcasecmp((string) $row['Status'], 'Suspended') ==
     jsonResponse(['success' => false, 'message' => 'Domain suspended'], 403);
 }
 
-// Update the domains row for this company c_code
-$update = $db->prepare(
-    'UPDATE domains
-     SET current_total_orders = COALESCE(current_total_orders, 0) + ?
-     WHERE c_code = ?'
-);
-if (!$update) {
-    jsonResponse(['success' => false, 'message' => 'prepare update failed', 'error' => $db->error], 500);
+if ($hasTotal) {
+    $update = $db->prepare(
+        'UPDATE domains SET current_total_orders = ? WHERE c_code = ?'
+    );
+    if (!$update) {
+        jsonResponse(['success' => false, 'message' => 'prepare update failed', 'error' => $db->error], 500);
+    }
+    $update->bind_param('is', $total, $cCode);
+} else {
+    $update = $db->prepare(
+        'UPDATE domains
+         SET current_total_orders = COALESCE(current_total_orders, 0) + ?
+         WHERE c_code = ?'
+    );
+    if (!$update) {
+        jsonResponse(['success' => false, 'message' => 'prepare update failed', 'error' => $db->error], 500);
+    }
+    $update->bind_param('is', $by, $cCode);
 }
 
-$update->bind_param('is', $by, $cCode);
 $ok = $update->execute();
 $affected = $update->affected_rows;
 $update->close();
@@ -136,9 +166,9 @@ $fresh->close();
 
 jsonResponse([
     'success' => true,
-    'message' => 'updated',
+    'message' => $hasTotal ? 'synced' : 'incremented',
+    'mode' => $hasTotal ? 'total' : 'increment',
     'c_code' => $cCode,
     'sub_domain' => $freshRow['Sub_Domain'] ?? ($row['Sub_Domain'] ?? null),
-    'incremented_by' => $by,
-    'current_total_orders' => (int) ($freshRow['current_total_orders'] ?? ((int) $row['current_total_orders'] + $by)),
+    'current_total_orders' => (int) ($freshRow['current_total_orders'] ?? $total ?? 0),
 ]);
