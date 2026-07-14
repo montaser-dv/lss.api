@@ -126,12 +126,11 @@ $show_picked_action = $action_context['show_picked'];
 $is_picked_status = mobile_is_picked_status($status_short_name, $status_id);
 $can_courier_act = mobile_can_courier_act_on_order($status_short_name, $status_id);
 $show_delivery_actions = $can_courier_act && !$show_picked_action;
-$has_location = !empty($cur['lat']) && !empty($cur['lng']) && $cur['lat'] != 0 && $cur['lng'] != 0;
+$has_location = mobile_has_valid_coords($cur['lat'] ?? null, $cur['lng'] ?? null);
 $client_lat = $rc['client_lat'] ?? null;
 $client_lng = $rc['client_lng'] ?? null;
-$has_client_location = $client_lat !== null && $client_lng !== null
-    && $client_lat !== '' && $client_lng !== ''
-    && (float) $client_lat != 0.0 && (float) $client_lng != 0.0;
+$has_client_location = mobile_has_valid_coords($client_lat, $client_lng);
+$show_order_location_button = $has_location && !$show_picked_action && !$is_picked_status;
 $barcode_url = 'https://' . $subdomain . '.' . $domain . '/assets/order_barcode/' . $cur['AWB'] . '.png';
 $safe_phone = mobile_h($cur['Reciver_phone']);
 $safe_awb = mobile_h($mobile_AWB);
@@ -187,6 +186,16 @@ $picked_theme = $show_picked_action || $is_picked_status;
                 echo mobile_order_field(mobile_t('area', $mobile_lang), $cur['area']);
                 echo mobile_order_field(mobile_t('address', $mobile_lang), $cur['Address'], ['full' => true]);
                 ?>
+                <?php if ($show_order_location_button): ?>
+                <button
+                    type="button"
+                    class="order-location-inline-btn"
+                    onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)"
+                >
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span><?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?></span>
+                </button>
+                <?php endif; ?>
             </div>
         </section>
 
@@ -238,10 +247,10 @@ $picked_theme = $show_picked_action || $is_picked_status;
             </button>
         </div>
 
-        <?php if ($has_location && $can_courier_act && !$show_picked_action): ?>
+        <?php if ($show_order_location_button): ?>
         <button type="button" class="order-action-btn order-action-btn--map" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
             <i class="bi bi-pin-map-fill"></i>
-            <?php echo mobile_h(mobile_t('open_location', $mobile_lang)); ?>
+            <?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?>
         </button>
         <?php endif; ?>
 

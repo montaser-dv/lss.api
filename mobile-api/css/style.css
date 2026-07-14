@@ -619,17 +619,49 @@ html[dir="rtl"] .order-page {
 }
 
 .order-action-btn--map {
-    background: #f59e0b;
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.order-action-btn--map i {
+    color: #2563eb;
+}
+
+.order-location-inline-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 12px;
+    background: #eff6ff;
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.order-location-inline-btn i {
+    font-size: 16px;
+    color: #2563eb;
+}
+
+.order-location-inline-btn:active {
+    opacity: 0.9;
+    transform: scale(0.98);
 }
 
 .order-action-btn--client-map {
-    background: #ffdabf;
-    color: #ff6d00;
+    background: #eff6ff;
+    color: #2563eb;
     order: -1;
 }
 
 .order-action-btn--client-map i {
-    color: #ff6d00;
+    color: #2563eb;
 }
 
 .order-action-btn--picked {
@@ -700,12 +732,12 @@ html[dir="rtl"] .order-page {
 }
 
 .order-shell--picked .order-action-btn--client-map {
-    background: #ffdabf;
-    color: #e56808;
+    background: #eff6ff;
+    color: #2563eb;
 }
 
 .order-shell--picked .order-action-btn--client-map i {
-    color: #e56808;
+    color: #2563eb;
 }
 
 .order-action-btn--delivered {

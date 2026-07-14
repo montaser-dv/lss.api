@@ -1,5 +1,28 @@
 <?php
 
+if (!function_exists('mobile_has_valid_coords')) {
+    function mobile_has_valid_coords($lat, $lng) {
+        if ($lat === null || $lng === null) {
+            return false;
+        }
+
+        $lat = trim((string) $lat);
+        $lng = trim((string) $lng);
+        if ($lat === '' || $lng === '' || !is_numeric($lat) || !is_numeric($lng)) {
+            return false;
+        }
+
+        $lat = (float) $lat;
+        $lng = (float) $lng;
+
+        if ($lat == 0.0 && $lng == 0.0) {
+            return false;
+        }
+
+        return $lat >= -90.0 && $lat <= 90.0 && $lng >= -180.0 && $lng <= 180.0;
+    }
+}
+
 if (!function_exists('mobile_normalize_order_type')) {
     function mobile_normalize_order_type($value) {
         $value = strtolower(trim((string) $value));
