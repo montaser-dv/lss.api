@@ -564,36 +564,36 @@ html[dir="rtl"] .order-page {
     justify-content: center;
     gap: 8px;
     min-height: 46px;
-    border: none;
+    border: 1.5px solid #93c5fd;
     border-radius: 12px;
+    background: #eff6ff;
+    color: #2563eb;
     font-size: 14px;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.15s ease, opacity 0.15s ease;
+    transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
 }
 
 .order-contact-btn:active {
     transform: scale(0.98);
     opacity: 0.92;
+    background: #dbeafe;
 }
 
-.order-contact-btn--call {
+.order-contact-btn--call,
+.order-contact-btn--whatsapp {
     background: #eff6ff;
     color: #2563eb;
+    border-color: #93c5fd;
 }
 
-.order-contact-btn--call .order-contact-icon {
+.order-contact-btn--call .order-contact-icon,
+.order-contact-btn--whatsapp .order-contact-icon {
     color: #2563eb;
     font-size: 20px;
 }
 
-.order-contact-btn--whatsapp {
-    background: #ecfdf5;
-    color: #16a34a;
-}
-
 .order-contact-btn--whatsapp .order-contact-icon {
-    color: #22c55e;
     font-size: 22px;
 }
 
@@ -621,6 +621,7 @@ html[dir="rtl"] .order-page {
 .order-action-btn--map {
     background: #eff6ff;
     color: #2563eb;
+    border: 1.5px solid #93c5fd;
 }
 
 .order-action-btn--map i {
@@ -632,11 +633,19 @@ html[dir="rtl"] .order-page {
     min-height: 50px;
     border-radius: 14px;
     font-size: 15px;
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1.5px solid #93c5fd;
+}
+
+.order-location-toolbar-btn .order-contact-icon {
+    color: #2563eb;
 }
 
 .order-action-btn--client-map {
     background: #eff6ff;
     color: #2563eb;
+    border: 1.5px solid #93c5fd;
     order: -1;
 }
 
@@ -714,6 +723,7 @@ html[dir="rtl"] .order-page {
 .order-shell--picked .order-action-btn--client-map {
     background: #eff6ff;
     color: #2563eb;
+    border: 1.5px solid #93c5fd;
 }
 
 .order-shell--picked .order-action-btn--client-map i {
