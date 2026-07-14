@@ -186,16 +186,6 @@ $picked_theme = $show_picked_action || $is_picked_status;
                 echo mobile_order_field(mobile_t('area', $mobile_lang), $cur['area']);
                 echo mobile_order_field(mobile_t('address', $mobile_lang), $cur['Address'], ['full' => true]);
                 ?>
-                <?php if ($show_order_location_button): ?>
-                <button
-                    type="button"
-                    class="order-location-inline-btn"
-                    onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)"
-                >
-                    <i class="bi bi-geo-alt-fill"></i>
-                    <span><?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?></span>
-                </button>
-                <?php endif; ?>
             </div>
         </section>
 
@@ -248,9 +238,9 @@ $picked_theme = $show_picked_action || $is_picked_status;
         </div>
 
         <?php if ($show_order_location_button): ?>
-        <button type="button" class="order-action-btn order-action-btn--map" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
-            <i class="bi bi-pin-map-fill"></i>
-            <?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?>
+        <button type="button" class="order-contact-btn order-contact-btn--call order-location-toolbar-btn" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
+            <i class="bi bi-geo-alt-fill order-contact-icon" aria-hidden="true"></i>
+            <span><?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?></span>
         </button>
         <?php endif; ?>
 

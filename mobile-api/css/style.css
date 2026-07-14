@@ -627,31 +627,11 @@ html[dir="rtl"] .order-page {
     color: #2563eb;
 }
 
-.order-location-inline-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+.order-location-toolbar-btn {
     width: 100%;
-    margin-top: 12px;
-    padding: 12px 14px;
-    border: 0;
-    border-radius: 12px;
-    background: #eff6ff;
-    color: #2563eb;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.order-location-inline-btn i {
-    font-size: 16px;
-    color: #2563eb;
-}
-
-.order-location-inline-btn:active {
-    opacity: 0.9;
-    transform: scale(0.98);
+    min-height: 50px;
+    border-radius: 14px;
+    font-size: 15px;
 }
 
 .order-action-btn--client-map {
