@@ -147,9 +147,17 @@ $order_action_config = json_encode([
     'lang' => $mobile_lang,
 ], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 $picked_theme = $show_picked_action || $is_picked_status;
+$is_fulfillment = mobile_normalize_order_type($order_type) === 'fulfillment';
+$fulfillment_theme = $is_fulfillment && $show_delivery_actions;
+$shell_theme_class = '';
+if ($picked_theme) {
+    $shell_theme_class = ' order-shell--picked';
+} elseif ($fulfillment_theme) {
+    $shell_theme_class = ' order-shell--fulfillment';
+}
 ?>
 
-<div class="order-shell<?php echo $picked_theme ? ' order-shell--picked' : ''; ?>">
+<div class="order-shell<?php echo $shell_theme_class; ?>">
     <header class="order-hero">
         <div class="order-hero-top">
             <span class="order-hero-label"><?php echo mobile_h(mobile_t('awb', $mobile_lang)); ?></span>

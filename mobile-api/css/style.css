@@ -720,6 +720,64 @@ html[dir="rtl"] .order-page {
     color: #2563eb;
 }
 
+/* Fulfillment delivery theme (Delivered / Not delivered) */
+.order-page:has(.order-shell--fulfillment) {
+    background: #eff6ff;
+    color: #0f172a;
+}
+
+.order-shell--fulfillment .order-hero {
+    background: linear-gradient(135deg, #1b84ff 0%, #2563eb 100%);
+    color: #ffffff;
+    border: 1px solid #93c5fd;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.22);
+}
+
+.order-shell--fulfillment .order-hero-label {
+    color: rgba(255, 255, 255, 0.85);
+    opacity: 1;
+}
+
+.order-shell--fulfillment .order-hero-awb {
+    color: #ffffff;
+}
+
+.order-shell--fulfillment .order-barcode-wrap {
+    border: 1px solid #bfdbfe;
+}
+
+.order-shell--fulfillment .order-card {
+    background: #ffffff;
+    border-color: #bfdbfe;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+.order-shell--fulfillment .order-card-title {
+    color: #1e3a8a;
+    border-bottom-color: #dbeafe;
+}
+
+.order-shell--fulfillment .order-card-title i {
+    color: #2563eb;
+}
+
+.order-shell--fulfillment .order-field-label {
+    color: #64748b;
+}
+
+.order-shell--fulfillment .order-field-value {
+    color: #0f172a;
+}
+
+.order-shell--fulfillment .order-field-value--highlight {
+    color: #2563eb;
+}
+
+.order-shell--fulfillment .order-toolbar {
+    background: #eff6ff;
+    border-top-color: #bfdbfe;
+}
+
 .order-action-btn--delivered {
     background: #2563eb;
 }
