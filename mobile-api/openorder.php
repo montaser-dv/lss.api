@@ -228,25 +228,25 @@ if ($picked_theme) {
 
     <div class="order-toolbar">
         <?php if ($show_picked_action && $has_client_location): ?>
-        <button type="button" class="order-action-btn order-action-btn--client-map" onclick="openLocation(<?php echo (float) $client_lat; ?>,<?php echo (float) $client_lng; ?>)">
-            <i class="bi bi-geo-alt-fill"></i>
-            <?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?>
+        <button type="button" class="order-contact-btn order-location-toolbar-btn<?php echo $picked_theme ? ' order-btn--orange' : ''; ?>" onclick="openLocation(<?php echo (float) $client_lat; ?>,<?php echo (float) $client_lng; ?>)">
+            <i class="bi bi-geo-alt-fill order-contact-icon" aria-hidden="true"></i>
+            <span><?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?></span>
         </button>
         <?php endif; ?>
 
         <div class="order-contact-row">
-            <button type="button" class="order-contact-btn order-contact-btn--call" onclick='shareNo("c", "<?php echo $safe_phone; ?>", "null")' aria-label="<?php echo mobile_h(mobile_t('call', $mobile_lang)); ?>">
+            <button type="button" class="order-contact-btn order-contact-btn--call<?php echo $picked_theme ? ' order-btn--orange' : ''; ?>" onclick='shareNo("c", "<?php echo $safe_phone; ?>", "null")' aria-label="<?php echo mobile_h(mobile_t('call', $mobile_lang)); ?>">
                 <i class="bi bi-telephone-fill order-contact-icon" aria-hidden="true"></i>
                 <span><?php echo mobile_h(mobile_t('call', $mobile_lang)); ?></span>
             </button>
-            <button type="button" class="order-contact-btn order-contact-btn--whatsapp" onclick='shareNo("w", "<?php echo $safe_phone; ?>", <?php echo $safe_msg; ?>)' aria-label="<?php echo mobile_h(mobile_t('whatsapp', $mobile_lang)); ?>">
+            <button type="button" class="order-contact-btn order-contact-btn--whatsapp<?php echo $picked_theme ? ' order-btn--orange' : ''; ?>" onclick='shareNo("w", "<?php echo $safe_phone; ?>", <?php echo $safe_msg; ?>)' aria-label="<?php echo mobile_h(mobile_t('whatsapp', $mobile_lang)); ?>">
                 <i class="bi bi-whatsapp order-contact-icon" aria-hidden="true"></i>
                 <span><?php echo mobile_h(mobile_t('whatsapp', $mobile_lang)); ?></span>
             </button>
         </div>
 
         <?php if ($show_order_location_button): ?>
-        <button type="button" class="order-contact-btn order-contact-btn--call order-location-toolbar-btn" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
+        <button type="button" class="order-contact-btn order-location-toolbar-btn" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
             <i class="bi bi-geo-alt-fill order-contact-icon" aria-hidden="true"></i>
             <span><?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?></span>
         </button>

@@ -720,35 +720,32 @@ html[dir="rtl"] .order-page {
     border-top-color: #ffdabf;
 }
 
+/* Force orange contact/location buttons on Picked pages */
+.order-btn--orange,
 .order-shell--picked .order-contact-btn,
 .order-shell--picked .order-contact-btn--call,
 .order-shell--picked .order-contact-btn--whatsapp,
-.order-shell--picked .order-location-toolbar-btn {
-    background: #fff2e8;
-    color: #e56808;
-    border: 1.5px solid #ffb074;
+.order-shell--picked .order-location-toolbar-btn,
+.order-shell--picked .order-action-btn--client-map {
+    background: #fff2e8 !important;
+    color: #e56808 !important;
+    border: 1.5px solid #ffb074 !important;
 }
 
+.order-btn--orange:active,
 .order-shell--picked .order-contact-btn:active,
 .order-shell--picked .order-location-toolbar-btn:active {
-    background: #ffe4cc;
+    background: #ffe4cc !important;
 }
 
+.order-btn--orange .order-contact-icon,
+.order-btn--orange i,
 .order-shell--picked .order-contact-btn .order-contact-icon,
 .order-shell--picked .order-contact-btn--call .order-contact-icon,
 .order-shell--picked .order-contact-btn--whatsapp .order-contact-icon,
-.order-shell--picked .order-location-toolbar-btn .order-contact-icon {
-    color: #e56808;
-}
-
-.order-shell--picked .order-action-btn--client-map {
-    background: #fff2e8;
-    color: #e56808;
-    border: 1.5px solid #ffb074;
-}
-
+.order-shell--picked .order-location-toolbar-btn .order-contact-icon,
 .order-shell--picked .order-action-btn--client-map i {
-    color: #e56808;
+    color: #e56808 !important;
 }
 
 /* Fulfillment delivery theme (Delivered / Not delivered) */
