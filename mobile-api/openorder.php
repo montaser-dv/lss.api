@@ -234,6 +234,13 @@ if ($picked_theme) {
         </button>
         <?php endif; ?>
 
+        <?php if ($show_order_location_button): ?>
+        <button type="button" class="order-contact-btn order-location-toolbar-btn" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
+            <i class="bi bi-geo-alt-fill order-contact-icon" aria-hidden="true"></i>
+            <span><?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?></span>
+        </button>
+        <?php endif; ?>
+
         <div class="order-contact-row">
             <button type="button" class="order-contact-btn order-contact-btn--call<?php echo $picked_theme ? ' order-btn--orange' : ''; ?>" onclick='shareNo("c", "<?php echo $safe_phone; ?>", "null")' aria-label="<?php echo mobile_h(mobile_t('call', $mobile_lang)); ?>">
                 <i class="bi bi-telephone-fill order-contact-icon" aria-hidden="true"></i>
@@ -244,13 +251,6 @@ if ($picked_theme) {
                 <span><?php echo mobile_h(mobile_t('whatsapp', $mobile_lang)); ?></span>
             </button>
         </div>
-
-        <?php if ($show_order_location_button): ?>
-        <button type="button" class="order-contact-btn order-location-toolbar-btn" onclick="openLocation(<?php echo (float) $cur['lat']; ?>,<?php echo (float) $cur['lng']; ?>)">
-            <i class="bi bi-geo-alt-fill order-contact-icon" aria-hidden="true"></i>
-            <span><?php echo mobile_h(mobile_t('open_client_location', $mobile_lang)); ?></span>
-        </button>
-        <?php endif; ?>
 
         <?php if ($is_picked_status): ?>
         <div class="order-picked-notice">
