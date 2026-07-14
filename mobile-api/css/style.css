@@ -720,14 +720,35 @@ html[dir="rtl"] .order-page {
     border-top-color: #ffdabf;
 }
 
+.order-shell--picked .order-contact-btn,
+.order-shell--picked .order-contact-btn--call,
+.order-shell--picked .order-contact-btn--whatsapp,
+.order-shell--picked .order-location-toolbar-btn {
+    background: #fff2e8;
+    color: #e56808;
+    border: 1.5px solid #ffb074;
+}
+
+.order-shell--picked .order-contact-btn:active,
+.order-shell--picked .order-location-toolbar-btn:active {
+    background: #ffe4cc;
+}
+
+.order-shell--picked .order-contact-btn .order-contact-icon,
+.order-shell--picked .order-contact-btn--call .order-contact-icon,
+.order-shell--picked .order-contact-btn--whatsapp .order-contact-icon,
+.order-shell--picked .order-location-toolbar-btn .order-contact-icon {
+    color: #e56808;
+}
+
 .order-shell--picked .order-action-btn--client-map {
-    background: #eff6ff;
-    color: #2563eb;
-    border: 1.5px solid #93c5fd;
+    background: #fff2e8;
+    color: #e56808;
+    border: 1.5px solid #ffb074;
 }
 
 .order-shell--picked .order-action-btn--client-map i {
-    color: #2563eb;
+    color: #e56808;
 }
 
 /* Fulfillment delivery theme (Delivered / Not delivered) */
