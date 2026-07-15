@@ -41,18 +41,41 @@
     }
 
     function updateSeoMeta(lang) {
+        const pageUrl = lang === 'en'
+            ? 'https://trakmile.com/?lang=en'
+            : 'https://trakmile.com/?lang=ar';
+        const canonicalUrl = lang === 'en'
+            ? 'https://trakmile.com/?lang=en'
+            : 'https://trakmile.com/';
+
         document.title = t('meta.title');
         setMetaContent('meta[name="description"]', t('meta.description'));
         setMetaContent('meta[name="keywords"]', t('meta.keywords'));
+        setMetaContent('meta[name="language"]', lang === 'ar' ? 'Arabic' : 'English');
         setMetaContent('meta[property="og:title"]', t('meta.title'));
         setMetaContent('meta[property="og:description"]', t('meta.ogDescription'));
+        setMetaContent('meta[property="og:url"]', pageUrl);
         setMetaContent('meta[property="og:locale"]', lang === 'ar' ? 'ar_SA' : 'en_US');
+        setMetaContent('meta[property="og:image:alt"]', t('meta.ogImageAlt'));
         setMetaContent('meta[name="twitter:title"]', t('meta.title'));
         setMetaContent('meta[name="twitter:description"]', t('meta.ogDescription'));
+        setMetaContent('meta[name="twitter:image:alt"]', t('meta.ogImageAlt'));
+
+        const canonical = document.getElementById('canonicalLink');
+        if (canonical) canonical.setAttribute('href', canonicalUrl);
 
         const schemaEl = document.getElementById('schemaOrg');
         if (schemaEl) {
             const features = t('meta.schemaFeatures').split(',').map(s => s.trim()).filter(Boolean);
+            const faqItems = [1, 2, 3, 4].map((n) => ({
+                '@type': 'Question',
+                name: t(`faq.q${n}`),
+                acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: t(`faq.a${n}`),
+                },
+            }));
+
             schemaEl.textContent = JSON.stringify({
                 '@context': 'https://schema.org',
                 '@graph': [
@@ -60,37 +83,119 @@
                         '@type': 'Organization',
                         '@id': 'https://trakmile.com/#organization',
                         name: 'Trakmile',
+                        alternateName: ['تراك مايل', 'Trak Mile'],
                         url: 'https://trakmile.com/',
-                        logo: 'https://trakmile.com/imgs/logo.png',
+                        logo: {
+                            '@type': 'ImageObject',
+                            url: 'https://trakmile.com/imgs/logo.png',
+                        },
+                        image: 'https://trakmile.com/imgs/courier-dashboard.png',
                         email: 'info@trakmile.com',
                         description: t('meta.schemaOrgDesc'),
+                        foundingLocation: {
+                            '@type': 'Place',
+                            name: 'Riyadh, Saudi Arabia',
+                        },
+                        areaServed: {
+                            '@type': 'Place',
+                            name: 'Worldwide',
+                        },
                         sameAs: ['https://demo.trakmile.com'],
+                        contactPoint: [{
+                            '@type': 'ContactPoint',
+                            contactType: 'sales',
+                            email: 'info@trakmile.com',
+                            availableLanguage: ['ar', 'en', 'fr'],
+                            areaServed: 'Worldwide',
+                        }],
                     },
                     {
                         '@type': 'WebSite',
                         '@id': 'https://trakmile.com/#website',
                         url: 'https://trakmile.com/',
                         name: 'Trakmile',
+                        alternateName: 'تراك مايل',
                         description: t('meta.schemaWebDesc'),
                         publisher: { '@id': 'https://trakmile.com/#organization' },
                         inLanguage: ['ar', 'en'],
                     },
                     {
+                        '@type': 'WebPage',
+                        '@id': `${canonicalUrl}#webpage`,
+                        url: canonicalUrl,
+                        name: t('meta.schemaWebPageName'),
+                        isPartOf: { '@id': 'https://trakmile.com/#website' },
+                        about: { '@id': 'https://trakmile.com/#software' },
+                        primaryImageOfPage: {
+                            '@type': 'ImageObject',
+                            url: 'https://trakmile.com/imgs/courier-dashboard.png',
+                        },
+                        inLanguage: lang,
+                        description: t('meta.description'),
+                    },
+                    {
                         '@type': 'SoftwareApplication',
                         '@id': 'https://trakmile.com/#software',
                         name: 'Trakmile',
+                        alternateName: 'تراك مايل',
                         applicationCategory: 'BusinessApplication',
-                        operatingSystem: 'Web, Android, iOS',
+                        applicationSubCategory: 'Logistics Management Software',
+                        operatingSystem: 'Web, Android',
                         url: 'https://trakmile.com/',
+                        image: 'https://trakmile.com/imgs/courier-dashboard.png',
                         description: t('meta.schemaAppDesc'),
                         offers: {
                             '@type': 'Offer',
                             price: '0',
                             priceCurrency: 'SAR',
                             description: t('meta.schemaOfferDesc'),
+                            availability: 'https://schema.org/InStock',
                         },
                         featureList: features,
                         provider: { '@id': 'https://trakmile.com/#organization' },
+                        downloadUrl: 'https://trakmile.com/downloads/apk/app-release.apk',
+                    },
+                    {
+                        '@type': 'FAQPage',
+                        '@id': 'https://trakmile.com/#faq',
+                        mainEntity: faqItems,
+                        inLanguage: lang,
+                    },
+                    {
+                        '@type': 'BreadcrumbList',
+                        '@id': 'https://trakmile.com/#breadcrumb',
+                        itemListElement: [
+                            {
+                                '@type': 'ListItem',
+                                position: 1,
+                                name: lang === 'ar' ? 'الرئيسية' : 'Home',
+                                item: 'https://trakmile.com/',
+                            },
+                            {
+                                '@type': 'ListItem',
+                                position: 2,
+                                name: t('nav.features'),
+                                item: 'https://trakmile.com/#features',
+                            },
+                            {
+                                '@type': 'ListItem',
+                                position: 3,
+                                name: t('nav.mobile'),
+                                item: 'https://trakmile.com/#mobile',
+                            },
+                            {
+                                '@type': 'ListItem',
+                                position: 4,
+                                name: t('nav.faq'),
+                                item: 'https://trakmile.com/#faq',
+                            },
+                            {
+                                '@type': 'ListItem',
+                                position: 5,
+                                name: t('nav.contact'),
+                                item: 'https://trakmile.com/#contact',
+                            },
+                        ],
                     },
                 ],
             });

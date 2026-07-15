@@ -1,8 +1,32 @@
 User-agent: *
 Allow: /
+Allow: /imgs/
+Allow: /downloads/
+Allow: /js/
+Allow: /docs/Trakmile-Overview.html
+Allow: /docs/Trakmile-Overview-en.html
+
+Disallow: /admin/
+Disallow: /api/
+Disallow: /mobile-api/
+Disallow: /git_deploy/
+Disallow: /docs/DB/
+Disallow: /*?*token=
+Disallow: /*?*ccode=
+
+User-agent: Googlebot
+Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /mobile-api/
 Disallow: /git_deploy/
 
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /mobile-api/
+Disallow: /git_deploy/
+
+Host: https://trakmile.com
 Sitemap: https://trakmile.com/sitemap.xml
